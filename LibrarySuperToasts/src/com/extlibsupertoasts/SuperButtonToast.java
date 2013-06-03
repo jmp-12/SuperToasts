@@ -113,7 +113,7 @@ public class SuperButtonToast
 	public static final int DURATION_MEDIUM = (4500);
 	public static final int DURATION_LONG = (6500);
 
-
+private int ff;
 
 	private SuperButtonToastStyle mSuperButtonToastStyle;
 	
