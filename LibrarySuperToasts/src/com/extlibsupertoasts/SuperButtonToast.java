@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class SuperButtonToast
 {	
-	
+	   
 	public static final SuperButtonToastStyle STYLE_EDITDARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_edit, "EDIT", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
