@@ -1,0 +1,599 @@
+package com.extlibsupertoasts;
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.extlibsupertoasts.styles.ProgressToastStyle;
+
+public class SuperProgressToast
+{
+
+	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperUndoToast)";
+	
+	
+	public static final ProgressToastStyle STYLE_PROGRESSDARK = new ProgressToastStyle(Color.WHITE, 
+			com.extlibsupertoasts.R.drawable.background_black);
+
+	public static final ProgressToastStyle STYLE_PROGRESSLIGHT = new ProgressToastStyle(Color.WHITE, 
+			com.extlibsupertoasts.R.drawable.background_white);
+	
+	
+	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
+	public static final int BACKGROUND_BLACK = (R.drawable.background_black);
+	public static final int BACKGROUND_ORANGE = (R.drawable.background_orange);
+	public static final int BACKGROUND_PURPLE = (R.drawable.background_purple);
+	public static final int BACKGROUND_YELLOW = (R.drawable.background_yellow);
+	public static final int BACKGROUND_BLUE = (R.drawable.background_blue);
+	public static final int BACKGROUND_HOLOBLUE = (R.drawable.background_holoblue);
+	
+	
+	public static final int DURATION_SHORT = (3000);
+	public static final int DURATION_MEDIUM = (4500);
+	public static final int DURATION_LONG = (6500);
+
+
+	private ProgressToastStyle mProgressToastStyle;
+	
+	private Context context;
+	private View superprogressView;
+	private ViewGroup mViewGroup;
+	
+	
+	private Handler errorHideToastHandler = new Handler();;
+
+	private LinearLayout superprogresstoastRootLayout;
+	private int toastbackgroundResource = BACKGROUND_WHITE;
+	
+	
+	private Animation animationIn = getFadeInAnimation();
+	private Animation animationOut = getFadeOutAnimation();
+	
+	private TextView messageTextView;
+	private CharSequence messageText = "Default text.";
+	private int messageTextColor = Color.BLACK;
+	private float messageTextSize = 18;
+	private Typeface messageTextTypeface = Typeface.DEFAULT;
+
+
+	
+	public SuperProgressToast(final Context context) 
+	{
+		
+		if(context != null)
+		{
+
+			if(!(context instanceof Activity))
+			{
+				
+				throw new IllegalArgumentException("Context must be an instance of an Activity! (SuperProgressToast)");
+				
+			}
+			
+			else
+			{
+				
+				this.context = context;
+				
+			}
+			
+		}
+		
+		else
+		{
+			
+			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
+			
+		}
+		
+	}
+	
+	
+	public void show()
+	{
+		
+		final LayoutInflater superprogressLayoutInflater = (LayoutInflater) 
+				context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+        Activity activity = (Activity) context;
+        
+	        if(mViewGroup == null)
+	        {
+	        	
+	        	mViewGroup = (ViewGroup) 
+	            		activity.findViewById(android.R.id.content);
+	        	
+	        }
+        			
+		superprogressView = superprogressLayoutInflater
+				.inflate(R.layout.standard_superprogresstoast, mViewGroup, false);
+			
+			
+		errorHideToastHandler.postDelayed(errorHideToastRunnable, 15000);
+		
+		
+		messageTextView = (TextView) 
+				superprogressView.findViewById(R.id.messageTextView);
+		
+		messageTextView.setText(messageText);
+		
+		messageTextView.setTextSize(messageTextSize);	
+		
+		messageTextView.setTypeface(messageTextTypeface);
+
+		
+			if(mProgressToastStyle != null)
+			{
+				
+				messageTextView.setTextColor(mProgressToastStyle.messagecolorResource);
+	
+			}
+			
+			else
+			{
+
+				messageTextView.setTextColor(messageTextColor);
+
+			}
+		
+		superprogresstoastRootLayout = (LinearLayout) 
+				superprogressView.findViewById(R.id.toast_rootlayout);
+		
+			if(mProgressToastStyle != null)
+			{
+					
+				superprogresstoastRootLayout.setBackgroundResource(mProgressToastStyle.toastbackgroundResource);
+		
+			}
+			
+			else
+			{
+				
+				superprogresstoastRootLayout.setBackgroundResource(toastbackgroundResource);
+
+			}
+        
+		mViewGroup.addView(superprogressView);
+		
+		superprogressView.startAnimation(animationIn);
+
+	}
+
+	
+	
+	/**
+	 * <b> public void setStyle(final UndoToastStyle mUndoToastStyle) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the style of the SuperUndoToast. </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (SuperUndoToast.STYLE_UNDODARK) </p>
+	 * 
+	 *	 
+	 */
+
+	public void setStyle(final ProgressToastStyle mProgressToastStyle)
+	{
+		
+		this.mProgressToastStyle = mProgressToastStyle;
+		
+	}
+	
+	
+	/**
+	 * <b> public void setViewGroup(final ViewGroup mViewGroup) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the ViewGroup that the SuperUndoToast will be added to. </p>
+	 *	 
+	 */
+
+	public void setViewGroup(final ViewGroup mViewGroup)
+	{
+		
+		this.mViewGroup = mViewGroup;
+		
+	}
+	
+	
+	/**
+	 * <b> public void setBackgroundResource(final int backgroundresource) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the background of the SuperUndoToast. </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (SuperUndoToast.BACKGROUND_STANDARDWHITE) </p>
+	 * 
+	 *	 
+	 */
+	
+	public void setBackgroundResource(final int toastbackgroundResource)
+	{
+		
+		this.toastbackgroundResource = toastbackgroundResource;
+		
+	}
+
+	
+	
+	/**
+	 * <b> public void setAnimationIn(final Animation animationIn) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the opening animation of the SuperUndoToast. </p>
+	 * 
+	 * <p> Please note: The animation should not exceed 750 milliseconds under any circumstances
+	 *
+	 */
+	
+	public void setAnimationIn(final Animation animationIn)
+	{
+		
+		this.animationIn = animationIn;
+		
+	}
+	
+	
+	/**
+	 * <b> public void setAnimationIn(final Animation animationIn) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the closing animation of the SuperUndoToast. </p>
+	 * 
+	 * <p> Please note: The animation should not exceed 750 milliseconds under any circumstances
+	 * 
+	 */
+	
+	public void setAnimationOut(final Animation animationOut)
+	{
+		
+		this.animationOut = animationOut;
+		
+	}
+	
+	
+	/**
+	 * <b> public void setMessageText(final CharSequence messageText) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the message text of the SuperUndoToast. </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> ("Hello, I am a SuperUndoToast")</p>
+	 * 
+	 *	 
+	 */
+
+	public void setMessageText(final CharSequence messageText)
+	{
+		
+		this.messageText = messageText;
+		
+			if(messageTextView != null)
+			{
+				
+				messageTextView.setText(messageText);
+				
+			}
+		
+	}
+	
+	
+	/**
+	 * <b> public void setMessageTextColor(final int messageTextColor) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the color of the message text in the SuperUndoToast.		  </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (Color.BLACK)</p>
+	 * 
+	 *	 
+	 */
+
+	public void setMessageTextColor(final int messageTextColor)
+	{
+		
+		this.messageTextColor = messageTextColor;
+		
+			if(messageTextView != null)
+			{
+				
+				messageTextView.setTextColor(messageTextColor);
+				
+			}
+		
+	}
+	
+	
+	/**
+	 * <b> public void setMessageTextSize(final float messageTextSize) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the size of the message text in the SuperUndoToast. </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (18) </p>
+	 * 
+	 *	 
+	 */
+
+	public void setMessageTextSize(final float messageTextSize)
+	{
+		
+		this.messageTextSize = messageTextSize;
+		
+	}
+	
+	
+	/**
+	 * <b> public void setMessageTypeface(final Typeface messageTextTypeface) </b>
+	 * 
+	 * 
+	 * <p> This is used to set the typeface of the message text in the SuperUndoToast. </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (Typeface.DEFAULT)</p>
+	 * 
+	 *	 
+	 */
+
+	public void setMessageTextTypeface(final Typeface messageTextTypeface)
+	{
+		
+		this.messageTextTypeface = messageTextTypeface;
+		
+	}
+
+	
+	/**
+	 * <b> public View getSuperUndoToastView() </b>
+	 * 
+	 * 
+	 * <p> This returns the SuperUndoToast view. </p>
+     *
+	 *
+	 */
+	
+
+	public View getSuperProgressToastView()
+	{
+		
+		if(superprogressView != null)
+		{
+			
+			return superprogressView;
+
+		}
+		
+		else
+		{
+			
+			return null;
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * <b> public TextView getMessageTextView() </b>
+	 * 
+	 * 
+	 * <p> This returns the SuperUndoToast message textview. </p>
+     *
+	 *
+	 */
+	
+	public TextView getMessageTextView()
+	{
+		
+		if(messageTextView != null)
+		{
+			
+			return messageTextView;
+
+		}
+		
+		else
+		{
+			
+			return null;
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * <b> public LinearLayout getRootLayout() </b>
+	 * 
+	 * 
+	 * <p> This returns the SuperUndoToast root LinearLayout. </p>
+     *
+	 *
+	 */
+	
+	public LinearLayout getRootLayout()
+	{
+		
+		if(superprogresstoastRootLayout != null)
+		{
+			
+			return superprogresstoastRootLayout;
+
+		}
+		
+		else
+		{
+			
+			return null;
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * <p> This is used to hide and dispose of the SuperUndoToast.
+	 * 	   This method MUST be called when using your own OnClickListener! </p>
+	 * 
+	 * <b> Parameter example: </b>
+	 * 
+	 * <p> (true) </p>
+	 * 
+	 *	 
+	 */
+
+	public void dismiss(final boolean showAnimation)
+	{
+		
+		errorHideToastHandler.removeCallbacks(errorHideToastRunnable);
+
+	    if(superprogressView != null && mViewGroup != null && animationOut != null)
+	    {
+
+	    	if (showAnimation) 
+	    	{
+	    			
+	       		animationOut.setAnimationListener(new AnimationListener()
+				{
+
+					@Override
+					public void onAnimationEnd(Animation animation) 
+					{
+
+						mViewGroup.removeView(superprogressView);
+			        		
+						superprogressView = null;                		
+			        	
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation) 
+					{
+
+						//Do nothing
+						
+					}
+
+					@Override
+					public void onAnimationStart(Animation animation) 
+					{
+						
+						//Do nothing
+						
+					}
+										
+				});
+
+	       		superprogressView.startAnimation(animationOut);	
+	       			
+	       	}
+			
+			else
+			{
+
+				mViewGroup.removeView(superprogressView);
+	        		
+				superprogressView = null; 
+    
+			}
+	    	
+	    }
+	    	
+	    else
+		{
+				
+			try
+			{
+					
+				mViewGroup.removeView(superprogressView);
+	        		
+				superprogressView = null; 
+					
+			}
+				
+			catch(Exception exception)
+			{
+					
+				Log.e("SuperUndoToast", exception.toString());
+					
+			}
+    
+		}
+		
+	}
+	
+	
+
+	
+	
+	private Runnable errorHideToastRunnable = new Runnable() 
+	{
+		 
+        public void run() 
+        {
+        	        	
+        	dismiss(true);
+        	 
+        }
+        
+    };
+    
+	
+	
+	private Animation getFadeInAnimation()
+	{
+		
+		
+		AlphaAnimation mAlphaAnimation = new AlphaAnimation(0f, 1f);
+		mAlphaAnimation.setDuration(500);
+		mAlphaAnimation.setInterpolator(new AccelerateInterpolator());
+		
+		return mAlphaAnimation;
+		
+	}
+	
+	private Animation getFadeOutAnimation()
+	{
+		
+		
+		AlphaAnimation mAlphaAnimation = new AlphaAnimation(1f, 0f);
+		mAlphaAnimation.setDuration(500);
+		mAlphaAnimation.setInterpolator(new AccelerateInterpolator());
+		
+		return mAlphaAnimation;
+		
+	}
+
+	
+
+}
