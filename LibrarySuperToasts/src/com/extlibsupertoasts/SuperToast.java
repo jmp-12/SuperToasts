@@ -1,6 +1,8 @@
 package com.extlibsupertoasts;
 
 
+import com.extlibsupertoasts.utilities.SuperToastConstants;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -24,40 +26,11 @@ public class SuperToast
 	
 	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperToast)";
 	
-
-	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
-	public static final int BACKGROUND_BLACK = (R.drawable.background_black);
-	public static final int BACKGROUND_ORANGE = (R.drawable.background_orange);
-	public static final int BACKGROUND_PURPLE = (R.drawable.background_purple);
-	public static final int BACKGROUND_YELLOW = (R.drawable.background_yellow);
-	public static final int BACKGROUND_BLUE = (R.drawable.background_blue);
-	public static final int BACKGROUND_HOLOBLUE = (R.drawable.background_holoblue);
 	
 	public static final int ANIMATION_FADE = (android.R.style.Animation_Toast);
 	public static final int ANIMATION_FLYIN = (android.R.style.Animation_Translucent);
 	public static final int ANIMATION_SCALE = (android.R.style.Animation_Dialog);
 	public static final int ANIMATION_POPUP = (android.R.style.Animation_InputMethod);
-
-	public static final int DURATION_SHORT = (2000);
-	public static final int DURATION_MEDIUM = (2750);
-	public static final int DURATION_LONG = (3500);
-	
-	public static final int TEXTSIZE_SMALL = (14);
-	public static final int TEXTSIZE_MEDIUM = (18);
-	public static final int TEXTSIZE_LARGE = (22);
-	
-	public static final String FONT_ROBOTO_BOLD = ("Roboto-Bold.ttf");
-	public static final String FONT_ROBOTO_BOLD_ITALIC = ("Roboto-BoldItalic.ttf");
-	public static final String FONT_ROBOTO_CONDENSED = ("Roboto-Condensed.ttf");
-	public static final String FONT_ROBOTO_CONDENSED_ITALIC = ("Roboto-CondensedItalic.ttf");
-	public static final String FONT_ROBOTO_ITALIC= ("Roboto-Italic.ttf");
-	public static final String FONT_ROBOTO_LIGHT = ("Roboto-Light.ttf");
-	public static final String FONT_ROBOTO_LIGHT_ITALIC = ("Roboto-LightItalic.ttf");
-	public static final String FONT_ROBOTO_MEDIUM = ("Roboto-Medium.ttf");
-	public static final String FONT_ROBOTO_MEDIUM_ITALIC = ("Roboto-MediumItalic.ttf");
-	public static final String FONT_ROBOTO_REGULAR = ("Roboto-Regular.ttf");
-	public static final String FONT_ROBOTO_THIN = ("Roboto-Thin.ttf");
-	public static final String FONT_ROBOTO_THIN_ITALIC = ("Roboto-ThinItalic.ttf");
 	
 	
 	private Context mContext;
@@ -71,19 +44,16 @@ public class SuperToast
 		
 	private CharSequence textCharSequence;
 	private int textColor = Color.WHITE;
-	private int backgroundResource = BACKGROUND_BLACK;
+	private int backgroundResource = SuperToastConstants.BACKGROUND_BLACK;
 	private int gravityInteger = Gravity.BOTTOM|Gravity.CENTER;
 	private Drawable backgroundDrawable;
 	private Typeface typeface = Typeface.DEFAULT;
-	private int duration = DURATION_SHORT;
+	private int duration = SuperToastConstants.DURATION_SHORT;
 	private int animationStyle = ANIMATION_FADE;
 	private int xOffset = 0;
 	private int yOffset = 0;
-	private float textSize = TEXTSIZE_SMALL;
+	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
 
-
-
-		
 	
 	public SuperToast(Context mContext) 
 	{
@@ -268,13 +238,13 @@ public class SuperToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperToast.DURATION_SHORT) </p>
+	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
 	 * 
 	 *	 
 	 * <b> Design guide: </b>
      *
 	 * <p> Although you may pass any millisecond integer value as a parameter in this
-	 *     method, the duration constants of this class should be used. </p>
+	 *     method, the duration constants of the SuperToastConstants class should be used. </p>
 	 *     
 	 */
 	public void setDuration(int duration)
@@ -294,7 +264,7 @@ public class SuperToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperToast.DURATION_SHORT) </p>
+	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
 	 * 
 	 *	 
 	 * <b> Design guide: </b>
@@ -348,7 +318,7 @@ public class SuperToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperToast.BACKGROUND_STANDARDBLACK) </p>
+	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
 	 * 
 	 * 
 	 * <b> Design guide: </b>
@@ -401,7 +371,7 @@ public class SuperToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperActivityToast.TEXTSIZE_SMALL) </p>
+	 * <p> (SuperToastConstants.TEXTSIZE_SMALL) </p>
 	 * 
 	 * <b> OR </b>
 	 * 
@@ -630,8 +600,8 @@ public class SuperToast
 	 * 
 	 * <p> This is used to load a Roboto Typeface. You <b><i>MUST</i></b>
 	 *     put the desired font file in the assets folder of your project.
-	 *     The Roboto fonts are included in this library as a zip file. Do not modify the
-	 *     names of these fonts. </p>
+	 *     The link to download the Roboto fonts is included in this library as a text file. 
+	 *     Do not modify the names of these fonts. </p>
 	 * 
 	 * 
 	 * <b> Returns: </b>
@@ -641,7 +611,7 @@ public class SuperToast
 	 * 
 	 * <b> Parameter example: </b>
      *	 
-     * <p> (SuperActivityToast.FONT_ROBOTO_THIN) </p>
+     * <p> (SuperToastConstants.FONT_ROBOTO_THIN) </p>
 	 * 
 	 * 
 	 * <b> Default value: </b>
@@ -723,7 +693,7 @@ public class SuperToast
     	SuperToast mSuperToast = new SuperToast(context);
     	mSuperToast.setText(textCharSequence);
     	mSuperToast.setDuration(durationInteger);
-    	mSuperToast.setBackgroundResource(SuperActivityToast.BACKGROUND_WHITE);
+    	mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
     	mSuperToast.setTextColor(Color.BLACK);
 
 		return mSuperToast;
@@ -762,7 +732,7 @@ public class SuperToast
     	SuperToast mSuperToast = new SuperToast(context);
     	mSuperToast.setText(textCharSequence);
     	mSuperToast.setDuration(durationInteger);
-    	mSuperToast.setBackgroundResource(SuperActivityToast.BACKGROUND_WHITE);
+    	mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
     	mSuperToast.setTextColor(Color.BLACK);
     	mSuperToast.setAnimation(animation);
 

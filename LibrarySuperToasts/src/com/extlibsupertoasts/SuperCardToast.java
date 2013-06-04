@@ -2,6 +2,7 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.styles.SuperCardToastStyle;
+import com.extlibsupertoasts.utilities.SwipeDismissListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

@@ -2,6 +2,7 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.styles.SuperButtonToastStyle;
+import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -54,7 +55,6 @@ public class SuperButtonToast
 			(com.extlibsupertoasts.R.drawable.icon_dark_undo, "UNDO", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
-	
 	public static final SuperButtonToastStyle STYLE_EDITLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_edit, "EDIT", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
@@ -82,14 +82,6 @@ public class SuperButtonToast
 	public static final SuperButtonToastStyle STYLE_UNDOLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_undo, "UNDO", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
-	
-	
-	public static final int BACKGROUND_BLACK = (com.extlibsupertoasts.R.drawable.background_black);
-	public static final int BACKGROUND_WHITE = (com.extlibsupertoasts.R.drawable.background_white);
-	public static final int BACKGROUND_ORANGE = (com.extlibsupertoasts.R.drawable.background_orange);
-	public static final int BACKGROUND_PURPLE = (com.extlibsupertoasts.R.drawable.background_purple);
-	public static final int BACKGROUND_RED = (com.extlibsupertoasts.R.drawable.background_red);
-	public static final int BACKGROUND_HOLOBLUE = (com.extlibsupertoasts.R.drawable.background_holoblue);
 
 	
 	public static final int BUTTON_DARK_EDIT = (com.extlibsupertoasts.R.drawable.icon_dark_edit);
@@ -107,14 +99,8 @@ public class SuperButtonToast
 	public static final int BUTTON_LIGHT_SAVE = (com.extlibsupertoasts.R.drawable.icon_light_save);
 	public static final int BUTTON_LIGHT_SHARE = (com.extlibsupertoasts.R.drawable.icon_light_share);
 	public static final int BUTTON_LIGHT_UNDO = (com.extlibsupertoasts.R.drawable.icon_light_undo);
-	
-	
-	public static final int DURATION_SHORT = (3000);
-	public static final int DURATION_MEDIUM = (4500);
-	public static final int DURATION_LONG = (6500);
 
-private int ff;
-
+	
 	private SuperButtonToastStyle mSuperButtonToastStyle;
 	
 	private Context mContext;
@@ -152,7 +138,7 @@ private int ff;
 	private Typeface messageTextTypeface = Typeface.DEFAULT;
 
 	private Button mButton;
-	private int buttonimageResource = BACKGROUND_WHITE;
+	private int buttonimageResource = SuperToastConstants.BACKGROUND_WHITE;
 	private Drawable buttonimageDrawable;
 	private CharSequence buttonText = "UNDO";
 	private int buttonTextColor = Color.BLACK;
