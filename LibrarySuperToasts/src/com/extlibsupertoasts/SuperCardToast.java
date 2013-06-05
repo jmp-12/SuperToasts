@@ -77,14 +77,14 @@ public class SuperCardToast
 	
 
 	private Context mContext;
-	private int sdkVersion;
 	private LinearLayout mContainer;
+	private int sdkVersion = android.os.Build.VERSION.SDK_INT;
+	private Handler mHandler;
+
 	
 	private boolean disableSwipeDismiss;
-	
 	private Drawable backgroundDrawable;
 	private int backgroundResource = (R.drawable.background_white);
-
 	private int dividerColor = (R.color.black);
 	private Drawable dividerDrawable;
 	
@@ -94,7 +94,6 @@ public class SuperCardToast
 	private int mDuration;
 	private boolean mIsTimed;
 	
-	private Handler mHandler = new Handler();;
 
 
 	
@@ -102,8 +101,6 @@ public class SuperCardToast
 
 	public SuperCardToast(Context mContext) 
 	{		
-		
-		sdkVersion = android.os.Build.VERSION.SDK_INT;
 
 		
 		if(mContext instanceof Activity)
@@ -172,10 +169,9 @@ public class SuperCardToast
 			if(mIsTimed && mDuration > 0)
 			{
 				
+				mHandler = new Handler();
 				mHandler.postDelayed(mHideRunnable, mDuration);
-				
-				Log.d("TAG", "BOOM");
-				
+								
 			}
 			
 		
@@ -418,8 +414,8 @@ public class SuperCardToast
 			if(mIsTimed && mDuration > 0)
 			{
 				
+				mHandler = new Handler();
 				mHandler.postDelayed(mHideRunnable, mDuration);
-				Log.d("TAG", "BOOM");
 
 			}
 			
@@ -584,37 +580,7 @@ public class SuperCardToast
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public void dismiss()
 	{
 		
