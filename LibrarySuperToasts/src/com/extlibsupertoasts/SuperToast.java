@@ -404,7 +404,7 @@ public class SuperToast
 	 * 
 	 * <b> OR </b>
 	 * 
-	 * <p> (mSuperToast.loadRobotoTypeface(SuperToast.FONT_ROBOTO_THIN);
+	 * <p> (mSuperToast.loadRobotoTypeface(SuperToastConstants.FONT_ROBOTO_THIN);
 	 *
 	 */
 	public void setTypeface(Typeface typeface)
