@@ -33,7 +33,6 @@ public class SuperActivityToast
 	private static final String ERROR_CONTEXTNOTACTIVITY= "The Context that you passed was not an Activity! (SuperActivityToast)";
 
 	
-	
 	private Context mContext;
 	private LayoutInflater mLayoutInflater;
 	private ViewGroup mViewGroup;
@@ -58,7 +57,6 @@ public class SuperActivityToast
 	private boolean touchImmediateDismiss;
 
 
-		
 	
 	public SuperActivityToast(Context mContext) 
 	{
@@ -271,13 +269,13 @@ public class SuperActivityToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperActivityToast.DURATION_SHORT) </p>
+	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
 	 * 
 	 *	 
 	 * <b> Design guide: </b>
      *
 	 * <p> Although you may pass any millisecond integer value as a parameter in this
-	 *     method, the duration constants of this class should be used. </p>
+	 *     method, the duration constants of the SuperToastConstants class should be used. </p>
 	 *     
 	 */
 	public void setDuration(int duration)
@@ -297,7 +295,7 @@ public class SuperActivityToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperActivityToast.DURATION_SHORT) </p>
+	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
 	 * 
 	 *	 
 	 * <b> Design guide: </b>
@@ -383,7 +381,7 @@ public class SuperActivityToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperActivityToast.BACKGROUND_STANDARDBLACK) </p>
+	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
 	 * 
 	 * 
 	 * <b> Design guide: </b>
@@ -436,7 +434,7 @@ public class SuperActivityToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperActivityToast.TEXTSIZE_SMALL) </p>
+	 * <p> (SuperToastConstants.TEXTSIZE_SMALL) </p>
 	 * 
 	 * <b> OR </b>
 	 * 
@@ -689,7 +687,7 @@ public class SuperActivityToast
 	 * 
 	 * <p> This is used to load a Roboto Typeface. You <b><i>MUST</i></b>
 	 *     put the desired font file in the assets folder of your project.
-	 *     The Roboto fonts are included in this library as a zip file. Do not modify the
+	 *     The link to download the Roboto fonts is included in this library as a text file. Do not modify the
 	 *     names of these fonts. </p>
 	 * 
 	 * 
@@ -700,7 +698,7 @@ public class SuperActivityToast
 	 * 
 	 * <b> Parameter example: </b>
      *	 
-     * <p> (SuperActivityToast.FONT_ROBOTO_THIN) </p>
+     * <p> (SuperToastConstants.FONT_ROBOTO_THIN) </p>
 	 * 
 	 * 
 	 * <b> Default value: </b>
