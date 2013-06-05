@@ -364,7 +364,7 @@ public class SuperProgressToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperProgressToast.BACKGROUND_STANDARDBLACK) </p>
+	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
 	 * 
 	 * 
 	 * <b> Design guide: </b>
@@ -417,7 +417,7 @@ public class SuperProgressToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperProgressToast.TEXTSIZE_SMALL) </p>
+	 * <p> (SuperToastConstants.TEXTSIZE_SMALL) </p>
 	 * 
 	 * <b> OR </b>
 	 * 
@@ -440,8 +440,7 @@ public class SuperProgressToast
 	 * 
 	 * <b> Important note: </b>
 	 * 
-	 * <p> This library comes with all of the variations of the 
-	 *     Roboto font in a zip file. To use the fonts see 
+	 * <p> This library comes with a link to download the Roboto font. To use the fonts see 
 	 *     {@link #loadRobotoTypeface(String)}.
 	 * 
 	 * 

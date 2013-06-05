@@ -394,8 +394,7 @@ public class SuperToast
 	 * 
 	 * <b> Important note: </b>
 	 * 
-	 * <p> This library comes with all of the variations of the 
-	 *     Roboto font in a zip file. To use the fonts see 
+	 * <p> This library comes with a link to download the Roboto font. To use the fonts see 
 	 *     {@link #loadRobotoTypeface(String)}.
 	 * 
 	 * 
