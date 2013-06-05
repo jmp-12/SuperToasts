@@ -2,6 +2,7 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.styles.SuperCardToastStyle;
+import com.extlibsupertoasts.utilities.SuperToastConstants;
 import com.extlibsupertoasts.utilities.SwipeDismissListener;
 
 import android.annotation.SuppressLint;
@@ -26,11 +27,14 @@ import android.widget.TextView;
 
 
 
-
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
 public class SuperCardToast
 {
+	
+	private static final String ERROR_CONTEXTNOTACTIVITY= "Context must be an instance of Activity (SuperCardToast)";
+	private static final String ERROR_CONTAINERNULL= "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";
+
 	
 	public static final SuperCardToastStyle STYLE_DARKEDIT = new SuperCardToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_edit, Color.WHITE, com.extlibsupertoasts.R.drawable.background_black, Color.WHITE);
@@ -80,28 +84,28 @@ public class SuperCardToast
 	private LinearLayout mContainer;
 	private int sdkVersion = android.os.Build.VERSION.SDK_INT;
 	private Handler mHandler;
-
+	private View toastView;
 	
+	
+	private CharSequence textCharSequence;
 	private boolean disableSwipeDismiss;
 	private Drawable backgroundDrawable;
-	private int backgroundResource = (R.drawable.background_white);
-	private int dividerColor = (R.color.black);
+	private int backgroundResource = (SuperToastConstants.BACKGROUND_BLACK);
+	private int dividerColor = (Color.WHITE);
 	private Drawable dividerDrawable;
+	private boolean mIsTimed;
+	private int textColor = Color.WHITE;
+	private int duration = SuperToastConstants.DURATION_LONG;
+	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
+
+	
 	
 	private SuperCardToastStyle mSuperCardToastStyle;
-	
-	
-	private int mDuration;
-	private boolean mIsTimed;
-	
-
 
 	
-	View mView;
-
+	
 	public SuperCardToast(Context mContext) 
 	{		
-
 		
 		if(mContext instanceof Activity)
 		{
@@ -121,7 +125,7 @@ public class SuperCardToast
 			else
 			{
 					
-				throw new IllegalArgumentException("You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)");
+				throw new IllegalArgumentException(ERROR_CONTAINERNULL);
 					
 			}
 							
@@ -130,7 +134,7 @@ public class SuperCardToast
 		else
 		{
 				
-			throw new IllegalArgumentException("Context must be an instance of Activity (SuperCardToast)");
+			throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 				
 		}
 
@@ -143,40 +147,40 @@ public class SuperCardToast
 		final LayoutInflater superundoLayoutInflater = (LayoutInflater) 
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         			
-	    mView = superundoLayoutInflater
+		toastView = superundoLayoutInflater
 	    		.inflate(R.layout.supercardtoast_button, mContainer, false);
 	    
 			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && !disableSwipeDismiss) 
 			{
 				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(mView,
+		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView,
 	                    new SwipeDismissListener.OnDismissCallback() {
 							
 							@Override
 							public void onDismiss(View view) 
 							{
 	
-								mContainer.removeView(mView);
+								mContainer.removeView(toastView);
 															
 							}
 						});
 	
-		        mView.setOnTouchListener(touchListener);
+		        toastView.setOnTouchListener(touchListener);
 				
 			}
 			
 			
-			if(mIsTimed && mDuration > 0)
+			if(mIsTimed && duration > 0)
 			{
 				
 				mHandler = new Handler();
-				mHandler.postDelayed(mHideRunnable, mDuration);
+				mHandler.postDelayed(mHideRunnable, duration);
 								
 			}
 			
 		
 	    final TextView mTextView = (TextView) 
-				mView.findViewById(R.id.messageTextView);
+	    		toastView.findViewById(R.id.messageTextView);
 	    
 	    	if(mSuperCardToastStyle != null)
 	    	{
@@ -185,11 +189,18 @@ public class SuperCardToast
 	    		
 	    	}
 	    	
+	    	else
+	    	{
+	    		
+	        	mTextView.setTextColor(textColor);
+	    		
+	    	}
+	    	
 		mTextView.setText(messageText);
 		
 		
 		final Button actionButton = (Button) 
-				mView.findViewById(R.id.actionButton);
+				toastView.findViewById(R.id.actionButton);
 		
 			if(mSuperCardToastStyle != null)
 			{
@@ -203,7 +214,7 @@ public class SuperCardToast
 
 	   
 	   final LinearLayout mRootLayout = (LinearLayout)
-				mView.findViewById(R.id.root_layout);
+			   toastView.findViewById(R.id.root_layout);
 	   
 			if(mSuperCardToastStyle != null)
 			{
@@ -245,7 +256,7 @@ public class SuperCardToast
 			
 			
 		final View dividerView = (View) 
-				mView.findViewById(R.id.dividerView);
+				toastView.findViewById(R.id.dividerView);
 		
 			if(mSuperCardToastStyle != null)
 			{
@@ -294,31 +305,31 @@ public class SuperCardToast
 		final LayoutInflater superundoLayoutInflater = (LayoutInflater) 
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         			
-	    mView = superundoLayoutInflater
+		toastView = superundoLayoutInflater
 	    		.inflate(R.layout.supercardtoast_progress, mContainer, false);
 	    
 			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && !disableSwipeDismiss) 
 			{
 				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(mView,
+		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView,
 	                    new SwipeDismissListener.OnDismissCallback() {
 							
 							@Override
 							public void onDismiss(View view) 
 							{
 	
-								mContainer.removeView(mView);
+								mContainer.removeView(toastView);
 															
 							}
 						});
 	
-		        mView.setOnTouchListener(touchListener);
+		        toastView.setOnTouchListener(touchListener);
 				
 			}
 			
 		
 	    final TextView mTextView = (TextView) 
-				mView.findViewById(R.id.messageTextView);
+	    		toastView.findViewById(R.id.messageTextView);
 	    
 	    	if(mSuperCardToastStyle != null)
 	    	{
@@ -331,13 +342,13 @@ public class SuperCardToast
 		
 		
 		final ProgressBar progressBar = (ProgressBar) 
-				mView.findViewById(R.id.circleProgressBar);
+				toastView.findViewById(R.id.circleProgressBar);
 		
 		progressBar.setIndeterminate(isIndeterminate);
 	   
 		
 	    final LinearLayout mRootLayout = (LinearLayout)
-				mView.findViewById(R.id.root_layout);
+	    		toastView.findViewById(R.id.root_layout);
 	   
 			if(mSuperCardToastStyle != null)
 			{
@@ -387,41 +398,41 @@ public class SuperCardToast
 		final LayoutInflater superundoLayoutInflater = (LayoutInflater) 
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-	    mView = superundoLayoutInflater
+		toastView = superundoLayoutInflater
 	    		.inflate(R.layout.supercardtoast_toast, mContainer, false);
 	    
 			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && !disableSwipeDismiss) 
 			{
 				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(mView, new SwipeDismissListener.OnDismissCallback() 
+		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
 		        {
 							
 		        	@Override
 					public void onDismiss(View view) 
 					{
 	
-						mContainer.removeView(mView);
+						mContainer.removeView(toastView);
 															
 					}
 		        	
 				});
 	
-		        mView.setOnTouchListener(touchListener);
+		        toastView.setOnTouchListener(touchListener);
 				
 			}
 			
 		
-			if(mIsTimed && mDuration > 0)
+			if(mIsTimed && duration > 0)
 			{
 				
 				mHandler = new Handler();
-				mHandler.postDelayed(mHideRunnable, mDuration);
+				mHandler.postDelayed(mHideRunnable, duration);
 
 			}
 			
 	
 	    final TextView mTextView = (TextView) 
-				mView.findViewById(R.id.messageTextView);
+	    		toastView.findViewById(R.id.messageTextView);
 	    
 	    	if(mSuperCardToastStyle != null)
 	    	{
@@ -430,11 +441,18 @@ public class SuperCardToast
 	    		
 	    	}
 	    	
+	    	else
+	    	{
+	    		
+	        	mTextView.setTextColor(textColor);
+	    		
+	    	}
+	    	
 		mTextView.setText(messageText);
 		
 		
 	    final LinearLayout mRootLayout = (LinearLayout)
-				mView.findViewById(R.id.root_layout);
+	    		toastView.findViewById(R.id.root_layout);
 	   
 			if(mSuperCardToastStyle != null)
 			{
@@ -570,11 +588,11 @@ public class SuperCardToast
 	 *	 
 	 */
 	
-	public void setDuration(final int mDuration)
+	public void setDuration(final int duration)
 	{
 		
 		this.mIsTimed = true;
-		this.mDuration = mDuration;
+		this.duration = duration;
 		
 	}
 	
@@ -587,10 +605,10 @@ public class SuperCardToast
 		mHandler.removeCallbacks(mHideRunnable);
 
 		
-		if(mView != null && mContainer != null)
+		if(toastView != null && mContainer != null)
 		{
 			
-			mContainer.removeView(mView);
+			mContainer.removeView(toastView);
 
 		}
 		
@@ -611,14 +629,14 @@ public class SuperCardToast
 		
 		mContainer.setVisibility(View.VISIBLE);
 
-		mContainer.addView(mView);
+		mContainer.addView(toastView);
 
-		mView.startAnimation(getCardAnimation());
+		toastView.startAnimation(getCardAnimation());
 		
-			if(mIsTimed && mDuration > 0)
+			if(mIsTimed && duration > 0)
 			{
 				
-				mHandler.postDelayed(mHideRunnable, mDuration);
+				mHandler.postDelayed(mHideRunnable, duration);
 				
 			}
 
@@ -629,14 +647,14 @@ public class SuperCardToast
 		
 		mContainer.setVisibility(View.VISIBLE);
 		
-		mContainer.addView(mView);
+		mContainer.addView(toastView);
 		
-		mView.startAnimation(mAnimation);
+		toastView.startAnimation(mAnimation);
 		
-			if(mIsTimed && mDuration > 0)
+			if(mIsTimed && duration > 0)
 			{
 				
-				mHandler.postDelayed(mHideRunnable, mDuration);
+				mHandler.postDelayed(mHideRunnable, duration);
 				
 			}
 		
