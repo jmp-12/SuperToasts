@@ -6,6 +6,9 @@ This library seeks to give developers a better way of communicating with their u
 for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
 and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
+
+PLEASE NOTE THAT THIS LIBRARY IS NOT YET READY FOR PRODUCTION AND IS UNDER ACTIVE DEVELOPMENT.
+
 ![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/framed_Screenshot_SuperButtonToast_zps87b52488.png)
 
 
