@@ -280,7 +280,6 @@ public class SuperToast
 		{
 			
 			mHandler.removeCallbacks(hideToastRunnable);
-			
 			mHandler = null;
 
 		}
@@ -475,7 +474,6 @@ public class SuperToast
 		{
 			
 			mHandler.removeCallbacks(hideToastRunnable);
-			
 			mHandler = null;
 
 		}
@@ -484,7 +482,6 @@ public class SuperToast
         {
 
         	mWindowManager.removeView(toastView);
-        		
             toastView = null;                		
 
         }
@@ -556,7 +553,7 @@ public class SuperToast
 	 * 
 	 * <b> Default value: </b>
 	 * 	 
-	 * <p> 50 </p>
+	 * <p> 64dp </p>
 	 * 
 	 */
 	public int getYOffset()
