@@ -5,15 +5,26 @@ import com.extlibsupertoasts.R;
 public class SuperToastConstants 
 {
 	
-	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
 	public static final int BACKGROUND_BLACK = (R.drawable.background_black);
-	public static final int BACKGROUND_ORANGE = (R.drawable.background_orange);
-	public static final int BACKGROUND_PURPLE = (R.drawable.background_purple);
-	public static final int BACKGROUND_YELLOW = (R.drawable.background_yellow);
+	public static final int BACKGROUND_BLACKTRANSLUCENT = (R.drawable.background_blacktranslucent);
 	public static final int BACKGROUND_BLUE = (R.drawable.background_blue);
-	public static final int BACKGROUND_HOLOBLUE = (R.drawable.background_holoblue);
+	public static final int BACKGROUND_BLUETRANSLUCENT = (R.drawable.background_bluetranslucent);
+	public static final int BACKGROUND_GREEN = (R.drawable.background_green);
+	public static final int BACKGROUND_GREENTRANSLUCENT = (R.drawable.background_greentranslucent);
+	public static final int BACKGROUND_GREY = (R.drawable.background_grey);
+	public static final int BACKGROUND_GREYTRANSLUCENT = (R.drawable.background_greytranslucent);
+	public static final int BACKGROUND_PURPLE = (R.drawable.background_purple);
+	public static final int BACKGROUND_PURPLETRANSLUCENT = (R.drawable.background_purpletranslucent);
+	public static final int BACKGROUND_RED = (R.drawable.background_red);
+	public static final int BACKGROUND_REDTRANSLUCENT = (R.drawable.background_redtranslucent);
+	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
+	public static final int BACKGROUND_WHITETRANSLUCENT = (R.drawable.background_whitetranslucent);
+
 	
-	
+	public static final int BACKGROUND_ORANGE = 0; //TODO
+	public static final int BACKGROUND_ORANGETRANSLUCENT= 0; //TODO
+
+
 	public static final int BUTTON_DARK_EDIT = (com.extlibsupertoasts.R.drawable.icon_dark_edit);
 	public static final int BUTTON_DARK_EXIT = (com.extlibsupertoasts.R.drawable.icon_dark_exit);	
 	public static final int BUTTON_DARK_INFO = (com.extlibsupertoasts.R.drawable.icon_dark_info);
