@@ -7,7 +7,7 @@
     android:background="@drawable/background_white" >
 
     <ProgressBar
-        android:id="@+id/circleProgressBar"
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="2dp" />
