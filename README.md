@@ -9,7 +9,7 @@ and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
 PLEASE NOTE THAT THIS LIBRARY IS NOT YET READY FOR PRODUCTION AND IS UNDER ACTIVE DEVELOPMENT.
 
-![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/framed_Screenshot_SuperButtonToast_zps87b52488.png)
+![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/supertoasts_githubimage_zps8a5ceb7c.png)
 
 
 
