@@ -5,6 +5,7 @@ import com.extlibsupertoasts.R;
 public class SuperToastConstants 
 {
 	
+	/** All of the colors except black, grey, and white are derived from the Android holo color palette **/
 	public static final int BACKGROUND_BLACK = (R.drawable.background_black);
 	public static final int BACKGROUND_BLACKTRANSLUCENT = (R.drawable.background_blacktranslucent);
 	public static final int BACKGROUND_BLUE = (R.drawable.background_blue);
@@ -19,12 +20,11 @@ public class SuperToastConstants
 	public static final int BACKGROUND_REDTRANSLUCENT = (R.drawable.background_redtranslucent);
 	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
 	public static final int BACKGROUND_WHITETRANSLUCENT = (R.drawable.background_whitetranslucent);
-
-	
-	public static final int BACKGROUND_ORANGE = 0; //TODO
-	public static final int BACKGROUND_ORANGETRANSLUCENT= 0; //TODO
+	public static final int BACKGROUND_ORANGE = (R.drawable.background_orange);
+	public static final int BACKGROUND_ORANGETRANSLUCENT = (R.drawable.background_orangetranslucent);
 
 
+	/** All of the button images were made with the Android assets studio **/
 	public static final int BUTTON_DARK_EDIT = (com.extlibsupertoasts.R.drawable.icon_dark_edit);
 	public static final int BUTTON_DARK_EXIT = (com.extlibsupertoasts.R.drawable.icon_dark_exit);	
 	public static final int BUTTON_DARK_INFO = (com.extlibsupertoasts.R.drawable.icon_dark_info);
@@ -41,12 +41,14 @@ public class SuperToastConstants
 	public static final int BUTTON_LIGHT_UNDO = (com.extlibsupertoasts.R.drawable.icon_light_undo);
 	
 	
+	/** Duration short and long are derived from the stock Android Toast class **/
 	public static final int DURATION_SHORT = (2000);
 	public static final int DURATION_MEDIUM = (2750);
 	public static final int DURATION_LONG = (3500);
 	public static final int DURATION_XLONG = (4500);
 	
 	
+	/** The link to download these fonts is included in the library **/
 	public static final String FONT_ROBOTO_BOLD = ("Roboto-Bold.ttf");
 	public static final String FONT_ROBOTO_BOLD_ITALIC = ("Roboto-BoldItalic.ttf");
 	public static final String FONT_ROBOTO_CONDENSED = ("Roboto-Condensed.ttf");
@@ -61,6 +63,7 @@ public class SuperToastConstants
 	public static final String FONT_ROBOTO_THIN_ITALIC = ("Roboto-ThinItalic.ttf");
 	
 	
+	/** These text sizes are derived from stock Android XML sizes **/
 	public static final int TEXTSIZE_SMALL = (14);
 	public static final int TEXTSIZE_MEDIUM = (18);
 	public static final int TEXTSIZE_LARGE = (22);

@@ -421,7 +421,7 @@ public class SuperActivityToast
 	
 	
 	/**
-	 * <b><i> public void setTextSize(int textSizeInt) </i></b>
+	 * <b><i> public void setTextSize(int textSize) </i></b>
 	 * 
 	 * <p> This is used to set the text size of the SuperActivityToast message. </p>
 	 * 
@@ -441,10 +441,10 @@ public class SuperActivityToast
      * <p> (14) </p>
      *
 	 */
-	public void setTextSize(int textSizeInt)
+	public void setTextSize(int textSize)
 	{
 
-		this.textSize = textSizeInt;
+		this.textSize = textSize;
 		
 	}
 	

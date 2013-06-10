@@ -5,6 +5,8 @@ import com.extlibsupertoasts.styles.SuperCardToastStyle;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 import com.extlibsupertoasts.utilities.SwipeDismissListener;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +15,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
@@ -98,7 +103,7 @@ public class SuperCardToast
 	
 	private CharSequence textCharSequence;
 	private boolean touchDismiss;
-	private boolean enableSwipeDismiss;
+	private boolean swipeDismiss;
 	private Drawable backgroundDrawable;
 	private int backgroundResource = (SuperToastConstants.BACKGROUND_BLACK);
 	private Typeface typeface = Typeface.DEFAULT;
@@ -106,9 +111,10 @@ public class SuperCardToast
 	private Drawable dividerDrawable;
 	private int textColor = Color.WHITE;
 	private boolean isIndeterminate;
-	private boolean isProgressIndeterminate;
 	private int duration = SuperToastConstants.DURATION_LONG;
 	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
+	private float buttonTextSize = SuperToastConstants.TEXTSIZE_MEDIUM;
+
 
 	
 	
@@ -190,7 +196,7 @@ public class SuperCardToast
 				
 			}
 	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && enableSwipeDismiss) 
+			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
 			{
 				
 		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
@@ -239,6 +245,10 @@ public class SuperCardToast
 	    	
 		mTextView.setText(textCharSequence);
 		
+		mTextView.setTypeface(typeface);
+		
+		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+
 		
 		mButton = (Button) 
 				toastView.findViewById(R.id.actionButton);
@@ -253,6 +263,10 @@ public class SuperCardToast
 		
 		mButton.setOnClickListener(mOnClickListener);
 
+		mButton.setTypeface(typeface);
+		
+		mButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+		
 	   
 	    mRootLayout = (LinearLayout)
 			   toastView.findViewById(R.id.root_layout);
@@ -370,13 +384,6 @@ public class SuperCardToast
 	public void showProgressCard(boolean isIndeterminate, boolean isHorizontal)
 	{
 		
-			if(touchDismiss)
-			{
-				
-				toastView.setOnTouchListener(mTouchDismissListener);
-				
-			}
-		
 		
 			if(isHorizontal)
 			{
@@ -392,9 +399,16 @@ public class SuperCardToast
 				toastView = mLayoutInflater
 			    		.inflate(R.layout.supercardtoast_progresscircle, mContainer, false);
 			}
+			
+			if(touchDismiss)
+			{
+				
+				toastView.setOnTouchListener(mTouchDismissListener);
+				
+			}
 		
 	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && enableSwipeDismiss) 
+			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
 			{
 				
 		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
@@ -427,6 +441,8 @@ public class SuperCardToast
 	    	
 		mTextView.setText(textCharSequence);
 		
+		mTextView.setTypeface(typeface);
+
 		
 		mProgressBar = (ProgressBar) 
 				toastView.findViewById(R.id.progressBar);
@@ -519,7 +535,7 @@ public class SuperCardToast
 			}
 		
 	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && enableSwipeDismiss) 
+			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
 			{
 				
 		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
@@ -567,6 +583,8 @@ public class SuperCardToast
 	    	}
 	    	
 		mTextView.setText(textCharSequence);
+		
+		mTextView.setTypeface(typeface);
 		
 		
 	    mRootLayout = (LinearLayout)
@@ -625,20 +643,12 @@ public class SuperCardToast
 	/**
 	 * <b><i> public void setText(CharSequence textCharSequence) </i></b>
 	 * 
-	 * <p> This is used to set the message text of the SuperActivityToast. </p>
+	 * <p> This is used to set the message text of the SuperCardToast. </p>
 	 * 
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
 	 * <p> ("Hello, I am a SuperActivityToast!") </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> This method can be called again while the SuperActivityToast is showing to 
-	 *     modify the existing message. If your application might show two SuperActivityToasts
-	 *     at one time you should try to reuse the same SuperActivityToast by calling this method and
-	 *     {@link #resetDuration(int)}. </p>
 	 * 
 	 */
 	public void setText(CharSequence textCharSequence)
@@ -667,7 +677,6 @@ public class SuperCardToast
 	 * <p> (SuperCardToast.STYLE_UNDODARK) </p>
 	 *	 
 	 */
-	
 	public void setStyle(SuperCardToastStyle mSuperCardToastStyle)
 	{
 		
@@ -680,6 +689,11 @@ public class SuperCardToast
 	 * <b><i> public void setDuration(int duration) </i></b>
 	 * 
 	 * <p> This is used to set the duration of the SuperCardToast. </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 	 
+	 * <p> This method is not compatible with the {@link #showProgressCard(boolean, boolean)} method. </p>
 	 * 
 	 * 
 	 * <b> Parameter example: </b>
@@ -743,6 +757,27 @@ public class SuperCardToast
 	
 	
 	/**
+	 * <b><i> public void setSwipeToDismiss(boolean touchDismiss) </i></b>
+	 * 
+	 * <p> This is used to set a private SwipeToDismiss to the SuperCardToast
+	 *     which will call {@link #dismiss()} if the user swipes the SuperCardToast
+	 *     to the left or the right.
+     *
+	 *      
+	 * <b> Important note: </b>
+	 * 	 
+	 * <p> This method is not compatible with pre-honeycomb devices. </p>
+     * 
+	 */
+	public void setSwipeToDismiss(boolean swipeDismiss)
+	{
+		
+		this.swipeDismiss = swipeDismiss;
+		
+	}
+	
+	
+	/**
 	 * <b><i> setBackgroundResource(int backgroundID) </i></b>
 	 * 
 	 * <p> This is used to set the background resource of the SuperCardToast. </p>
@@ -750,7 +785,7 @@ public class SuperCardToast
 	 * 
 	 * <b> Parameter example: </b>
 	 * 	 
-	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
+	 * <p> (SuperToastConstants.BACKGROUND_BLACK) </p>
 	 * 
 	 * 
 	 * <b> Design guide: </b>
@@ -819,6 +854,68 @@ public class SuperCardToast
 	
 	
 	/**
+	 * <b><i> public void setButtonTextSize(int buttonTextSize) </i></b>
+	 * 
+	 * <p> This is used to set the text size of the button in the SuperCardToast
+	 *     when using {@link #showButtonCard(OnClickListener)}. </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 
+	 * <p> This method will automatically convert the Integer parameter
+	 *     into scaled pixels.
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (SuperToastConstants.TEXTSIZE_MEDIUM) </p>
+	 * 
+	 * <b> OR </b>
+	 * 
+     * <p> (14) </p>
+     *
+	 */
+	public void setButtonTextSize(int buttonTextSize)
+	{
+
+		this.buttonTextSize = buttonTextSize;
+		
+	}
+	
+	
+	/**
+	 * <b><i> public void setProgress(int progress) </i></b>
+	 * 
+	 * <p> This is used to set the progress of the ProgressBar in the SuperCardToast
+	 *     when using {@link #showProgressCard(boolean, boolean)}. </p>
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (45) </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 
+	 * <p> This method should be used with a horizontal SuperCardToast to display visual
+	 *     progress. </p>
+	 * 
+	 */
+	public void setProgress(int progress)
+	{
+
+		if(mProgressBar != null)
+		{
+				
+			mProgressBar.setProgress(progress);
+				
+		}			
+			
+
+	}
+	
+	
+	/**
 	 * <b><i> public void setTypeface(Typeface mTypeface) </i></b>
 	 * 
 	 * <p> This is used to set the Typeface of the SuperCardToast text.	  </p>
@@ -862,15 +959,108 @@ public class SuperCardToast
 	 */
 	public void dismiss()
 	{
-		
-		mHandler.removeCallbacks(mHideRunnable);
 
+		if(toastView != null)
+		{
+			
+			dismissWithAnimation();
+			
+		}
 		
+		else
+		{
+			
+			Log.e("SuperCardToast", "The View was null when trying to dismiss. " +
+					"Did you create and show a SuperCardToast before trying to dismiss it?");
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * <b><i> public void dismiss(Animation animation) </i></b>
+     *
+	 * <p> This is used to hide and dispose of the SuperCardToast
+	 *     after the supplied Animation ends. </p>
+	 *
+	 *
+	 * <b> Design guide: </b>
+	 * 
+	 * <p> The Animation supplied should not exceed 500 milliseconds. </p>
+	 *	 
+	 */
+	public void dismiss(Animation animation)
+	{
+
+		if(toastView != null && mContainer != null)
+		{
+			
+			animation.setAnimationListener(new AnimationListener()
+			{
+
+				@Override
+				public void onAnimationEnd(Animation animation) 
+				{
+
+					mContainer.removeView(toastView);
+					
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) 
+				{
+
+					// Not used
+					
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) 
+				{
+
+					// Not used
+					
+				}
+
+			});
+			
+			toastView.startAnimation(animation);			
+			
+		}
+		
+		else
+		{
+			
+			Log.e("SuperCardToast", "Either the View or Container was null when trying to dismiss. " +
+					"Did you create and show a SuperCardToast before trying to dismiss it?");
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * <b><i> public void dismissImmediate() </i></b>
+     *
+	 * <p> This is used to hide and dispose of the SuperCardToast without an Animation. </p>
+	 *
+	 *
+	 * <b> Design guide: </b>
+	 * 
+	 * <p> Treat your SuperCardToast like a Dialog, dismiss it when it is no longer
+	 *     relevant. </p>
+	 *	 
+	 */ 
+	public void dismissImmediate()
+	{
+		
+
 		if(toastView != null && mContainer != null)
 		{
 			
 			mContainer.removeView(toastView);
-
+			
 		}
 		
 		else
@@ -912,6 +1102,93 @@ public class SuperCardToast
 	}
 	
 	
+	private void dismissWithAnimation()
+	{
+				
+		if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1)
+		{
+			
+		     int mViewWidth = toastView.getWidth();
+
+		     toastView.animate()
+       	 		.translationX(mViewWidth)
+       	 		.alpha(0)
+       	 		.setDuration(500)
+       	 		.setListener(new AnimatorListenerAdapter() 
+       	 		{
+       	 		
+       	 			@Override
+       	 			public void onAnimationEnd(Animator animation) 
+       	 			{
+            	 
+       	 				dismissImmediate();
+                 
+       	 			}
+       	 			
+       	 		});
+
+		}
+		
+		else
+		{
+
+			AnimationSet mAnimationSet = new AnimationSet(false);
+			
+			final Activity mActivity = (Activity) mContext;
+			
+			Display display = mActivity.getWindowManager().getDefaultDisplay(); 
+
+			int width = display.getWidth(); 
+			
+			TranslateAnimation mTranslateAnimation = new TranslateAnimation(0f, width, 0f, 0f);
+			mTranslateAnimation.setDuration(500);
+			mAnimationSet.addAnimation(mTranslateAnimation);
+
+			
+			AlphaAnimation mAlphaAnimation = new AlphaAnimation(1f, 0f);
+			mAlphaAnimation.setDuration(500);
+			mAnimationSet.addAnimation(mAlphaAnimation);
+			
+			
+			mAnimationSet.setAnimationListener(new AnimationListener()
+			{
+
+				@Override
+				public void onAnimationEnd(Animation animation) 
+				{
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+					
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) 
+				{
+					
+					// Not used
+					
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) 
+				{
+
+					// Not used
+					
+				}
+
+			});
+			
+			toastView.startAnimation(mAnimationSet);
+						
+
+		}
+
+	}
+	
+	
 	private Runnable mHideRunnable = new Runnable() 
 	{
 		 
@@ -925,15 +1202,46 @@ public class SuperCardToast
     };
     
     
+	private Runnable mHideImmediateRunnable = new Runnable() 
+	{
+		 
+        public void run() 
+        {
+        	        	
+        	dismissImmediate();
+        	 
+        }
+        
+    };
+    
+    
 	private OnTouchListener mTouchDismissListener = new OnTouchListener()
 	{
 
+		int timesTouched;
+		
 		@Override
 		public boolean onTouch(View view, MotionEvent event) 
 		{
 			
-			dismiss();
+			/** This is a little hack to prevent the user from repeatedly 
+			 *  touching the SuperCardToast causing erratic behavior **/
+			if(timesTouched == 0)
+			{
+				
+				dismiss();
+				
+			}
 			
+			else
+			{
+				
+				dismissImmediate();
+				
+			}
+			
+			timesTouched++;
+						
 			return false;
 			
 		}
