@@ -40,8 +40,9 @@ import android.widget.TextView;
 public class SuperCardToast
 {
 	
-	private static final String ERROR_CONTEXTNOTACTIVITY= "Context must be an instance of Activity (SuperCardToast)";
-	private static final String ERROR_CONTAINERNULL= "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";
+	private static final String ERROR_CONTEXTNOTACTIVITY  = "Context must be an instance of Activity (SuperCardToast)";
+	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";
+	private static final String ERROR_TYPENULL = "You cannot supply null as a Type! (SuperCardToast)";
 
 	
 	public static final SuperCardToastStyle STYLE_DARKEDIT = new SuperCardToastStyle
@@ -99,34 +100,44 @@ public class SuperCardToast
 	private Button mButton;
 	private View mDivider;
 	private LinearLayout mRootLayout;
+	private Type mType = Type.STANDARD;
+	private ProgressStyle mProgressStyle = ProgressStyle.CIRCLE;
 	
 	
 	private CharSequence textCharSequence;
 	private boolean touchDismiss;
 	private boolean swipeDismiss;
-	private Drawable backgroundDrawable;
 	private int backgroundResource = (SuperToastConstants.BACKGROUND_BLACK);
-	private Typeface typeface = Typeface.DEFAULT;
 	private int dividerColor = (Color.WHITE);
+	private int textColor = (Color.WHITE);
+	private int buttonResource = (SuperToastConstants.BUTTON_DARK_UNDO);
+	private int duration = (SuperToastConstants.DURATION_LONG);
+	private Typeface typeface = (Typeface.DEFAULT);
+	private Drawable backgroundDrawable;
 	private Drawable dividerDrawable;
-	private int textColor = Color.WHITE;
+	private Drawable buttonDrawable;
 	private boolean isIndeterminate;
-	private int duration = SuperToastConstants.DURATION_LONG;
-	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
-	private float buttonTextSize = SuperToastConstants.TEXTSIZE_MEDIUM;
-
-
+	private float textSize = (SuperToastConstants.TEXTSIZE_SMALL);
+	private float buttonTextSize = (SuperToastConstants.TEXTSIZE_MEDIUM);
+	private OnClickListener mOnClickListener;
+	private OnClickListener mButtonOnClickListener;
+	private boolean isProgressIndeterminate;
 	
+		
 	
-	private SuperCardToastStyle mSuperCardToastStyle;
+	public enum Type {
+		STANDARD, PROGRESS, BUTTON;
+	}
 
+	public enum ProgressStyle {
+		CIRCLE, HORIZONTAL;
+	}
 	
 	
 	public SuperCardToast(Context mContext) 
 	{		
 		
-		if(mContext instanceof Activity)
-		{
+		if(mContext instanceof Activity) {
 								
 			this.mContext = mContext;
 			
@@ -141,108 +152,133 @@ public class SuperCardToast
 				mContainer = (LinearLayout)
 						mActivity.findViewById(R.id.card_container);
 				
-			}
-			
-			else
-			{
-					
+			} else {
+
 				throw new IllegalArgumentException(ERROR_CONTAINERNULL);
-					
+
 			}
 							
-		}
-			
-		else
-		{
-				
+		} else {
+
 			throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
-				
+
+		}
+
+	}
+	
+	
+	public SuperCardToast(Context mContext, Type mType) 
+	{		
+		
+		if (mContext instanceof Activity) {
+
+			this.mContext = mContext;
+
+			final Activity mActivity = (Activity) mContext;
+
+			mLayoutInflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			if (mActivity.findViewById(R.id.card_container) != null) {
+
+				mContainer = (LinearLayout) mActivity
+						.findViewById(R.id.card_container);
+
+			} else {
+
+				throw new IllegalArgumentException(ERROR_CONTAINERNULL);
+
+			}
+
+		} else {
+
+			throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+
+		}
+
+		if (mType != null) {
+
+			this.mType = mType;
+
+		} else {
+
+			throw new IllegalArgumentException(ERROR_TYPENULL);
+
 		}
 
 	}
 
 	
 	
-	/**
-	 * <b><i> public void createButtonCard(String messageText, OnClickListener mOnClickListener) </i></b>
-	 * 
-	 * <p> This is used to create a SuperCardToast with a clickable button. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> You may only use one create method per object. If you would like
-	 *     to show more than one SuperCardToast than you must create multiple objects. </p>
-	 *     
-	 *     
-     * <b> Design guide: </b>
-     *
-	 * <p> The SuperCardToast with a button is meant to be used in instances where
-	 *     a SuperButtonToast would be necessary. Although you can place the layout container </p>
-	 *     anywhere in your Activity's layout, it is recommended that you put the container at the very top of
-	 *     the layout.
-	 * 
-	 */
-	public void showButtonCard(OnClickListener mOnClickListener)
+	public void show()
 	{
         			
-		toastView = mLayoutInflater
-	    		.inflate(R.layout.supercardtoast_button, mContainer, false);
+		if(mType == Type.STANDARD)
+		{
+			
+			toastView = mLayoutInflater
+		    		.inflate(R.layout.supercardtoast_toast, mContainer, false);
+			
+		} else if(mType == Type.BUTTON) {
+			
+			toastView = mLayoutInflater
+		    		.inflate(R.layout.supercardtoast_button, mContainer, false);
+			
+		} else if(mType == Type.PROGRESS) {
+			
+			if(mProgressStyle == ProgressStyle.CIRCLE) {
+
+				toastView = mLayoutInflater
+			    		.inflate(R.layout.supercardtoast_progresscircle, mContainer, false);
+				
+			} else if(mProgressStyle == ProgressStyle.HORIZONTAL) {
+
+				toastView = mLayoutInflater
+			    		.inflate(R.layout.supercardtoast_progresshorizontal, mContainer, false);
+				
+			}
+			
+		}
 		
-			if(touchDismiss)
-			{
+		if(touchDismiss){
 				
-				toastView.setOnTouchListener(mTouchDismissListener);
+			toastView.setOnTouchListener(mTouchDismissListener);
 				
-			}
+		}
 	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
-			{
-				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
-		        {
-							
-		        	@Override
-					public void onDismiss(View view) 
-					{
-	
-						mContainer.removeView(toastView);
-															
-					}
-		        	
-				});
-	
-		        toastView.setOnTouchListener(touchListener);
-				
-			}
+		if (sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1
+				&& swipeDismiss) {
+
+			final SwipeDismissListener touchListener = new SwipeDismissListener(
+					toastView, new SwipeDismissListener.OnDismissCallback() {
+
+						@Override
+						public void onDismiss(View view) {
+
+							mContainer.removeView(toastView);
+
+						}
+
+					});
+
+			toastView.setOnTouchListener(touchListener);
+
+		}
 			
 			
-			if(!isIndeterminate)
-			{
+		if(!isIndeterminate) {
 				
-				mHandler = new Handler();
-				mHandler.postDelayed(mHideRunnable, duration);
+			mHandler = new Handler();
+			mHandler.postDelayed(mHideRunnable, duration);
 												
-			}
+		}
 			
 		
 	    mTextView = (TextView) 
-	    		toastView.findViewById(R.id.messageTextView);
-	    
-	    	if(mSuperCardToastStyle != null)
-	    	{
+	    		toastView.findViewById(R.id.messageTextView);	    
 	    		
-	    		mTextView.setTextColor(mSuperCardToastStyle.messagecolorResource);
-	    		
-	    	}
-	    	
-	    	else
-	    	{
-	    		
-	        	mTextView.setTextColor(textColor);
-	    		
-	    	}
-	    	
+	    mTextView.setTextColor(textColor);
+	    			    	
 		mTextView.setText(textCharSequence);
 		
 		mTextView.setTypeface(typeface);
@@ -250,106 +286,102 @@ public class SuperCardToast
 		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
 		
-		mButton = (Button) 
-				toastView.findViewById(R.id.actionButton);
-		
-			if(mSuperCardToastStyle != null)
-			{
-				
+		if(mType == Type.BUTTON) {
+			
+			mButton = (Button) 
+					toastView.findViewById(R.id.actionButton);
+			
+			if (buttonDrawable != null) {
+
+				mButton.setCompoundDrawablesWithIntrinsicBounds(null, null, buttonDrawable, null);
+
+			} else {
+
 				mButton.setCompoundDrawablesWithIntrinsicBounds(null, null, mContext.getResources()
-						.getDrawable(mSuperCardToastStyle.buttondrawableResource), null);
+						.getDrawable(buttonResource), null);
 				
 			}
-		
-		mButton.setOnClickListener(mOnClickListener);
+								
+			if (mButtonOnClickListener != null) {
 
-		mButton.setTypeface(typeface);
+				mButton.setOnClickListener(mButtonOnClickListener);
+
+			}
+
+			else {
+
+				Log.e("(SuperCardToast)",
+						"There was no OnClickListener set to the Button. Please call setButtonOnClickListener().");
+				
+			}
+
+			mButton.setTypeface(typeface);
+			
+			mButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+			
+			
+			mDivider = (View) 
+					toastView.findViewById(R.id.dividerView);
+			
+			if (dividerDrawable != null) {
+
+				if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
+					mDivider.setBackgroundDrawable(dividerDrawable);
+
+				} else {
+
+					mDivider.setBackground(dividerDrawable);
+
+				}
+
+			} else {
+
+				mDivider.setBackgroundColor(dividerColor);
+
+			}
+			
+		}
 		
-		mButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+		if(mType == Type.PROGRESS) {
+			
+			mProgressBar = (ProgressBar) 
+					toastView.findViewById(R.id.progressBar);
+			
+			mProgressBar.setIndeterminate(isProgressIndeterminate);
+			
+		}
 		
 	   
 	    mRootLayout = (LinearLayout)
 			   toastView.findViewById(R.id.root_layout);
 	   
-			if(mSuperCardToastStyle != null)
-			{
-					
-				mRootLayout.setBackgroundResource(mSuperCardToastStyle.backgroundResource);
-		
-			}
-			
-			else
-			{
-				
-				if(backgroundDrawable != null)
-				{
-					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-														
-						mRootLayout.setBackgroundDrawable(backgroundDrawable);
-							
-					}
-						
-					else 
-					{
-							
-						mRootLayout.setBackground(backgroundDrawable);
-						    
-					}
-	
-				}
-				
-				else
-				{
-					
-					mRootLayout.setBackgroundResource(backgroundResource);
-	
-				}
-				
-			}
-			
-			
-		mDivider = (View) 
-				toastView.findViewById(R.id.dividerView);
-		
-			if(mSuperCardToastStyle != null)
-			{
-				
-				mDivider.setBackgroundColor(mSuperCardToastStyle.dividerdrawableResource);
-				
-			}
-			
-			else
-			{
-				
-				if(dividerDrawable != null)
-				{
-					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-												
-						mDivider.setBackgroundDrawable(dividerDrawable);
-						
-					}
-					
-					else 
-					{
-						
-						mDivider.setBackground(dividerDrawable);
-					    
-					}
-					
-				}
-				
-				else
-				{
-					
-					mDivider.setBackgroundColor(dividerColor);
+	    
+		if(backgroundDrawable != null) {
 
-				}
-				
+			if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
+				mRootLayout.setBackgroundDrawable(backgroundDrawable);
+
+			} else {
+
+				mRootLayout.setBackground(backgroundDrawable);
+
 			}
+
+		} else {
+
+			mRootLayout.setBackgroundResource(backgroundResource);
+
+		}
+
+		
+		if(mOnClickListener != null) {
+			
+			mRootLayout.setOnClickListener(mOnClickListener);
+			
+		}
+
 			
 		mContainer.setVisibility(View.VISIBLE);
 
@@ -358,286 +390,9 @@ public class SuperCardToast
 		toastView.startAnimation(getCardAnimation());
 	
 	}
-
 	
 	
-	/**
-	 * <b><i> public void createProgressCard(String messageText, boolean isIndeterminate, boolean isHorizontal)</i></b>
-	 * 
-	 * <p> This is used to create a SuperCardToast with a ProgressBar. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> You may only use one create method per object. If you would like
-	 *     to show more than one SuperCardToast than you must create multiple objects. </p>
-	 *     
-	 *     
-     * <b> Design guide: </b>
-     *
-	 * <p> The SuperCardToast with a ProgressBar is meant to be used in instances where
-	 *     a SuperProgressToast would be necessary. Although you can place the layout container </p>
-	 *     anywhere in your Activity's layout, it is recommended that you put the container at the very top of
-	 *     the layout.
-	 * 
-	 */
-	public void showProgressCard(boolean isIndeterminate, boolean isHorizontal)
-	{
-		
-		
-			if(isHorizontal)
-			{
-				
-				toastView = mLayoutInflater
-			    		.inflate(R.layout.supercardtoast_progresshorizontal, mContainer, false);
-				
-			}
-			
-			else
-			{
-				
-				toastView = mLayoutInflater
-			    		.inflate(R.layout.supercardtoast_progresscircle, mContainer, false);
-			}
-			
-			if(touchDismiss)
-			{
-				
-				toastView.setOnTouchListener(mTouchDismissListener);
-				
-			}
-		
-	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
-			{
-				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
-		        {
-							
-		        	@Override
-					public void onDismiss(View view) 
-					{
-	
-						mContainer.removeView(toastView);
-															
-					}
-		        	
-				});
-	
-		        toastView.setOnTouchListener(touchListener);
-				
-			}
-			
-		
-	    mTextView = (TextView) 
-	    		toastView.findViewById(R.id.messageTextView);
-	    
-	    	if(mSuperCardToastStyle != null)
-	    	{
-	    		
-	    		mTextView.setTextColor(mSuperCardToastStyle.messagecolorResource);
-	    		
-	    	}
-	    	
-		mTextView.setText(textCharSequence);
-		
-		mTextView.setTypeface(typeface);
-
-		
-		mProgressBar = (ProgressBar) 
-				toastView.findViewById(R.id.progressBar);
-		
-		mProgressBar.setIndeterminate(isIndeterminate);
-	   
-		
-	    mRootLayout = (LinearLayout)
-	    		toastView.findViewById(R.id.root_layout);
-	   
-			if(mSuperCardToastStyle != null)
-			{
-					
-				mRootLayout.setBackgroundResource(mSuperCardToastStyle.backgroundResource);
-		
-			}
-			
-			else
-			{
-				
-				if(backgroundDrawable != null)
-				{
-					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-														
-						mRootLayout.setBackgroundDrawable(backgroundDrawable);
-							
-					}
-						
-					else 
-					{
-							
-						mRootLayout.setBackground(backgroundDrawable);
-						    
-					}
-	
-				}
-				
-				else
-				{
-					
-					mRootLayout.setBackgroundResource(backgroundResource);
-	
-				}
-				
-			}
-			
-		mContainer.setVisibility(View.VISIBLE);
-
-		mContainer.addView(toastView);
-
-		toastView.startAnimation(getCardAnimation());		
-			
-	}
-	
-	
-	
-	/**
-	 * <b><i> public void showToastCard(String messageText) </i></b>
-	 * 
-	 * <p> This is used to create a standard SuperCardToast. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> You may only use one create method per object. If you would like
-	 *     to show more than one SuperCardToast than you must create multiple objects. </p>
-	 *     
-	 *     
-     * <b> Design guide: </b>
-     *
-	 * <p> The standard SuperCardToast is meant to be used in instances where
-	 *     a SuperToast would be necessary. Although you can place the layout container </p>
-	 *     anywhere in your Activity's layout, it is recommended that you put the container 
-	 *     at the very top of the layout.
-	 * 
-	 */
-	public void showToastCard()
-	{
-		
-		toastView = mLayoutInflater
-	    		.inflate(R.layout.supercardtoast_toast, mContainer, false);
-		
-			if(touchDismiss)
-			{
-				
-				toastView.setOnTouchListener(mTouchDismissListener);
-				
-			}
-		
-	    
-			if(sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1 && swipeDismiss) 
-			{
-				
-		        final SwipeDismissListener touchListener = new SwipeDismissListener(toastView, new SwipeDismissListener.OnDismissCallback() 
-		        {
-							
-		        	@Override
-					public void onDismiss(View view) 
-					{
-	
-						mContainer.removeView(toastView);
-															
-					}
-		        	
-				});
-	
-		        toastView.setOnTouchListener(touchListener);
-				
-			}
-			
-
-			if(!isIndeterminate)
-			{
-				
-				mHandler = new Handler();
-				mHandler.postDelayed(mHideRunnable, duration);
-								
-			}
-			
-	
-	    mTextView = (TextView) 
-	    		toastView.findViewById(R.id.messageTextView);
-	    
-	    	if(mSuperCardToastStyle != null)
-	    	{
-	    		
-	    		mTextView.setTextColor(mSuperCardToastStyle.messagecolorResource);
-	    		
-	    	}
-	    	
-	    	else
-	    	{
-	    		
-	        	mTextView.setTextColor(textColor);
-	    		
-	    	}
-	    	
-		mTextView.setText(textCharSequence);
-		
-		mTextView.setTypeface(typeface);
-		
-		
-	    mRootLayout = (LinearLayout)
-	    		toastView.findViewById(R.id.root_layout);
-	   
-			if(mSuperCardToastStyle != null)
-			{
-					
-				mRootLayout.setBackgroundResource(mSuperCardToastStyle.backgroundResource);
-		
-			}
-			
-			else
-			{
-				
-				if(backgroundDrawable != null)
-				{
-					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-														
-						mRootLayout.setBackgroundDrawable(backgroundDrawable);
-							
-					}
-						
-					else 
-					{
-							
-						mRootLayout.setBackground(backgroundDrawable);
-						    
-					}
-	
-				}
-				
-				else
-				{
-					
-					mRootLayout.setBackgroundResource(backgroundResource);
-	
-				}
-				
-			}
-			
-		mContainer.setVisibility(View.VISIBLE);
-
-		mContainer.addView(toastView);
-
-		toastView.startAnimation(getCardAnimation());
-		
-	}
-	
-	
-	//Quick Navigation: Setter methods
+	//XXX: General methods.
 	
 	
 	/**
@@ -651,18 +406,16 @@ public class SuperCardToast
 	 * <p> ("Hello, I am a SuperActivityToast!") </p>
 	 * 
 	 */
-	public void setText(CharSequence textCharSequence)
-	{
+	public void setText(CharSequence textCharSequence) {
 
 		this.textCharSequence = textCharSequence;
-		
-		if(mTextView != null)
-		{
-			
+
+		if (mTextView != null) {
+
 			mTextView.setText(textCharSequence);
-			
+
 		}
-		
+
 	}
 	
 	
@@ -672,16 +425,24 @@ public class SuperCardToast
 	 * <p> This is used to set the style of the SuperCardToast. </p>
 	 * 
 	 * 
+	 * <b> Important note: </b>
+	 * 	 
+	 * <p> Although these styles are more geared for the Button Type SuperCardToast
+	 *     they can be used for any Type of SuperCardToast. </p>
+	 * 
+	 * 
 	 * <b> Parameter example: </b>
 	 * 
 	 * <p> (SuperCardToast.STYLE_UNDODARK) </p>
 	 *	 
 	 */
-	public void setStyle(SuperCardToastStyle mSuperCardToastStyle)
-	{
-		
-		this.mSuperCardToastStyle = mSuperCardToastStyle;
-		
+	public void setStyle(SuperCardToastStyle mSuperCardToastStyle) {
+
+		this.backgroundResource = mSuperCardToastStyle.backgroundResource;
+		this.buttonResource = mSuperCardToastStyle.buttondrawableResource;
+		this.dividerColor = mSuperCardToastStyle.dividerdrawableResource;
+		this.textColor = mSuperCardToastStyle.messagecolorResource;
+
 	}
 
 	
@@ -689,11 +450,6 @@ public class SuperCardToast
 	 * <b><i> public void setDuration(int duration) </i></b>
 	 * 
 	 * <p> This is used to set the duration of the SuperCardToast. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 	 
-	 * <p> This method is not compatible with the {@link #showProgressCard(boolean, boolean)} method. </p>
 	 * 
 	 * 
 	 * <b> Parameter example: </b>
@@ -707,11 +463,10 @@ public class SuperCardToast
 	 *     method, the duration constants of the SuperToastConstants class should be used. </p>
 	 *     
 	 */
-	public void setDuration(int duration)
-	{
-		
+	public void setDuration(int duration) {
+
 		this.duration = duration;
-		
+
 	}
 	
 	
@@ -728,11 +483,10 @@ public class SuperCardToast
 	 * <p> (true) </p>
 	 * 
 	 */
-	public void setIndeterminate(boolean isIndeterminate)
-	{
+	public void setIndeterminate(boolean isIndeterminate) {
 
 		this.isIndeterminate = isIndeterminate;
-		
+
 	}
 	
 	
@@ -745,14 +499,13 @@ public class SuperCardToast
 	 *      
 	 * <b> Important note: </b>
 	 * 	 
-	 * <p> This method is not compatible </p>
+	 * <p> This method is not compatible with the method {@link #setSwipeToDismiss(boolean)}. </p>
      * 
 	 */
-	public void setTouchToDismiss(boolean touchDismiss)
-	{
-		
+	public void setTouchToDismiss(boolean touchDismiss) {
+
 		this.touchDismiss = touchDismiss;
-		
+
 	}
 	
 	
@@ -769,11 +522,10 @@ public class SuperCardToast
 	 * <p> This method is not compatible with pre-honeycomb devices. </p>
      * 
 	 */
-	public void setSwipeToDismiss(boolean swipeDismiss)
-	{
-		
+	public void setSwipeToDismiss(boolean swipeDismiss) {
+
 		this.swipeDismiss = swipeDismiss;
-		
+
 	}
 	
 	
@@ -794,11 +546,10 @@ public class SuperCardToast
 	 *     make sure your background is a nine-patch Drawable. </p>
 	 *	 
 	 */
-	public void setBackgroundResource(int backgroundResource)
-	{
-		
+	public void setBackgroundResource(int backgroundResource) {
+
 		this.backgroundResource = backgroundResource;
-		
+
 	}
 	
 	
@@ -816,11 +567,10 @@ public class SuperCardToast
 	 *     make sure your background is a nine-patch Drawable. </p>
 	 *	 
 	 */	
-	public void setBackgroundDrawable(Drawable backgroundDrawable)
-	{
-		
+	public void setBackgroundDrawable(Drawable backgroundDrawable) {
+
 		this.backgroundDrawable = backgroundDrawable;
-		
+
 	}
 	
 	
@@ -845,76 +595,13 @@ public class SuperCardToast
      * <p> (14) </p>
      *
 	 */
-	public void setTextSize(int textSizeInt)
-	{
+	public void setTextSize(int textSizeInt) {
 
 		this.textSize = textSizeInt;
-		
-	}
-	
-	
-	/**
-	 * <b><i> public void setButtonTextSize(int buttonTextSize) </i></b>
-	 * 
-	 * <p> This is used to set the text size of the button in the SuperCardToast
-	 *     when using {@link #showButtonCard(OnClickListener)}. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> This method will automatically convert the Integer parameter
-	 *     into scaled pixels.
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.TEXTSIZE_MEDIUM) </p>
-	 * 
-	 * <b> OR </b>
-	 * 
-     * <p> (14) </p>
-     *
-	 */
-	public void setButtonTextSize(int buttonTextSize)
-	{
-
-		this.buttonTextSize = buttonTextSize;
-		
-	}
-	
-	
-	/**
-	 * <b><i> public void setProgress(int progress) </i></b>
-	 * 
-	 * <p> This is used to set the progress of the ProgressBar in the SuperCardToast
-	 *     when using {@link #showProgressCard(boolean, boolean)}. </p>
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (45) </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> This method should be used with a horizontal SuperCardToast to display visual
-	 *     progress. </p>
-	 * 
-	 */
-	public void setProgress(int progress)
-	{
-
-		if(mProgressBar != null)
-		{
-				
-			mProgressBar.setProgress(progress);
-				
-		}			
-			
 
 	}
 	
-	
+
 	/**
 	 * <b><i> public void setTypeface(Typeface mTypeface) </i></b>
 	 * 
@@ -936,13 +623,11 @@ public class SuperCardToast
 	 * <p> (mSuperCardToast.loadRobotoTypeface(SuperToastConstants.FONT_ROBOTO_THIN);
 	 *
 	 */
-	public void setTypeface(Typeface typeface)
-	{
-		
+	public void setTypeface(Typeface typeface) {
+
 		this.typeface = typeface;
-		
-	}
-	
+
+	}	
 	
 	
 	/**
@@ -1072,6 +757,138 @@ public class SuperCardToast
 		}
 		
 	}
+	
+	
+	//XXX Progress specific methods.
+	
+	
+	/**
+	 * <b><i> public void setProgressStyle(ProgressStyle mProgressStyle </i></b>
+	 * 
+	 * <p> This is used to set the style of the SuperCardToast ProgressBar. </p>
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (ProgressType.HORIZONTAL) </p>
+	 *
+	 */
+	public void setProgressStyle(ProgressStyle mProgressStyle) {
+
+		this.mProgressStyle = mProgressStyle;
+
+	}
+	
+	
+	/**
+	 * <b><i> public void setProgressIndeterminate(boolean isProgressIndeterminate) </i></b>
+	 * 
+	 * <p> This is used to set an indeterminate value to the SuperCardToast ProgressBar. </p>
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (true) </p>
+	 * 
+	 */
+	public void setProgressIndeterminate(boolean isProgressIndeterminate) {
+
+		this.isProgressIndeterminate = isProgressIndeterminate;
+
+	}
+	
+	
+	/**
+	 * <b><i> public void setProgress(int progress) </i></b>
+	 * 
+	 * <p> This is used to set the progress of the SuperCardToast ProgressBar. </p>
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (45) </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 
+	 * <p> This method should be used with a horizontal SuperCardToast to display visual
+	 *     progress. </p>
+	 * 
+	 */
+	public void setProgress(int progress)
+	{
+
+		if(mProgressBar != null)
+		{
+				
+			mProgressBar.setProgress(progress);
+				
+		}			
+			
+
+	}
+	
+	
+	//XXX Button specific methods.
+	
+	
+	/**
+	 * <b><i> public void setButtonOnClickListener(OnClickListener mButtonOnClickListener) </i></b>
+	 * 
+	 * <p> This is used to set the OnClickListener of the SuperCardToast. </p>
+	 *
+	 */
+	public void setOnClickListener(OnClickListener mOnClickListener) {
+
+		this.mOnClickListener = mOnClickListener;
+
+	}
+	
+	
+	/**
+	 * <b><i> public void setButtonOnClickListener(OnClickListener mButtonOnClickListener) </i></b>
+	 * 
+	 * <p> This is used to set the OnClickListener of the SuperCardToast Button. </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 
+	 * <p> This method should be used in conjunction with Button Type SuperCardToasts.
+	 *
+	 */
+	public void setButtonOnClickListener(OnClickListener mButtonOnClickListener) {
+
+		this.mButtonOnClickListener = mButtonOnClickListener;
+
+	}
+	
+	/**
+	 * <b><i> public void setButtonTextSize(int buttonTextSize) </i></b>
+	 * 
+	 * <p> This is used to set the text size of the SuperCardToast Button. </p>
+	 * 
+	 * 
+	 * <b> Important note: </b>
+	 * 
+	 * <p> This method will automatically convert the Integer parameter
+	 *     into scaled pixels.
+	 * 
+	 * 
+	 * <b> Parameter example: </b>
+	 * 	 
+	 * <p> (SuperToastConstants.TEXTSIZE_MEDIUM) </p>
+	 * 
+	 * <b> OR </b>
+	 * 
+     * <p> (14) </p>
+     *
+	 */
+	public void setButtonTextSize(int buttonTextSize) {
+
+		this.buttonTextSize = buttonTextSize;
+
+	}
+
 
 	
 	

@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_layout"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/background_white" >
+    android:layout_height="wrap_content">
 
     <ProgressBar
         android:id="@+id/progressBar"
