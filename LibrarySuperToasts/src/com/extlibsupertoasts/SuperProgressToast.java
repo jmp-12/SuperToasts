@@ -31,7 +31,8 @@ public class SuperProgressToast
 	
 	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperProgressToast)";
 	private static final String ERROR_CONTEXTNOTACTIVITY= "The Context that you passed was not an Activity! (SuperProgressToast)";
-	
+	private static final String ERROR_TYPENULL = "You cannot supply null as a Type! (SuperProgressToast)";
+
 	
 	private Context mContext;
 	private LayoutInflater mLayoutInflater;
@@ -54,10 +55,14 @@ public class SuperProgressToast
 	private Animation dismissAnimation = getFadeOutAnimation();
 	private boolean touchDismiss;
 	private boolean touchImmediateDismiss;
-
+	
+	
+	public enum ProgressStyle {
+		CIRCLE, HORIZONTAL;
+	}
 		
 	
-	public SuperProgressToast(Context mContext, boolean isHorizontal) 
+	public SuperProgressToast(Context mContext) 
 	{
 				
 		if(mContext != null)
@@ -76,21 +81,9 @@ public class SuperProgressToast
 				
 				mViewGroup = (ViewGroup) 
 						mActivity.findViewById(android.R.id.content);
-				
-				if(isHorizontal)
-				{
-					
-					toastView = mLayoutInflater
-							.inflate(R.layout.superhorizontalprogresstoast, mViewGroup, false);
-				}
-				
-				else
-				{
-					
-					
-					toastView = mLayoutInflater
+
+				toastView = mLayoutInflater
 							.inflate(R.layout.supercircleprogresstoast, mViewGroup, false);
-				}
 				
 			}
 			
@@ -112,6 +105,68 @@ public class SuperProgressToast
 		
 	}
 
+	
+	public SuperProgressToast(Context mContext, ProgressStyle mProgressStyle) 
+	{
+				
+		if(mContext != null)
+		{
+			
+			
+			if(mContext instanceof Activity)
+			{
+				
+				this.mContext = mContext;
+				
+				mLayoutInflater = (LayoutInflater) 
+						mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			    
+				final Activity mActivity = (Activity) mContext;
+				
+				mViewGroup = (ViewGroup) 
+						mActivity.findViewById(android.R.id.content);
+				
+				if(mProgressStyle != null)
+				{
+					
+					if(mProgressStyle == ProgressStyle.CIRCLE) {
+
+						toastView = mLayoutInflater
+								.inflate(R.layout.supercircleprogresstoast, mViewGroup, false);
+						
+					} else if(mProgressStyle == ProgressStyle.HORIZONTAL) {
+						
+						toastView = mLayoutInflater
+								.inflate(R.layout.superhorizontalprogresstoast, mViewGroup, false);
+						
+					}
+					
+				} else { 
+					
+					throw new IllegalArgumentException(ERROR_TYPENULL);
+					
+				}
+
+				
+			}
+			
+			else
+			{
+				
+				throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+
+			}
+				
+		}
+			
+		else
+		{
+				
+			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
+				
+		}
+		
+	}
 	
 	
 	public void show()
