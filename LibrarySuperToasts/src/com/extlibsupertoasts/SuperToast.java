@@ -104,34 +104,34 @@ public class SuperToast
 		messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 		
 
-		final LinearLayout mRootLayout = (LinearLayout) 
-				toastView.findViewById(R.id.toast_rootlayout);
-		
-		if(backgroundDrawable != null)
-		{
-			
-			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-			{
-												
-				mRootLayout.setBackgroundDrawable(backgroundDrawable);
-					
-			}
-				
-			else 
-			{
-					
-				mRootLayout.setBackground(backgroundDrawable);
-				    
-			}
-
-		}
-		
-		else
-		{
-			
-			mRootLayout.setBackgroundResource(backgroundResource);
-
-		}
+//		final LinearLayout mRootLayout = (LinearLayout) 
+//				toastView.findViewById(R.id.toast_rootlayout);
+//		
+//		if(backgroundDrawable != null)
+//		{
+//			
+//			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
+//			{
+//												
+//				mRootLayout.setBackgroundDrawable(backgroundDrawable);
+//					
+//			}
+//				
+//			else 
+//			{
+//					
+//				mRootLayout.setBackground(backgroundDrawable);
+//				    
+//			}
+//
+//		}
+//		
+//		else
+//		{
+//			
+//			mRootLayout.setBackgroundResource(backgroundResource);
+//
+//		}
 
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         

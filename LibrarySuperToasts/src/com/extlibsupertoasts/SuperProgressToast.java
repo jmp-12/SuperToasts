@@ -64,43 +64,36 @@ public class SuperProgressToast
 	
 	public SuperProgressToast(Context mContext) 
 	{
-				
-		if(mContext != null)
-		{
-			
-			
-			if(mContext instanceof Activity)
-			{
-				
-				this.mContext = mContext;
-				
-				mLayoutInflater = (LayoutInflater) 
-						mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			    
-				final Activity mActivity = (Activity) mContext;
-				
-				mViewGroup = (ViewGroup) 
-						mActivity.findViewById(android.R.id.content);
 
-				toastView = mLayoutInflater
-							.inflate(R.layout.supercircleprogresstoast, mViewGroup, false);
-				
-			}
-			
-			else
-			{
-				
+		if (mContext != null) {
+
+			if (mContext instanceof Activity) {
+
+				this.mContext = mContext;
+
+				mLayoutInflater = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+				final Activity mActivity = (Activity) mContext;
+
+				mViewGroup = (ViewGroup) mActivity
+						.findViewById(android.R.id.content);
+
+				toastView = mLayoutInflater.inflate(
+						R.layout.supercircleprogresstoast, mViewGroup, false);
+
+			} else {
+
 				throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 
 			}
-				
+
 		}
-			
-		else
-		{
-				
+
+		else {
+
 			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
-				
+
 		}
 		
 	}
@@ -148,22 +141,16 @@ public class SuperProgressToast
 				}
 
 				
-			}
-			
-			else
-			{
-				
+			} else {
+
 				throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 
 			}
-				
-		}
-			
-		else
-		{
-				
+
+		} else {
+
 			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
-				
+
 		}
 		
 	}

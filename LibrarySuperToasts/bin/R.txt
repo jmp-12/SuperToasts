@@ -58,7 +58,8 @@ int layout supercardtoast_progresshorizontal 0x7f030004
 int layout supercardtoast_toast 0x7f030005
 int layout supercircleprogresstoast 0x7f030006
 int layout superhorizontalprogresstoast 0x7f030007
-int layout supertoast 0x7f030008
+int layout superimagetoast 0x7f030008
+int layout supertoast 0x7f030009
 int string app_name 0x7f070000
 int style AppBaseTheme 0x7f080000
 int style AppTheme 0x7f080001
