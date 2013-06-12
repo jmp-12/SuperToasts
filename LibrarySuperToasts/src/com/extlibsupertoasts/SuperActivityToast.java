@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 /**
@@ -195,26 +196,28 @@ public class SuperActivityToast {
 		messageTextView.setTypeface(typeface);
 		messageTextView.setTextColor(textColor);
 		messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-
+		
+		
+		final FrameLayout mFrameLayout = (FrameLayout) toastView
+				.findViewById(R.id.root);
+		
 		if (backgroundDrawable != null) {
 
 			if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 
-				messageTextView.setBackgroundDrawable(backgroundDrawable);
+				mFrameLayout.setBackgroundDrawable(backgroundDrawable);
 
 			}
 
 			else {
 
-				messageTextView.setBackground(backgroundDrawable);
+				mFrameLayout.setBackground(backgroundDrawable);
 
 			}
 
-		}
+		} else {
 
-		else {
-
-			messageTextView.setBackgroundResource(backgroundResource);
+			mFrameLayout.setBackgroundResource(backgroundResource);
 
 		}
 
@@ -242,7 +245,7 @@ public class SuperActivityToast {
 
 			}
 
-		} else if (mContext.getResources().getDrawable(iconResource) != null) {
+		} else if (iconResource > 0) {
 
 			if (mIconLocation == IconLocation.BOTTOM) {
 
@@ -461,7 +464,7 @@ public class SuperActivityToast {
 
 	
 	/**
-	 * This is used to set an icon to the SuperActivityToast.
+	 * This is used to set an icon drawable to the SuperActivityToast.
 	 * 
 	 * <br>
 	 * 
@@ -484,6 +487,34 @@ public class SuperActivityToast {
 	public void setIconDrawable(Drawable iconDrawable) {
 
 		this.iconDrawable = iconDrawable;
+
+	}
+	
+	
+	/**
+	 * This is used to set an icon resource to the SuperActivityToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Use {@link #setIconLocation(IconLocation)} to modify the 
+	 * location of the icon.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param iconResource 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setIconResource(int iconResource) {
+
+		this.iconResource = iconResource;
 
 	}
 	

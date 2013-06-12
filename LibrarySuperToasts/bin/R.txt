@@ -44,6 +44,7 @@ int id card_container 0x7f090000
 int id dividerView 0x7f090006
 int id messageTextView 0x7f090002
 int id progressBar 0x7f090008
+int id root 0x7f09000a
 int id rootLinearLayout 0x7f090001
 int id root_layout 0x7f090005
 int id toast_rootlayout 0x7f090009
