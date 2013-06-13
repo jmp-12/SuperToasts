@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="toast_yoffset">64dp</dimen>
-    <dimen name="toast_sidemargin">8dp</dimen>
-        
-    <dimen name="textview_padding">8dp</dimen>
-    
-</resources>

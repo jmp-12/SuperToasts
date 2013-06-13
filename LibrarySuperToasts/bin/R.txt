@@ -2,7 +2,14 @@ int color black 0x7f040000
 int color blue 0x7f040003
 int color darkgrey 0x7f040002
 int color white 0x7f040001
-int dimen textview_padding 0x7f050002
+int dimen buttontoast_button_padding 0x7f050008
+int dimen buttontoast_buttondrawable_padding 0x7f050007
+int dimen buttontoast_divider_width 0x7f050005
+int dimen buttontoast_divider_ymargin 0x7f050006
+int dimen buttontoast_textview_xmargin 0x7f050003
+int dimen buttontoast_textview_ymargin 0x7f050004
+int dimen buttontoast_yoffset 0x7f050002
+int dimen textview_padding 0x7f050009
 int dimen toast_sidemargin 0x7f050001
 int dimen toast_yoffset 0x7f050000
 int drawable background_black 0x7f020000

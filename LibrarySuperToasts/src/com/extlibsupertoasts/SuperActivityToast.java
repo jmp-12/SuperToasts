@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -59,7 +61,7 @@ public class SuperActivityToast {
 	private View toastView;
 	private TextView messageTextView;
 	private Handler mHandler;
-	private int sdkVersion = android.os.Build.VERSION.SDK_INT;;
+	private int sdkVersion = android.os.Build.VERSION.SDK_INT;
 
 	private CharSequence textCharSequence;
 	private int textColor = Color.WHITE;
@@ -70,8 +72,8 @@ public class SuperActivityToast {
 	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
 	private boolean isIndeterminate;
 	private OnClickListener mOnClickListener;
-	private Animation showAnimation = getFadeInAnimation();
-	private Animation dismissAnimation = getFadeOutAnimation();
+	private Animation showAnimation;
+	private Animation dismissAnimation;
 	private boolean touchDismiss;
 	private boolean touchImmediateDismiss;
 	private IconLocation mIconLocation = IconLocation.LEFT;
@@ -279,8 +281,16 @@ public class SuperActivityToast {
 		}
 
 		mViewGroup.addView(toastView);
+		
+		if (showAnimation != null) {
 
-		toastView.startAnimation(showAnimation);
+			toastView.startAnimation(showAnimation);
+
+		} else {
+
+			toastView.startAnimation(getFadeInAnimation());
+
+		}
 
 	}
 
@@ -821,77 +831,46 @@ public class SuperActivityToast {
 
 	
 	/**
-	 * This is used to dismiss the SuperActivityToast with an Animation.
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This method should be used when the SuperActivityToast is no longer relevant.
-	 * Treat your SuperActivityToast like a Dialog!
-	 * </p>
+	 * This is used to dismiss the SuperActivityToast.
 	 * 
 	 * <br>
 	 * 
 	 */
 	public void dismiss() {
 
-		if (mHandler != null) {
+		if (toastView != null) {
 
-			mHandler.removeCallbacks(hideToastRunnable);
+			dismissWithAnimation();
 
-			mHandler = null;
+		} else {
 
-		}
-
-		if (toastView != null && mViewGroup != null) {
-
-			toastView.startAnimation(dismissAnimation);
-
-			mViewGroup.removeView(toastView);
-
-			toastView = null;
+			Log.e("SuperActivityToast",
+					"The View was null when trying to dismiss. "
+							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
 
 		}
 
 	}
-
+	
 	
 	/**
-	 * This is used to dismiss the SuperActivityToast immediately without an Animation.
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This method should be used when the SuperActivityToast is no longer relevant.
-	 * Treat your SuperActivityToast like a Dialog!
-	 * </p>
+	 * This is used to dismiss the SuperActivityToast immediately without Animation.
 	 * 
 	 * <br>
 	 * 
 	 */
 	public void dismissImmediately() {
 
-		if (mHandler != null) {
-
-			mHandler.removeCallbacks(hideToastRunnable);
-
-			mHandler = null;
-
-		}
-
 		if (toastView != null && mViewGroup != null) {
 
 			mViewGroup.removeView(toastView);
-
 			toastView = null;
+
+		} else {
+
+			Log.e("SuperCardToast",
+					"Either the View or Container was null when trying to dismiss. "
+							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
 
 		}
 
@@ -1048,6 +1027,92 @@ public class SuperActivityToast {
 		}
 
 	};
+	
+	
+	private Runnable mHideImmediateRunnable = new Runnable() 
+	{
+		 
+        public void run() 
+        {
+        	        	
+        	dismissImmediately();
+        	 
+        }
+        
+    };
+	
+	
+	private void dismissWithAnimation() {
+
+		if (dismissAnimation != null) {
+
+			dismissAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(dismissAnimation);
+
+		}
+
+		else {
+
+			Animation mAnimation = getFadeOutAnimation();
+
+			mAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(mAnimation);
+
+		}
+
+	}
 	
 
 	// XXX: Static methods.

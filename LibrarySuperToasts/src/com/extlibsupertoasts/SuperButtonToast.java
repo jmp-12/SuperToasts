@@ -1,3 +1,20 @@
+/**
+ *  Copyright 2013 John Persano
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *	you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	Unless required by applicable law or agreed to in writing, software
+ *	distributed under the License is distributed on an "AS IS" BASIS,
+ *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	See the License for the specific language governing permissions and
+ *	limitations under the License.
+ * 
+ */
+
 package com.extlibsupertoasts;
 
 
@@ -24,139 +41,237 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+
+/**
+ * SuperButtonToasts are designed to be used inside of Activities. When the
+ * Activity is destroyed the SuperButtonToast is destroyed along with it.
+ * SuperButtonToasts will not linger to the next screen like standard
+ * Toasts/SuperToasts.
+ * 
+ * <br>
+ * 
+ * <p>
+ * <b> Design guide: </b>
+ * </p>
+ * 
+ * <p>
+ * SuperButtonToasts are designed to be displayed after a potentially
+ * dangerous event such as deleting an email as seen in the official
+ * Gmail application. 
+ * </p>
+ * 
+ */
+@SuppressLint("NewApi")
+@SuppressWarnings("deprecation")
 public class SuperButtonToast
 {	
-	   
+	
+	private static final String ERROR_CONTEXTNULL = "The Context that you passed was null! (SuperButtonToast)";
+	private static final String ERROR_CONTEXTNOTACTIVITY = "The Context that you passed was not an Activity! (SuperButtonToast)";
+	private static final String ERROR_ACTIVITYNOINTERFACE = "You must either set an OnClickListener or the calling Activity must implement the " +
+			"SuperButtonToastCallback. (SuperButtonToast)";
+
+	/**
+	 * This style implements a edit icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_EDITDARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_edit, "EDIT", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a exit icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_EXITDARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_exit, "EXIT", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a information icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_INFODARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_info, "INFO", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a redo icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_REDODARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_redo, "REDO", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a save icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_SAVEDARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_save, "SAVE", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a share icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_SHAREDARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_share, "SHARE", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a undo icon with a dark theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_UNDODARK = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_dark_undo, "UNDO", (Color.WHITE), (Color.WHITE), 
 					(com.extlibsupertoasts.R.drawable.background_black), (Color.WHITE));
 	
+	/**
+	 * This style implements a edit icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_EDITLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_edit, "EDIT", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a exit icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_EXITLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_exit, "EXIT", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a information icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_INFOLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_info, "INFO", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a redo icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_REDOLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_redo, "REDO", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a save icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_SAVELIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_save, "SAVE", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a share icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_SHARELIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_share, "SHARE", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 	
+	/**
+	 * This style implements a undo icon with a light theme background.
+	 */
 	public static final SuperButtonToastStyle STYLE_UNDOLIGHT = new SuperButtonToastStyle
 			(com.extlibsupertoasts.R.drawable.icon_light_undo, "UNDO", (Color.DKGRAY), (Color.DKGRAY), 
 					(com.extlibsupertoasts.R.drawable.background_white), (Color.DKGRAY));
 
-	
-	private SuperButtonToastStyle mSuperButtonToastStyle;
-	
+		
 	private Context mContext;
-	private View mView;
+	private View toastView;
 	private ViewGroup mViewGroup;
-	
-	
-	private Handler mHandler = new Handler();;
-
 	private SuperButtonToastCallback mSuperButtonToastCallback;
-	
-	private OnClickListener mOnClickListener;
-
 	private LinearLayout mRootLayout;
-	private int backgroundResource = (R.drawable.background_white);
-	private Drawable backgroundDrawable;
-
-	
 	private View undodividerView;
-	private int dividerColor = (R.color.black);
-	private Drawable dividerDrawable;
-
-	
-	private int durationInteger = 5000;
-	private boolean setIndeterminate;
-
-	
-	private Animation animationIn = getFadeInAnimation();
-	private Animation animationOut = getFadeOutAnimation();
-	
 	private TextView mTextView;
-	private CharSequence messageText = "Default text.";
-	private int messageTextColor = Color.BLACK;
-	private float messageTextSize;
-	private Typeface messageTextTypeface = Typeface.DEFAULT;
+	private LayoutInflater mLayoutInflater;
+	private int sdkVersion = android.os.Build.VERSION.SDK_INT;
 
+	
+	private int backgroundResource = (SuperToastConstants.BACKGROUND_BLACK);
+	private int durationInteger = (SuperToastConstants.DURATION_LONG);
+	private int messageTextSize = (SuperToastConstants.TEXTSIZE_MEDIUM);
+	private Handler mHandler;
+	private OnClickListener mOnClickListener;
+	private Drawable backgroundDrawable;
+	private int dividerResource = (R.color.black);
+	private Drawable dividerDrawable;
+	private boolean setIndeterminate;
+	private Animation showAnimation = getFadeInAnimation();
+	private Animation dismissAnimation = getFadeOutAnimation();
+	private CharSequence messageCharSequence;
+	private int messageTextColor = (Color.WHITE);
+	private Typeface messageTypeface = (Typeface.DEFAULT);
 	private Button mButton;
-	private int buttonimageResource = SuperToastConstants.BACKGROUND_WHITE;
+	private int undoButtonResource = (SuperToastConstants.BUTTON_LIGHT_REDO);
 	private Drawable buttonimageDrawable;
-	private CharSequence buttonText = "UNDO";
-	private int buttonTextColor = Color.BLACK;
+	private CharSequence buttonTextCharSequence;
+	private int buttonTextColor = (Color.BLACK);
 	private float buttonTextSize;
-	private Typeface buttonTextTypeface = Typeface.DEFAULT_BOLD;
+	private Typeface buttonTextTypeface = (Typeface.DEFAULT_BOLD);
 
 		
-	
+	/**
+	 * This is a callback that can be implemented in place of an
+	 * OnClickListener.
+	 */
 	public interface SuperButtonToastCallback
 	{
 		
+		/**
+		 * This callback will be called when the button in the
+		 * SuperButtonToast is clicked.
+		 * 
+		 * <br>
+		 * 
+		 * <p>
+		 * <b> Important note: </b>
+		 * </p>
+		 * 
+		 * <p>
+		 * This callback will not be called if an OnClickListener is set
+		 * to the SuperButtonToast. 
+		 * </p>
+		 * 
+		 */
 		public void onSuperButtonToastClick();
 		
 	}
 
 
 	
-
+	/**
+	 * Instantiates a new SuperButtonToast. You <b>MUST</b> pass an Activity
+	 * as a Context.
+	 * 
+	 * <br>
+	 * 
+	 * @param mContext
+	 *            This must be an Activity Context.
+	 * 
+	 */
 	public SuperButtonToast(final Context mContext) 
 	{
 		
 		if(mContext != null)
 		{
 
-			if(!(mContext instanceof Activity))
+			if(mContext instanceof Activity)
 			{
 				
-				throw new IllegalArgumentException("You must pass an Activity Context!");
+				this.mContext = mContext;
+
+				mLayoutInflater = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+				final Activity mActivity = (Activity) mContext;
+
+				mViewGroup = (ViewGroup) mActivity
+						.findViewById(android.R.id.content);
+
+				toastView = mLayoutInflater.inflate(R.layout.supertoast,
+						mViewGroup, false);	
 				
 			}
 			
 			else
 			{
 				
-				this.mContext = mContext;
+				throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 				
 			}
 			
@@ -165,589 +280,238 @@ public class SuperButtonToast
 		else
 		{
 			
-			throw new IllegalArgumentException("The Context you passed was null!");
+			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
 			
 		}
 		
 	}
 	
 	
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
+	/**
+	 * This is used to show the SuperButtonToast. You should
+	 * do all of your modifications to the SuperButtonToast before calling
+	 * this method. 
+	 */
 	public void show()
-	{
-		
-		final LayoutInflater superundoLayoutInflater = (LayoutInflater) 
-				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
-        final Activity activity = (Activity) mContext;
-        
-		final int sdkVersion = android.os.Build.VERSION.SDK_INT;
-
-        
-	        if(mViewGroup == null)
-	        {
-	        	
-	        	mViewGroup = (ViewGroup) 
-	            		activity.findViewById(android.R.id.content);
-	        	
-	        }
-        			
-	    mView = superundoLayoutInflater
-				.inflate(R.layout.superbuttontoast, mViewGroup, false);
-			
+	{		
 			
 	    if(!setIndeterminate)
 	    {
 	    	
-			mHandler.postDelayed(hideUndoToastRunnable, durationInteger);
+	    	mHandler = new Handler();
+			mHandler.postDelayed(hideToastRunnable, durationInteger);
 	    	
 	    }
 			
-		
 		mTextView = (TextView) 
-				mView.findViewById(R.id.messageTextView);
+				toastView.findViewById(R.id.messageTextView);
 		
-		mTextView.setText(messageText);
-		
-			if(messageTextSize > 0)
-			{
-			
-				mTextView.setTextSize(messageTextSize);	
-
-			}
-		
-		mTextView.setTypeface(messageTextTypeface);
-
-		
-			if(mSuperButtonToastStyle != null)
-			{
-				
-				mTextView.setTextColor(mSuperButtonToastStyle.messagecolorResource);
-	
-			}
-			
-			else
-			{
-
-				mTextView.setTextColor(messageTextColor);
-
-			}
+		mTextView.setText(messageCharSequence);
+	    mTextView.setTextSize(messageTextSize);	
+		mTextView.setTypeface(messageTypeface);
+		mTextView.setTextColor(messageTextColor);
 		
 		
 		mButton = (Button) 
-				mView.findViewById(R.id.undoButton);
+				toastView.findViewById(R.id.undoButton);
 		
-			if(buttonTextSize > 0)
-			{
-			
-				mButton.setTextSize(buttonTextSize);	
-
-			}
-		
+		mButton.setTextSize(buttonTextSize);	
 		mButton.setTypeface(buttonTextTypeface);
+		mButton.setTextColor(buttonTextColor);
+		mButton.setText(buttonTextCharSequence);
 
-			if(mSuperButtonToastStyle != null)
-			{
-					
-				mButton.setTextColor(mSuperButtonToastStyle.undocolorResource);
 				
-				mButton.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
-						.getDrawable(mSuperButtonToastStyle.undobuttondrawableResource), null, null, null);
+		if (buttonimageDrawable != null) {
+
+			mButton.setCompoundDrawablesWithIntrinsicBounds(
+					buttonimageDrawable, null, null, null);
+
+		} else {
+
+			mButton.setCompoundDrawablesWithIntrinsicBounds(mContext
+					.getResources().getDrawable(undoButtonResource), null,
+					null, null);
+
+		}
 				
-				mButton.setText(mSuperButtonToastStyle.undoCharSequence);
-		
+
+		if(mOnClickListener == null) {
+				
+			try {
+				
+				mSuperButtonToastCallback = (SuperButtonToastCallback) mContext;				
+				
+			} catch (Exception exception) {
+				
+				throw new IllegalArgumentException(ERROR_ACTIVITYNOINTERFACE);
+				
 			}
-			
-			else
+				
+			mButton.setOnClickListener(new View.OnClickListener() 
 			{
 	
-				mButton.setTextColor(buttonTextColor);
-				
-					if(buttonimageDrawable != null)
-					{
+				@Override
+				public void onClick(View view){
 						
-						mButton.setCompoundDrawablesWithIntrinsicBounds(buttonimageDrawable, null, null, null);
+					mSuperButtonToastCallback.onSuperButtonToastClick();
 						
-					}
+				}
 					
-					else
-					{
-						
-						mButton.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
-								.getDrawable(buttonimageResource), null, null, null);
-						
-					}
+		    });
 				
-				mButton.setText(buttonText);
-
-			}
-			
-			
-			if(mOnClickListener == null)
-			{
-				
-				mSuperButtonToastCallback = (SuperButtonToastCallback) mContext;
-				
-				mButton.setOnClickListener(new View.OnClickListener() 
-				{
-	
-					@Override
-					public void onClick(View view)
-					{
-						
-						mSuperButtonToastCallback.onSuperButtonToastClick();
-						
-						mHandler.removeCallbacks(hideUndoToastRunnable);
-												
-						dismiss(true);
-						
-					}
-					
-		        });
-				
-			}
-			
-			else
-			{
+		} else {
 				
 				mButton.setOnClickListener(mOnClickListener);
 				
-			}
+		}
 		
 		
 		mRootLayout = (LinearLayout) 
-				mView.findViewById(R.id.rootLinearLayout);
-		
-			if(mSuperButtonToastStyle != null)
-			{
-					
-				mRootLayout.setBackgroundResource(mSuperButtonToastStyle.toastbackgroundResource);
-		
-			}
+				toastView.findViewById(R.id.rootLinearLayout);
+
+		if(backgroundDrawable != null) {
 			
-			else
-			{
+			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 				
-				if(backgroundDrawable != null)
-				{
-					
-					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-														
-						mRootLayout.setBackgroundDrawable(backgroundDrawable);
+				mRootLayout.setBackgroundDrawable(backgroundDrawable);
+								
+			} else { 
 							
-					}
-						
-					else 
-					{
-							
-						mRootLayout.setBackground(backgroundDrawable);
-						    
-					}
-
-				}
-				
-				else
-				{
-					
-					mRootLayout.setBackgroundResource(backgroundResource);
-
-				}
-				
+				mRootLayout.setBackground(backgroundDrawable);
+							    
 			}
 			
-		
-		undodividerView = (View) 
-				mView.findViewById(R.id.undodividerView);
-		
-			if(mSuperButtonToastStyle != null)
-			{
-				
-				undodividerView.setBackgroundColor(mSuperButtonToastStyle.dividerdrawableResource);
-				
-			}
-			
-			else
-			{
-				
-				if(dividerDrawable != null)
-				{
+		} else {
 					
-					if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-					{
-												
-						undodividerView.setBackgroundDrawable(dividerDrawable);
-						
-					}
-					
-					else 
-					{
-						
-						undodividerView.setBackground(dividerDrawable);
-					    
-					}
-				}
-				
-				else
-				{
-					
-					undodividerView.setBackgroundColor(dividerColor);
+			mRootLayout.setBackgroundResource(backgroundResource);
 
-				}
-				
-			}
-        
-		mViewGroup.addView(mView);
-		
-		
-		mView.startAnimation(animationIn);
-
-	}
-	
-	
-	
-	
-	/**
-	 * <b> public void setOnClickListener(final OnClickListener mOnClickListener) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the OnClickListener for the button in the SuperButtonToast.
-	 *     If you do not wish to set an OnClickListener then you must implement the SuperButtonToastCallback
-	 *     in your Activity to receive the Button click.</p>
-	 * 
-	 * 
-	 *	 
-	 */
-	
-	public void setOnClickListener(final OnClickListener mOnClickListener)
-	{
-		
-		this.mOnClickListener = mOnClickListener;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setStyle(final SuperButtonToastStyle mSuperButtonToastStyle) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the style of the SuperButtonToast. Please note: 
-	 * 	   If you decide to use a default style than you are limited on the other
-	 * 	   modifications you may make to the SuperButtonToast because the style 
-	 * 	   presents these components. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (SuperButtonToast.STYLE_UNDODARK) </p>
-	 * 
-	 *	 
-	 */
-
-	public void setStyle(final SuperButtonToastStyle mSuperButtonToastStyle)
-	{
-		
-		this.mSuperButtonToastStyle = mSuperButtonToastStyle;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setViewGroup(final ViewGroup mViewGroup) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the ViewGroup that the SuperButtonToast will be added to. 
-	 *     By default this is set to (android.R.id.content).</p>
-	 *	 
-	 */
-
-	public void setViewGroup(final ViewGroup mViewGroup)
-	{
-		
-		this.mViewGroup = mViewGroup;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setBackgroundResource(final int backgroundresource) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the background resource of the SuperButtonToast.
-	 * 	   Please note: You may also use a custom Drawable as a background via the 
-	 *     setBackgroundDrawable() method. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (SuperButtonToast.BACKGROUND_STANDARDWHITE) </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setBackgroundResource(final int backgroundResource)
-	{
-		
-		this.backgroundResource = backgroundResource;
-		
-	}
-	
-	
-	
-	/**
-	 * <b> public void setBackgroundDrawable(final Drawable backgroundDrawable) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the background Drawable of the SuperButtonToast.
-	 * 	   Please note: You may also use the resources in this library as a background via the 
-	 *     setBackgroundResource() method. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setBackgroundDrawable(final Drawable backgroundDrawable)
-	{
-		
-		this.backgroundDrawable = backgroundDrawable;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setButtonImageResource(final int undobuttondrawableResource) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the image resource of the button in the SuperButtonToast.
-	 *     Please note: You may also use a custom Drawable as the image background via the 
-	 *     setButtonImageDrawable() method.  </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (SuperUndoToast.BUTTON_DARK_EDIT) </p>
-	 * 
-	 * 	    
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> The Drawable supplied through this parameter should be nine-patch format. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setButtonImageResource(int undobuttondrawableResource)
-	{
-		
-		this.buttonimageResource = undobuttondrawableResource;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setButtonImageDrawable(final Drawable buttonimageDrawable) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the image Drawable of the button in the SuperButtonToast.
-	 * 	   Please note: You may also use the resources in this library as a background via the 
-	 *     setButtonImageResource() method. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setButtonImageDrawable(Drawable buttonimageDrawable)
-	{
-		
-		this.buttonimageDrawable = buttonimageDrawable;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setDividerColor(final int dividerColor) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the color of the divider in the SuperButtonToast. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (Color.BLACK) </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setDividerColor(final int dividerColor)
-	{
-		
-		this.dividerColor = dividerColor;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setDividerDrawable(final Drawable dividerDrawable) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the Drawable of the divider in the SuperButtonToast. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setDividerDrawable(final Drawable dividerDrawable)
-	{
-		
-		this.dividerDrawable = dividerDrawable;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setDuration(final int durationInteger) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the duration the SuperButtonToast. You
-	 *     may use a custom duration for example (3000) for three seconds. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (SuperButtonToast.DURATION_SHORT) </p>
-	 * 
-	 * 
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> The duration should not exceed 10000 milliseconds. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setDuration(final int durationInteger)
-	{
-		
-		this.durationInteger = durationInteger;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setIndeterminate(final boolean setIndeterminate) </b>
-	 * 
-	 * 
-	 * <p> This is used to show the SuperButtonToast indefinitely. Please note: 
-	 *     You must call dismiss() to dismiss the SuperButtonToast. </p>
-	 * 
-	 * 
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> There are a very few situations where this should be used. </p>
-	 * 
-	 *	 
-	 */
-	
-	public void setIndeterminate(final boolean setIndeterminate)
-	{
-		
-		this.setIndeterminate = setIndeterminate;
-		
-	}
-	
-
-	/**
-	 * <b> public void setAnimationIn(final Animation animationIn) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the opening animation of the SuperUndoToast. </p>
-	 * 
-	 * <p> Please note: The animation should not exceed 750 milliseconds under any circumstances
-	 *
-	 */
-	
-	public void setAnimationIn(final Animation animationIn)
-	{
-		
-		this.animationIn = animationIn;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setAnimationIn(final Animation animationIn) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the closing animation of the SuperButtonToast. </p>
-	 * 
-	 * <p> Please note: The animation should not exceed 750 milliseconds under any circumstances
-	 * 
-	 */
-	
-	public void setAnimationOut(final Animation animationOut)
-	{
-		
-		this.animationOut = animationOut;
-		
-	}
-	
-	
-	/**
-	 * <b> public void setMessageText(final CharSequence messageText) </b>
-	 * 
-	 * 
-	 * <p> This is used to set the message text of the SuperButtonToast. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> ("Hello, I am a SuperButtonToast")</p>
-	 * 
-	 *	 
-	 */
-
-	public void setMessageText(final CharSequence messageText)
-	{
-		
-		this.messageText = messageText;
-		
-		if(mView != null)
-		{
-				
-			mTextView.setText(messageText);
-				
 		}
 		
+		undodividerView = (View) 
+				toastView.findViewById(R.id.undodividerView);
+		
+		if(dividerDrawable != null) {
+					
+			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+												
+				undodividerView.setBackgroundDrawable(dividerDrawable);
+						
+			} else {
+						
+				undodividerView.setBackground(dividerDrawable);
+					    
+			}
+			
+		} else {
+					
+			undodividerView.setBackgroundColor(dividerResource);
+
+		}
+        
+		mViewGroup.addView(toastView);
+		
+		toastView.startAnimation(showAnimation);
+
+	}
+	
+	
+	
+	/**
+	 * This is used to set the message text of the SuperButtonToast.
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The text of the SuperButtonToast should be short and to the point.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param messageCharSequence 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setMessageText(CharSequence messageCharSequence) {
+
+		this.messageCharSequence = messageCharSequence;
+
+		if (toastView != null) {
+
+			mTextView.setText(messageCharSequence);
+
+		}
+
 	}
 	
 	
 	/**
-	 * <b> public void setMessageTextColor(final int messageTextColor) </b>
+	 * This is used to set the message text color of the SuperButtonToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to set the color of the message text in the SuperButtonToast.		  </p>
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <b> Parameter example: </b>
+	 * <p>
+	 * The text color that you choose should contrast the color of the background.
+	 * Generally the colors white and black are the only colors that should be used
+	 * here.
+	 * </p>
 	 * 
-	 * <p> (Color.BLACK)</p>
+	 * <br>
 	 * 
-	 *	 
+	 * @param messageTextColor 
+	 * 		Example: (Color.WHITE)
+	 * 	 	
+	 * <br>
+	 * 
 	 */
+	public void setMessageTextColor(final int messageTextColor) {
 
-	public void setMessageTextColor(final int messageTextColor)
-	{
-		
 		this.messageTextColor = messageTextColor;
-		
+
 	}
-	
+
 	
 	/**
-	 * <b> public void setMessageTextSize(final float messageTextSize) </b>
+	 * This is used to set the text size of the message in the SuperButtonToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to set the size of the message text in the SuperButtonToast. </p>
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <b> Parameter example: </b>
+	 * <p>
+	 * Generally the text size should be around 14sp.
+	 * </p>
 	 * 
-	 * <p> (18) </p>
+	 * <br>
 	 * 
-	 *	 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * You may specify an integer value as a parameter.
+	 * This method will automatically convert the integer to 
+	 * scaled pixels. 
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param messageTextSize 
+	 * 		Example: (SuperToastConstants.TEXTSIZE_SMALL)
+	 * 		
+	 * <br>
+	 * 
 	 */
-
-	public void setMessageTextSize(final float messageTextSize)
-	{
+	public void setMessageTextSize(int messageTextSize) {
 		
 		this.messageTextSize = messageTextSize;
 		
@@ -755,126 +519,517 @@ public class SuperButtonToast
 	
 	
 	/**
-	 * <b> public void setMessageTypeface(final Typeface messageTextTypeface) </b>
+	 * This is used to set an OnClickListener to the Button of the SuperButtonToast.
+	 * <br>
 	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This is used to set the Typeface of the message text in the SuperButtonToast. </p>
+	 * <p>
+	 * An OnClickListener must be set to the Button of the SuperButtonToast or 
+	 * the SuperButtonToastCallback must be implemented in the calling Activity.
+	 * </p>
 	 * 
-	 * <b> Parameter example: </b>
+	 * <br>
 	 * 
-	 * <p> (Typeface.DEFAULT)</p>
+	 * @param mOnClickListener 
+	 * 		The OnClickListener should call {@link #dismiss()}.
+	 * 		
+	 * <br>
 	 * 
-	 *	 
 	 */
+	public void setOnClickListener(OnClickListener mOnClickListener) {
 
-	public void setMessageTextTypeface(final Typeface messageTextTypeface)
-	{
-		
-		this.messageTextTypeface = messageTextTypeface;
-		
+		this.mOnClickListener = mOnClickListener;
+
 	}
 	
 	
 	/**
-	 * <b> public void setButtonText(final CharSequence buttonText) </b>
+	 * This is used to set the style of the SuperButtonToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to set the message of the button text in the SuperButtonToast. </p>
+	 * @param mSuperButtonToastStyle 
+	 * 		Example: (SuperButtonToast.STYLE_UNDODARK)
+	 * 		
+	 * <br>
 	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> ("UNDO")</p>
-	 * 
-	 * 
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> This message should be in all capital letters and between 3-6 characters in length. </p>
-	 *	 
 	 */
+	public void setStyle(final SuperButtonToastStyle mSuperButtonToastStyle) {
 
-	public void setButtonText(final CharSequence buttonText)
-	{
-		
-		this.buttonText = buttonText;
-		
-		if(mView != null)
-		{
-			
-			mButton.setText(buttonText);
-			
+		this.undoButtonResource = mSuperButtonToastStyle.undoButtonResource;
+		this.buttonTextCharSequence = mSuperButtonToastStyle.buttonTextCharSequence;
+		this.messageTextColor = mSuperButtonToastStyle.messageTextColor;
+		this.buttonTextColor = mSuperButtonToastStyle.buttonTextColor;
+		this.backgroundResource = mSuperButtonToastStyle.backgroundResource;
+		this.dividerResource = mSuperButtonToastStyle.dividerResource;
+
+	}
+	
+	
+	/**
+	 * This is used to set the ViewGroup that the SuperButtonToast is 
+	 * attached to. By default the SuperButtonToast is attached to 
+	 * (android.R.id.content).
+	 * 
+	 * <br>
+	 * 
+	 * @param mViewGroup 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setViewGroup(final ViewGroup mViewGroup) {
+
+		this.mViewGroup = mViewGroup;
+
+	}
+	
+	/**
+	 * This is used to set the background of the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use your own backgrounds please make sure that
+	 * the background is nine-patch or XML format. 
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param backgroundResource 
+	 * 		Example: (SuperToastConstants.BACKGROUND_BLACK)
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setBackgroundResource(final int backgroundResource) {
+
+		this.backgroundResource = backgroundResource;
+
+	}
+	
+	
+	/**
+	 * This is used to set the background of the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use them please see {@link #setBackgroundResource(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param backgroundDrawable 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setBackgroundDrawable(final Drawable backgroundDrawable) {
+
+		this.backgroundDrawable = backgroundDrawable;
+
+	}
+	
+	
+	/**
+	 * This is used to set the background of the Button in the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param undoButtonResource 
+	 * 		Example: (SuperToastConstants.BUTTON_DARK_REDO)
+     *
+	 * <br>
+	 * 
+	 */
+	public void setButtonResource(int undoButtonResource) {
+
+		this.undoButtonResource = undoButtonResource;
+
+	}
+	
+	
+	/**
+	 * This is used to set the background drawable of the Button in the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications.
+	 * To use them please see {@link #setButtonResource(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param buttonimageDrawable 
+     *
+	 * <br>
+	 * 
+	 */
+	public void setButtonDrawable(Drawable buttonimageDrawable) {
+
+		this.buttonimageDrawable = buttonimageDrawable;
+
+	}
+	
+	
+	/**
+	 * This is used to set the resource of the divider in the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The resource can also be a Color. Choose a Color that contrasts the
+	 * background of the SuperButtonToast. 
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param dividerResource 
+	 * 		Example: (Color.WHITE)
+     *
+	 * <br>
+	 * 
+	 */
+	public void setDividerResource(int dividerResource) {
+
+		this.dividerResource = dividerResource;
+
+	}
+	
+	
+	/**
+	 * This is used to set the Drawable of the divider in the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * To use a Color instead see {@link #setDividerResource(int)}. 
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param dividerDrawable 
+     *
+	 * <br>
+	 * 
+	 */
+	public void setDividerDrawable(Drawable dividerDrawable) {
+
+		this.dividerDrawable = dividerDrawable;
+
+	}
+	
+	
+	/**
+	 * This is used to set the duration of the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * To mimic the actions of the official Gmail application see 
+	 * {@link #setIndeterminate(boolean)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param durationInteger 
+	 * 		Example: (SuperToastConstants.DURATION_LONG)
+     *
+	 * <br>
+	 * 
+	 */
+	public void setDuration(int durationInteger) {
+
+		this.durationInteger = durationInteger;
+
+	}
+	
+	
+	/**
+	 * This is used to set an indeterminate value to the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * {@link #dismiss()} must be called to dismiss the SuperButtonToast.
+	 * Setting the SuperButtonToast to indeterminate will force the SuperButtonToast 
+	 * to ignore any duration set by {@link #setDuration(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param setIndeterminate 
+     *
+	 * <br>
+	 * 
+	 */
+	public void setIndeterminate(boolean setIndeterminate) {
+
+		this.setIndeterminate = setIndeterminate;
+
+	}
+	
+
+	/**
+	 * This is used to set the show animation of the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The Animation that you supply here should be simple and not exceed
+	 * 500 milliseconds.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param showAnimation 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setShowAnimation(Animation showAnimation) {
+
+		this.showAnimation = showAnimation;
+
+	}
+	
+	
+	/**
+	 * This is used to set the dismiss animation of the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The Animation that you supply here should be simple and not exceed
+	 * 500 milliseconds.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param dismissAnimation 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setDismissAnimation(Animation dismissAnimation) {
+
+		this.dismissAnimation = dismissAnimation;
+
+	}
+	
+	
+	/**
+	 * This is used to set the Typeface of the message in the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with a link to download the Roboto font. To use the
+	 * fonts see {@link #loadRobotoTypeface(String)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param messageTypeface 
+	 * 		Example: (Typeface.DEFAULT) OR (mSuperActivityToast.loadRobotoTypeface(SuperToastConstants.
+	 * FONT_ROBOTO_THIN);
+	 * 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setMessageTextTypeface(final Typeface messageTypeface) {
+
+		this.messageTypeface = messageTypeface;
+
+	}
+	
+	
+	/**
+	 * This is used to set the message text of the Button in the SuperButtonToast.
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The text of the SuperButtonToast should be short, and all capital letters.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param buttonTextCharSequence 
+	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setButtonText(CharSequence buttonTextCharSequence) {
+
+		this.buttonTextCharSequence = buttonTextCharSequence;
+
+		if (toastView != null) {
+
+			mButton.setText(buttonTextCharSequence);
+
 		}
-	
+
 	}
 	
 	
 	/**
-	 * <b> public void setButtonTextColor(final int buttonTextColor) </b>
+	 * This is used to set the Button text color of the SuperButtonToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to set the text color of the Button in the SuperButtonToast. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (Color.BLACK)</p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> This color should match the message color and contrast the background of the SuperButtonToast. </p>
-	 *	 
+	 * <p>
+	 * The text color that you choose should contrast the color of the background.
+	 * Generally the colors white and black are the only colors that should be used
+	 * here. This color should also match the color specified in {@link #setMessageTextColor(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param buttonTextColor 
+	 * 		Example: (Color.WHITE)
+	 * 	 	
+	 * <br>
+	 * 
 	 */
+	public void setButtonTextColor(final int buttonTextColor) {
 
-	public void setButtonTextColor(final int buttonTextColor)
-	{
-		
 		this.buttonTextColor = buttonTextColor;
-		
+
 	}
 	
 	
 	/**
-	 * <b> public void setButtonTextSize(final int buttonTextSize) </b>
+	 * This is used to set the text size of the Button in the SuperButtonToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to set the text size of the Button in the SuperButtonToast. </p>
-	 * 
-	 * <b> Parameter example: </b>
-	 * 
-	 * <p> (12)</p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> This should not be larger than the size of the message text. </p>
-	 *	 
+	 * <p>
+	 * Generally the text size should be around 16sp.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * You may specify an integer value as a parameter.
+	 * This method will automatically convert the integer to 
+	 * scaled pixels. 
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param buttonTextSize 
+	 * 		Example: (SuperToastConstants.TEXTSIZE_MEDIUM)
+	 * 		
+	 * <br>
+	 * 
 	 */
+	public void setButtonTextSize(float buttonTextSize) {
 
-	public void setButtonTextSize(final float buttonTextSize)
-	{
-		
 		this.buttonTextSize = buttonTextSize;
-		
+
 	}
 	
 	
 	/**
-	 * <b> public void setButtonTextTypeface(final Typeface buttonTextTypeface) </b>
+	 * This is used to set the Typeface of the Button in the SuperButtonToast.
 	 * 
 	 * 
-	 * <p> This is used to set the Typeface of the Button in the SuperUndoToast. </p>
+	 * <br>
 	 * 
-	 * <b> Parameter example: </b>
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> (Typeface.DEFAULT_BOLD)</p>
+	 * <p>
+	 * This library comes with a link to download the Roboto font. To use the
+	 * fonts see {@link #loadRobotoTypeface(String)}.
+	 * </p>
 	 * 
+	 * <br>
 	 * 
-	 * <b> Design guide: </b>
+	 * @param buttonTextTypeface 
+	 * 		Example: (Typeface.DEFAULT) OR (mSuperActivityToast.loadRobotoTypeface(SuperToastConstants.
+	 * FONT_ROBOTO_THIN);
 	 * 
-	 * <p> This is set to bold by default. </p>
-	 *	 
+	 * 		
+	 * <br>
+	 * 
 	 */
-
-	public void setButtonTextTypeface(final Typeface buttonTextTypeface)
+	public void setButtonTextTypeface(Typeface buttonTextTypeface)
 	{
 		
 		this.buttonTextTypeface = buttonTextTypeface;
@@ -882,268 +1037,263 @@ public class SuperButtonToast
 	}	
 	
 	
-	
-	
 	/**
-	 * <b> public View getSuperButtonToastView() </b>
+	 * This is used to dismiss the SuperActivityToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This returns the SuperButtonToast view. </p>
-     *
-	 *
 	 */
-	
+	public void dismiss() {
 
-	public View getSuperButtonToastView()
-	{
-		
-		if(mView != null)
-		{
-			
-			return mView;
+		if (toastView != null) {
+
+			dismissWithAnimation();
+
+		} else {
+
+			Log.e("SuperActivityToast",
+					"The View was null when trying to dismiss. "
+							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
 
 		}
-		
-		else
-		{
-			
-			return null;
-			
-		}
-		
+
 	}
 	
 	
 	/**
-	 * <b> public Button getButton() </b>
+	 * This is used to dismiss the SuperActivityToast immediately without Animation.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This returns the SuperButtonToast Button. </p>
-     *
-	 *
 	 */
-	
-	public Button getButton()
-	{
-		
-		if(mButton != null)
-		{
-			
-			return mButton;
+	public void dismissImmediately() {
+
+		if (toastView != null && mViewGroup != null) {
+
+			mViewGroup.removeView(toastView);
+			toastView = null;
+
+		} else {
+
+			Log.e("SuperCardToast",
+					"Either the View or Container was null when trying to dismiss. "
+							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
 
 		}
-		
-		else
-		{
-			
-			return null;
-			
-		}
-		
+
+	}
+	
+	
+	//XXX Get methods.
+	
+	
+	/**
+	 * This is used to get the SuperButtonToast View.
+	 * 
+	 * <br>
+	 * 
+	 * @return View
+	 * 
+	 * <br>
+	 * 
+	 */
+	public View getView() {
+
+		return toastView;
+
 	}
 	
 	
 	/**
-	 * <b> public TextView getMessageTextView() </b>
+	 * This is used to get the SuperButtonToast Button.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This returns the SuperButtonToast message TextView. </p>
-     *
-	 *
+	 * @return Button
+	 * 
+	 * <br>
+	 * 
 	 */
-	
-	public TextView getMessageTextView()
-	{
-		
-		if(mTextView != null)
-		{
-			
-			return mTextView;
+	public Button getButton() {
 
-		}
-		
-		else
-		{
-			
-			return null;
-			
-		}
-		
+		return mButton;
+
 	}
 	
 	
 	/**
-	 * <b> public LinearLayout getRootLayout() </b>
+	 * This is used to get the SuperButtonToast TextView.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This returns the SuperButtonToast root LinearLayout. </p>
-     *
-	 *
+	 * @return TextView
+	 * 
+	 * <br>
+	 * 
 	 */
-	
-	public LinearLayout getRootLayout()
-	{
-		
-		if(mRootLayout != null)
-		{
-			
-			return mRootLayout;
+	public TextView getTextView() {
 
-		}
-		
-		else
-		{
-			
-			return null;
-			
-		}
-		
+		return mTextView;
+
 	}
 	
 	
 	/**
-	 * <b> public View getDivider() </b>
+	 * This is used to get the SuperButtonToast root Layout.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This returns the SuperButtonToast divider View. </p>
-     *
-	 *
+	 * @return LinearLayout
+	 * 
+	 * <br>
+	 * 
 	 */
-	
-	public View getDivider()
-	{
-		
-		if(undodividerView != null)
-		{
-			
-			return undodividerView;
+	public LinearLayout getRootLayout() {
 
-		}
-		
-		else
-		{
-			
-			return null;
-			
-		}
-		
+		return mRootLayout;
+
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/**
-	 * <p> This is used to hide and dispose of the SuperButtonToast. </p>
-	 *
-	 *
-	 * <b> Design guide: </b>
+	 * This is used to get the SuperButtonToast divider.
 	 * 
-	 * <p> This should be called when the user clicks the Button in the SuperButtonToast so
-	 *     that it's not hanging around after the user has used it. </p>
-	 * 	 
-	 *	 
+	 * <br>
+	 * 
+	 * @return View
+	 * 
+	 * <br>
+	 * 
 	 */
+	public View getDivider() {
 
-	public void dismiss(final boolean showAnimation)
-	{
-		
-		mHandler.removeCallbacks(hideUndoToastRunnable);
+		return undodividerView;
 
-	    if(mView != null && mViewGroup != null && animationOut != null)
-	    {
+	}	
+	
+	
+	/**
+	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
+	 * desired font file in the assets folder of your project. The link to
+	 * download the Roboto fonts is included in this library as a text file. Do
+	 * not modify the names of these fonts.
+	 * 
+	 * <br>
+	 * 
+	 * @param typefaceString
+	 * 		Example: (SuperToastConstants.FONT_ROBOTO_THIN)
+	 * 
+	 * <br>
+	 * 
+	 * @return Typeface
+	 * 
+	 * <br>
+	 * 
+	 */
+	public Typeface loadRobotoTypeface(String typefaceString) {
 
-	    	if (showAnimation) 
-	    	{
-	    			
-	       		animationOut.setAnimationListener(new AnimationListener()
-				{
+		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
 
-					@Override
-					public void onAnimationEnd(Animation animation) 
-					{
-
-						mViewGroup.removeView(mView);
-			        		
-						mView = null;                		
-			        	
-					}
-
-					@Override
-					public void onAnimationRepeat(Animation animation) 
-					{
-
-						//Do nothing
-						
-					}
-
-					@Override
-					public void onAnimationStart(Animation animation) 
-					{
-						
-						//Do nothing
-						
-					}
-										
-				});
-
-	       		mView.startAnimation(animationOut);	
-	       			
-	       	}
-			
-			else
-			{
-
-				mViewGroup.removeView(mView);
-	        		
-				mView = null; 
-    
-			}
-	    	
-	    }
-	    	
-	    else
-		{
-				
-			try
-			{
-					
-				mViewGroup.removeView(mView);
-	        		
-				mView = null; 
-					
-			}
-				
-			catch(Exception exception)
-			{
-					
-				Log.e("SuperUndoToast", exception.toString());
-					
-			}
-    
-		}
-		
 	}
-	
-	
 
 	
+	//XXX Private methods.
 	
-	private Runnable hideUndoToastRunnable = new Runnable() 
+	
+	private Runnable hideToastRunnable = new Runnable() {
+
+		public void run() {
+
+			dismiss();
+
+		}
+	};
+	
+	
+	private Runnable mHideImmediateRunnable = new Runnable() 
 	{
 		 
         public void run() 
         {
         	        	
-        	dismiss(true);
+        	dismissImmediately();
         	 
         }
         
     };
     
+	
+	private void dismissWithAnimation() {
+
+		if (dismissAnimation != null) {
+
+			dismissAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(dismissAnimation);
+
+		}
+
+		else {
+
+			Animation mAnimation = getFadeOutAnimation();
+
+			mAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(mAnimation);
+
+		}
+
+	}
 	
 	
 	private Animation getFadeInAnimation()

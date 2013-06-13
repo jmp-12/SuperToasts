@@ -5,46 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@drawable/background_white"
-    android:maxHeight="150dp"
-    android:minHeight="48dp" 
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="16dp" >
+    android:layout_marginLeft="@dimen/toast_sidemargin"
+    android:layout_marginRight="@dimen/toast_sidemargin"
+    android:layout_marginBottom="@dimen/buttontoast_yoffset" >
 
     <TextView
         android:id="@+id/messageTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_weight="1"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/black" />
+        android:layout_marginBottom="@dimen/buttontoast_textview_ymargin"
+        android:layout_marginLeft="@dimen/buttontoast_textview_xmargin"
+        android:layout_marginRight="@dimen/buttontoast_textview_xmargin"
+        android:layout_marginTop="@dimen/buttontoast_textview_ymargin"
+        android:layout_weight="1"/>
     
     <View
         android:id="@+id/undodividerView"
-        android:layout_width="1dp"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/black" />
+        android:layout_width="@dimen/buttontoast_divider_width"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/buttontoast_divider_ymargin"
+        android:layout_marginTop="@dimen/buttontoast_divider_ymargin" />
 
     <Button
         android:id="@+id/undoButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/selector_undobutton"
-        android:drawableLeft="@drawable/icon_light_undo"
-        android:drawablePadding="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Button"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:drawablePadding="@dimen/buttontoast_buttondrawable_padding"
+        android:paddingLeft="@dimen/buttontoast_button_padding"
+        android:paddingRight="@dimen/buttontoast_button_padding"/>
 
 </LinearLayout>

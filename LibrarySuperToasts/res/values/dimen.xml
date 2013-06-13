@@ -2,7 +2,15 @@
 <resources>
     <dimen name="toast_yoffset">64dp</dimen>
     <dimen name="toast_sidemargin">8dp</dimen>
-        
+    
+    <dimen name="buttontoast_yoffset">16dp</dimen>
+    <dimen name="buttontoast_textview_xmargin">16dp</dimen>
+    <dimen name="buttontoast_textview_ymargin">4dp</dimen>
+    <dimen name="buttontoast_divider_width">1dp</dimen>
+    <dimen name="buttontoast_divider_ymargin">8dp</dimen>
+    <dimen name="buttontoast_buttondrawable_padding">8dp</dimen>
+    <dimen name="buttontoast_button_padding">16dp</dimen>
+    
     <dimen name="textview_padding">8dp</dimen>
     
 </resources>
