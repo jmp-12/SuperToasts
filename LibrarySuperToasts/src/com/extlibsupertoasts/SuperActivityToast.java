@@ -65,27 +65,27 @@ public class SuperActivityToast {
 
 	private CharSequence textCharSequence;
 	private int textColor = Color.WHITE;
-	private int backgroundResource = SuperToastConstants.BACKGROUND_BLACK;
-	private Drawable backgroundDrawable;
 	private Typeface typeface = Typeface.DEFAULT;
-	private int duration = SuperToastConstants.DURATION_SHORT;
 	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
+	private int backgroundResource = SuperToastConstants.BACKGROUND_GREYTRANSLUCENT;
+	private Drawable backgroundDrawable;
+	private int duration = SuperToastConstants.DURATION_SHORT;
 	private boolean isIndeterminate;
 	private OnClickListener mOnClickListener;
 	private Animation showAnimation;
 	private Animation dismissAnimation;
 	private boolean touchDismiss;
 	private boolean touchImmediateDismiss;
-	private IconLocation mIconLocation = IconLocation.LEFT;
+	private IconPosition mIconPosition = IconPosition.LEFT;
 	private Drawable iconDrawable;
 	private int iconResource;
 
 	/**
-	 * This is used to specify the location of a supplied icon in the
+	 * This is used to specify the position of a supplied icon in the
 	 * SuperActivityToast.
 	 * 
 	 */
-	public enum IconLocation {
+	public enum IconPosition {
 
 		/**
 		 * Set the icon to the left of the text.
@@ -225,22 +225,22 @@ public class SuperActivityToast {
 
 		if (iconDrawable != null) {
 
-			if (mIconLocation == IconLocation.BOTTOM) {
+			if (mIconPosition == IconPosition.BOTTOM) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
 						null, null, backgroundDrawable);
 
-			} else if (mIconLocation == IconLocation.LEFT) {
+			} else if (mIconPosition == IconPosition.LEFT) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
 						backgroundDrawable, null, null, null);
 
-			} else if (mIconLocation == IconLocation.RIGHT) {
+			} else if (mIconPosition == IconPosition.RIGHT) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
 						null, backgroundDrawable, null);
 
-			} else if (mIconLocation == IconLocation.TOP) {
+			} else if (mIconPosition == IconPosition.TOP) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
 						backgroundDrawable, null, null);
@@ -249,28 +249,26 @@ public class SuperActivityToast {
 
 		} else if (iconResource > 0) {
 
-			if (mIconLocation == IconLocation.BOTTOM) {
+			if (mIconPosition == IconPosition.BOTTOM) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
 						null, null,
 						mContext.getResources().getDrawable(iconResource));
 
-			} else if (mIconLocation == IconLocation.LEFT) {
+			} else if (mIconPosition == IconPosition.LEFT) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
 						mContext.getResources().getDrawable(iconResource),
 						null, null, null);
 
-			} else if (mIconLocation == IconLocation.RIGHT) {
+			} else if (mIconPosition == IconPosition.RIGHT) {
 
 				messageTextView
 						.setCompoundDrawablesWithIntrinsicBounds(
-								null,
-								null,
-								mContext.getResources().getDrawable(
-										iconResource), null);
+								null, null, mContext.getResources().getDrawable(iconResource), 
+								null);
 
-			} else if (mIconLocation == IconLocation.TOP) {
+			} else if (mIconPosition == IconPosition.TOP) {
 
 				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
 						mContext.getResources().getDrawable(iconResource),
@@ -530,7 +528,7 @@ public class SuperActivityToast {
 	
 	
 	/**
-	 * This is used to set the location of the icon in the SuperActivityToast.
+	 * This is used to set the position of the icon in the SuperActivityToast.
 	 * 
 	 * <br>
 	 * 
@@ -544,15 +542,15 @@ public class SuperActivityToast {
 	 * 
 	 * <br>
 	 * 
-	 * @param mIconLocation 
-	 * 		Example: IconLocation.LEFT
+	 * @param mIconPosition 
+	 * 		Example: IconPosition.LEFT
 	 * 		
 	 * <br>
 	 * 
 	 */
-	public void setIconLocation(IconLocation mIconLocation) {
+	public void setIconPosition(IconPosition mIconPosition) {
 
-		this.mIconLocation = mIconLocation;
+		this.mIconPosition = mIconPosition;
 
 	}
 	
