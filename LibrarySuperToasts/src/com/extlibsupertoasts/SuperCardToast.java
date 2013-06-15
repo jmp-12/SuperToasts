@@ -38,7 +38,7 @@ import android.widget.TextView;
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
 public class SuperCardToast
-{
+{//TODO dismiss check button and standard for example
 	
 	private static final String ERROR_CONTEXTNOTACTIVITY  = "Context must be an instance of Activity (SuperCardToast)";
 	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";

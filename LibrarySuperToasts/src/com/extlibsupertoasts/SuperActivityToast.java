@@ -836,17 +836,7 @@ public class SuperActivityToast {
 	 */
 	public void dismiss() {
 
-		if (toastView != null) {
-
-			dismissWithAnimation();
-
-		} else {
-
-			Log.e("SuperActivityToast",
-					"The View was null when trying to dismiss. "
-							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
-
-		}
+		dismissWithAnimation();
 
 	}
 	
@@ -1002,11 +992,21 @@ public class SuperActivityToast {
 
 	private OnTouchListener mTouchDismissListener = new OnTouchListener() {
 
+		int timesTouched;
+
 		@Override
 		public boolean onTouch(View view, MotionEvent event) {
 
-			dismiss();
+			/** This is a little hack to prevent the user from repeatedly 
+			 *  touching the SuperCardToast causing erratic behavior **/
+			if (timesTouched == 0) {
 
+				dismiss();
+
+			} 
+			
+			timesTouched++;
+			
 			return false;
 
 		}
@@ -1041,6 +1041,14 @@ public class SuperActivityToast {
 	
 	
 	private void dismissWithAnimation() {
+		
+		
+		if (mHandler != null) {
+
+			mHandler.removeCallbacks(hideToastRunnable);
+			mHandler = null;
+
+		}
 
 		if (dismissAnimation != null) {
 

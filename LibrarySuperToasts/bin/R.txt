@@ -9,6 +9,7 @@ int dimen buttontoast_divider_ymargin 0x7f050006
 int dimen buttontoast_textview_xmargin 0x7f050003
 int dimen buttontoast_textview_ymargin 0x7f050004
 int dimen buttontoast_yoffset 0x7f050002
+int dimen supertoast_drawable_padding 0x7f05000a
 int dimen textview_padding 0x7f050009
 int dimen toast_sidemargin 0x7f050001
 int dimen toast_yoffset 0x7f050000
@@ -66,8 +67,7 @@ int layout supercardtoast_progresshorizontal 0x7f030004
 int layout supercardtoast_toast 0x7f030005
 int layout supercircleprogresstoast 0x7f030006
 int layout superhorizontalprogresstoast 0x7f030007
-int layout superimagetoast 0x7f030008
-int layout supertoast 0x7f030009
+int layout supertoast 0x7f030008
 int string app_name 0x7f070000
 int style AppBaseTheme 0x7f080000
 int style AppTheme 0x7f080001

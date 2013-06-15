@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -104,34 +105,34 @@ public class SuperToast
 		messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 		
 
-//		final LinearLayout mRootLayout = (LinearLayout) 
-//				toastView.findViewById(R.id.toast_rootlayout);
-//		
-//		if(backgroundDrawable != null)
-//		{
-//			
-//			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-//			{
-//												
-//				mRootLayout.setBackgroundDrawable(backgroundDrawable);
-//					
-//			}
-//				
-//			else 
-//			{
-//					
-//				mRootLayout.setBackground(backgroundDrawable);
-//				    
-//			}
-//
-//		}
-//		
-//		else
-//		{
-//			
-//			mRootLayout.setBackgroundResource(backgroundResource);
-//
-//		}
+		final FrameLayout mRootLayout = (FrameLayout) 
+				toastView.findViewById(R.id.root);
+		
+		if(backgroundDrawable != null)
+		{
+			
+			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
+			{
+												
+				mRootLayout.setBackgroundDrawable(backgroundDrawable);
+					
+			}
+				
+			else 
+			{
+					
+				mRootLayout.setBackground(backgroundDrawable);
+				    
+			}
+
+		}
+		
+		else
+		{
+			
+			mRootLayout.setBackgroundResource(backgroundResource);
+
+		}
 
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         
