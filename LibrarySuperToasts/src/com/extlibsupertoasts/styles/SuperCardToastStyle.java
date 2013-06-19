@@ -1,30 +1,24 @@
 package com.extlibsupertoasts.styles;
 
+public class SuperCardToastStyle {
 
-public class SuperCardToastStyle 
-{
-	
-	public int buttondrawableResource;
-	
-	public int messagecolorResource;
-	
+	public int undoButtonResource;
+	public CharSequence buttonTextCharSequence;
+	public int messageTextColor;
+	public int buttonTextColor;
 	public int backgroundResource;
-	
-	public int dividerdrawableResource;
+	public int dividerResource;
 
+	public SuperCardToastStyle(int undoButtonResource, CharSequence buttonTextCharSequence, int messageTextColor, 
+			int buttonTextColor, int backgroundResource, int dividerResource) {
 
-	
-	
-	public SuperCardToastStyle(final int buttondrawableResource, final int messagecolorResource,
-			final int backgroundResource, final int dividerdrawableResource)
-	{
-		
-		this.buttondrawableResource = buttondrawableResource;
-		this.messagecolorResource = messagecolorResource;
+		this.undoButtonResource = undoButtonResource;
+		this.buttonTextCharSequence = buttonTextCharSequence;
+		this.messageTextColor = messageTextColor;
+		this.buttonTextColor = buttonTextColor;
 		this.backgroundResource = backgroundResource;
-		this.dividerdrawableResource = dividerdrawableResource;
-		
+		this.dividerResource = dividerResource;
+
 	}
-	
 
 }

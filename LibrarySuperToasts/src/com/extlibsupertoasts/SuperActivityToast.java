@@ -117,7 +117,10 @@ public class SuperActivityToast {
 	 * <br>
 	 * 
 	 * @param mContext
-	 *            This must be an Activity Context.
+	 * 
+	 * <br>
+	 * This must be an Activity Context.
+	 * <br>
 	 * 
 	 */
 	public SuperActivityToast(Context mContext) {
@@ -356,10 +359,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param textColor 
-	 * 		Example: (Color.WHITE)
-	 * 	 	
+	 * <br>
+	 * Example: (Color.WHITE)
 	 * <br>
 	 * 
 	 */
@@ -390,10 +392,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
-	 * @param duration 
-	 * 		Example: (SuperToastConstants.DURATION_SHORT)
-	 * 		
+	 * @param duration
+	 * <br>
+	 * Example: (SuperToastConstants.DURATION_SHORT)
 	 * <br>
 	 * 
 	 */
@@ -421,10 +422,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param newDuration 
-	 * 		Example: (SuperToastConstants.DURATION_SHORT)
-     *
+	 * <br>
+	 * Example: (SuperToastConstants.DURATION_SHORT)
 	 * <br>
 	 * 
 	 */
@@ -458,9 +458,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param isIndeterminate 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -472,7 +470,7 @@ public class SuperActivityToast {
 
 	
 	/**
-	 * This is used to set an icon drawable to the SuperActivityToast.
+	 * This is used to set an icon Drawable to the SuperActivityToast.
 	 * 
 	 * <br>
 	 * 
@@ -481,14 +479,12 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <p>
-	 * Use {@link #setIconLocation(IconLocation)} to modify the 
+	 * Use {@link #setIconPosition(IconPosition)} to modify the 
 	 * location of the icon.
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param iconDrawable 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -509,14 +505,12 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <p>
-	 * Use {@link #setIconLocation(IconLocation)} to modify the 
+	 * Use {@link #setIconPosition(IconPosition)} to modify the 
 	 * location of the icon.
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param iconResource 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -541,10 +535,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param mIconPosition 
-	 * 		Example: IconPosition.LEFT
-	 * 		
+	 * <br>
+	 * Example: IconPosition.LEFT
 	 * <br>
 	 * 
 	 */
@@ -570,9 +563,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param mOnClickListener 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -599,10 +590,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param backgroundResource 
-	 * 		Example: (SuperToastConstants.BACKGROUND_BLACK)
-	 * 		
+	 * <br>
+	 * Example: (SuperToastConstants.BACKGROUND_BLACK)
 	 * <br>
 	 * 
 	 */
@@ -628,9 +618,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param backgroundDrawable 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -667,10 +655,9 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param textSize 
-	 * 		Example: (SuperToastConstants.TEXTSIZE_SMALL)
-	 * 		
+	 * <br>
+	 * Example: (SuperToastConstants.TEXTSIZE_SMALL)		
 	 * <br>
 	 * 
 	 */
@@ -696,12 +683,10 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param typeface 
+	 * <br>
 	 * 		Example: (Typeface.DEFAULT) OR (mSuperActivityToast.loadRobotoTypeface(SuperToastConstants.
-	 * FONT_ROBOTO_THIN);
-	 * 
-	 * 		
+	 * FONT_ROBOTO_THIN);	 * 		
 	 * <br>
 	 * 
 	 */
@@ -727,9 +712,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param showAnimation 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -755,9 +738,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param dismissAnimation 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -848,6 +829,13 @@ public class SuperActivityToast {
 	 * 
 	 */
 	public void dismissImmediately() {
+		
+		if(mHandler != null) { 
+			
+			mHandler.removeCallbacks(hideToastRunnable);
+			mHandler = null;
+			
+		}
 
 		if (toastView != null && mViewGroup != null) {
 
@@ -856,7 +844,7 @@ public class SuperActivityToast {
 
 		} else {
 
-			Log.e("SuperCardToast",
+			Log.e("SuperActivityToast",
 					"Either the View or Container was null when trying to dismiss. "
 							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
 
@@ -900,36 +888,8 @@ public class SuperActivityToast {
 		return toastView;
 
 	}
-
-	
-	// Quick Navigation: Utility methods
 	
 	
-	/**
-	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
-	 * desired font file in the assets folder of your project. The link to
-	 * download the Roboto fonts is included in this library as a text file. Do
-	 * not modify the names of these fonts.
-	 * 
-	 * <br>
-	 * 
-	 * @param typefaceString
-	 * 		Example: (SuperToastConstants.FONT_ROBOTO_THIN)
-	 * 
-	 * <br>
-	 * 
-	 * @return Typeface
-	 * 
-	 * <br>
-	 * 
-	 */
-	public Typeface loadRobotoTypeface(String typefaceString) {
-
-		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
-
-	}
-	
-
 	/**
 	 * Returns true of the SuperActivityToast is currently visible 
 	 * to the user. 
@@ -954,6 +914,30 @@ public class SuperActivityToast {
 			return false;
 
 		}
+
+	}
+	
+	
+	/**
+	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
+	 * desired font file in the assets folder of your project. The link to
+	 * download the Roboto fonts is included in this library as a text file. Do
+	 * not modify the names of these fonts.
+	 * 
+	 * <br>
+	 * @param typefaceString
+	 * <br>
+	 * Example: (SuperToastConstants.FONT_ROBOTO_THIN)
+	 * <br>
+	 * 
+	 * @return Typeface
+	 * 
+	 * <br>
+	 * 
+	 */
+	public Typeface loadRobotoTypeface(String typefaceString) {
+
+		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
 
 	}
 	
@@ -1139,11 +1123,10 @@ public class SuperActivityToast {
 	 * @return SuperActivityToast
 	 * 
 	 */
-	public static SuperActivityToast createDarkSuperActivityToast(
-			final Context context, final CharSequence textCharSequence,
-			final int durationInteger) {
+	public static SuperActivityToast createDarkSuperActivityToast(Context context, CharSequence textCharSequence,
+			 int durationInteger) {
 
-		final SuperActivityToast mSuperToast = new SuperActivityToast(context);
+		SuperActivityToast mSuperToast = new SuperActivityToast(context);
 		mSuperToast.setText(textCharSequence);
 		mSuperToast.setDuration(durationInteger);
 
@@ -1167,11 +1150,10 @@ public class SuperActivityToast {
 	 * @return SuperActivityToast
 	 * 
 	 */
-	public static SuperActivityToast createLightSuperActivityToast(
-			final Context context, final CharSequence textCharSequence,
-			final int durationInteger) {
+	public static SuperActivityToast createLightSuperActivityToast(Context context, CharSequence textCharSequence,
+			int durationInteger) {
 
-		final SuperActivityToast mSuperToast = new SuperActivityToast(context);
+		SuperActivityToast mSuperToast = new SuperActivityToast(context);
 		mSuperToast.setText(textCharSequence);
 		mSuperToast.setDuration(durationInteger);
 		mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);

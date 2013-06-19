@@ -1,3 +1,20 @@
+/**
+ *  Copyright 2013 John Persano
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *	you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	Unless required by applicable law or agreed to in writing, software
+ *	distributed under the License is distributed on an "AS IS" BASIS,
+ *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	See the License for the specific language governing permissions and
+ *	limitations under the License.
+ * 
+ */
+
 package com.extlibsupertoasts;
 
 
@@ -16,23 +33,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+
+/**
+ * SuperToasts are designed to replace stock Android Toasts. 
+ * If you need to display a SuperToast inside of an Activity 
+ * please see the class SuperActivityToast.
+ * 
+ */
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
-
 public class SuperToast
 {
 	
 	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperToast)";
 	
-	
+	/**
+	 * This Animation resembles the stock Toast Animation.
+	 */
 	public static final int ANIMATION_FADE = (android.R.style.Animation_Toast);
-	public static final int ANIMATION_FLYIN = (android.R.style.Animation_Translucent);
-	public static final int ANIMATION_SCALE = (android.R.style.Animation_Dialog);
-	public static final int ANIMATION_POPUP = (android.R.style.Animation_InputMethod);
 	
+	/**
+	 * This Animation makes the SuperToast fly in from the right and disappear to the right.
+	 */
+	public static final int ANIMATION_FLYIN = (android.R.style.Animation_Translucent);
+	
+	/**
+	 * This Animation makes the SuperToast scale in from 0% of its size to 100% and disappear 
+	 * by scaling the SuperToast from 100% of its size to 0%. 
+	 */
+	public static final int ANIMATION_SCALE = (android.R.style.Animation_Dialog);
+	
+	/**
+	 * This Animation makes the SuperToast pop-up from the bottom of the screen and disappear 
+	 * to the bottom of the screen.
+	 */
+	public static final int ANIMATION_POPUP = (android.R.style.Animation_InputMethod);
 	
 	private Context mContext;
 	private LayoutInflater mLayoutInflater;
@@ -41,7 +79,6 @@ public class SuperToast
 	private TextView messageTextView;
 	private Handler mHandler;
 	private int sdkVersion = android.os.Build.VERSION.SDK_INT;;
-	
 		
 	private CharSequence textCharSequence;
 	private int textColor = Color.WHITE;
@@ -54,47 +91,84 @@ public class SuperToast
 	private int xOffset = 0;
 	private int yOffset = 0;
 	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
+	private IconPosition mIconPosition = IconPosition.LEFT;
+	private Drawable iconDrawable;
+	private int iconResource;
+		
+	/**
+	 * This is used to specify the position of a supplied icon in the
+	 * SuperActivityToast.
+	 * 
+	 */
+	public enum IconPosition {
 
+		/**
+		 * Set the icon to the left of the text.
+		 */
+		LEFT,
+
+		/**
+		 * Set the icon to the right of the text.
+		 */
+		RIGHT,
+
+		/**
+		 * Set the icon on top of the text.
+		 */
+		TOP,
+
+		/**
+		 * Set the icon on the bottom of the text.
+		 */
+		BOTTOM;
+
+	}
 	
-	public SuperToast(Context mContext) 
-	{
-				
-		if(mContext != null)
-		{
+	/**
+	 * Instantiates a new SuperToast.
+	 * 
+	 * <br>
+	 * 
+	 * @param mContext
+	 * 
+	 */
+	public SuperToast(Context mContext) {
+
+		if (mContext != null) {
 
 			this.mContext = mContext;
-				
-			yOffset = mContext.getResources()
-					.getDimensionPixelSize(R.dimen.toast_yoffset);
-			
-			mLayoutInflater = (LayoutInflater) 
-					mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-			toastView = mLayoutInflater
-					.inflate(R.layout.supertoast, null);
-				
-			mWindowManager = (WindowManager)
-					toastView.getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-											
-		}
-			
-		else
-		{
-				
+
+			yOffset = mContext.getResources().getDimensionPixelSize(
+					com.extlibsupertoasts.R.dimen.toast_yoffset);
+
+			mLayoutInflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			toastView = mLayoutInflater.inflate(R.layout.supertoast, null);
+
+			mWindowManager = (WindowManager) toastView.getContext()
+					.getApplicationContext()
+					.getSystemService(Context.WINDOW_SERVICE);
+
+		} else {
+
 			throw new IllegalArgumentException(ERROR_CONTEXTNULL);
-				
+
 		}
-		
+
 	}
 
 	
-	
+	/**
+	 * This is used to show the SuperToast. You should
+	 * do all of your modifications to the SuperToast before calling
+	 * this method. 
+	 */
 	public void show()
 	{
 
 		mHandler = new Handler();
 		mHandler.postDelayed(hideToastRunnable, duration);
-		
 		
 		messageTextView = (TextView) 
 				toastView.findViewById(R.id.messageTextView);
@@ -108,29 +182,77 @@ public class SuperToast
 		final FrameLayout mRootLayout = (FrameLayout) 
 				toastView.findViewById(R.id.root);
 		
-		if(backgroundDrawable != null)
-		{
-			
-			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-			{
-												
+		if (backgroundDrawable != null) {
+
+			if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
 				mRootLayout.setBackgroundDrawable(backgroundDrawable);
-					
-			}
-				
-			else 
-			{
-					
+
+			} else {
+
 				mRootLayout.setBackground(backgroundDrawable);
-				    
+
 			}
 
-		}
-		
-		else
-		{
-			
+		} else {
+
 			mRootLayout.setBackgroundResource(backgroundResource);
+
+		}
+
+		
+		if (iconDrawable != null) {
+
+			if (mIconPosition == IconPosition.BOTTOM) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+						null, null, backgroundDrawable);
+
+			} else if (mIconPosition == IconPosition.LEFT) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
+						backgroundDrawable, null, null, null);
+
+			} else if (mIconPosition == IconPosition.RIGHT) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+						null, backgroundDrawable, null);
+
+			} else if (mIconPosition == IconPosition.TOP) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+						backgroundDrawable, null, null);
+
+			}
+
+		} else if (iconResource > 0) {
+
+			if (mIconPosition == IconPosition.BOTTOM) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+						null, null,
+						mContext.getResources().getDrawable(iconResource));
+
+			} else if (mIconPosition == IconPosition.LEFT) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
+						mContext.getResources().getDrawable(iconResource),
+						null, null, null);
+
+			} else if (mIconPosition == IconPosition.RIGHT) {
+
+				messageTextView
+						.setCompoundDrawablesWithIntrinsicBounds(
+								null, null, mContext.getResources().getDrawable(iconResource), 
+								null);
+
+			} else if (mIconPosition == IconPosition.TOP) {
+
+				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+						mContext.getResources().getDrawable(iconResource),
+						null, null);
+
+			}
 
 		}
 
@@ -156,154 +278,243 @@ public class SuperToast
 
 	
 	/**
-	 * <b><i> public void setText(CharSequence textCharSequence) </i></b>
+	 * This is used to set the message text of the SuperToast.
 	 * 
-	 * <p> This is used to set the text of the SuperToast message. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> ("Hello, I am a SuperToast!") </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This method can be called again while the SuperToast is showing to 
-	 *     modify the existing message. If your application might show two SuperToasts
-	 *     at one time you should try to reuse the same SuperToast by calling this method and
-	 *     {@link #resetDuration(int)}. </p>
-	 *     
-	 *     
-     * <b> Design guide: </b>
-     *
-	 * <p> Toasts/SuperToasts are designed to display short non-essential messages
-	 *     such as "Message sent!" after the user sends a SMS. Generally these messages
-	 *     should rarely take more than one line of text. </p>
+	 * <p>
+	 * This method can be called again while the SuperToast is showing
+	 * to modify the existing message. If your application might show two
+	 * SuperToasts at one time you should try to reuse the same
+	 * SuperToast by calling this method and {@link #resetDuration(int)}
+	 * </p>
 	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Toasts/SuperToasts are designed to display short non-essential
+	 * messages such as "Message sent!" after the user sends a SMS. Generally
+	 * these messages should rarely display more than one line of text.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param textCharSequence 
+	 * <br>
 	 * 
 	 */
-	public void setText(CharSequence textCharSequence)
-	{
+	public void setText(CharSequence textCharSequence) {
 
 		this.textCharSequence = textCharSequence;
-		
-		if(messageTextView != null)
-		{
-			
+
+		if (messageTextView != null) {
+
 			messageTextView.setText(textCharSequence);
-			
+
 		}
-		
+
 	}
 
 	
 	/**
-	 * <b><i> public void setTextColor(int textColor) </i></b>
+	 * This is used to set the message text color of the SuperToast.
 	 * 
-	 * <p> This is used to set the message text color of the SuperToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (Color.CYAN) </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
-     *
-	 * <p> The text color you select should contrast the background color. 
-	 *     Generally Color.WHITE and Color.BLACK should be the only two 
-	 *     text colors ever used. </p>
+	 * </p>
 	 * 
-	 *	 
+	 * <p>
+	 * The text color that you choose should contrast the color of the background.
+	 * Generally the colors white and black are the only colors that should be used
+	 * here.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param textColor 
+	 * <br>
+	 * Example: (Color.WHITE)
+	 * <br>
+	 * 
 	 */
-	public void setTextColor(int textColor)
-	{
+	public void setTextColor(int textColor) {
 
 		this.textColor = textColor;
-		
-		if(messageTextView != null)
-		{
-			
+
+		if (messageTextView != null) {
+
 			messageTextView.setTextColor(textColor);
-			
+
 		}
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setDuration(int duration) </i></b>
+	 * This is used to set the duration of the SuperToast.
 	 * 
-	 * <p> This is used to set the duration of the SuperToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
-	 * 
-	 *	 
+	 * <p>
 	 * <b> Design guide: </b>
-     *
-	 * <p> Although you may pass any millisecond integer value as a parameter in this
-	 *     method, the duration constants of the SuperToastConstants class should be used. </p>
-	 *     
+	 * </p>
+	 * 
+	 * <p>
+	 * Generally short durations are preferred. 
+	 * </p>
+	 * 
+	 * <br>
+	 * @param duration
+	 * <br>
+	 * Example: (SuperToastConstants.DURATION_SHORT)
+	 * <br>
+	 * 
 	 */
-	public void setDuration(int duration)
-	{
+	public void setDuration(int duration) {
 
 		this.duration = duration;
-		
+
 	}
 	
 	
+
 	/**
-	 * <b><i> public void resetDuration(int newDuration) </i></b>
+	 * This is used to reset the duration of the SuperToast 
+	 * while it is showing.
 	 * 
-	 * <p> This is used to reset the duration of the SuperToast 
-	 *     while the SuperToast is still showing. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.DURATION_SHORT) </p>
-	 * 
-	 *	 
+	 * <p>
 	 * <b> Design guide: </b>
-     *
-	 * <p> This method should be used in collaboration with {@link #setText(CharSequence)} 
-	 *     to reuse the same SuperToast when two or more messages are necessary. </p>
-	 *     
+	 * </p>
+	 * 
+	 * <p>
+	 * Instead of having overlapping or sequential messages you
+	 * should use this method to reuse an already showing SuperToast
+	 * in instances where two or more messages can be showing at the same time.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param newDuration 
+	 * <br>
+	 * Example: (SuperToastConstants.DURATION_SHORT)
+	 * <br>
+	 * 
 	 */
-	public void resetDuration(int newDuration)
-	{
-		
-		if(mHandler != null)
-		{
-			
+	public void resetDuration(int newDuration) {
+
+		if (mHandler != null) {
+
 			mHandler.removeCallbacks(hideToastRunnable);
 			mHandler = null;
 
 		}
-		
+
 		mHandler = new Handler();
 		mHandler.postDelayed(hideToastRunnable, newDuration);
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setGravity(int gravityInteger) </i></b>
+	 * This is used to set an icon Drawable to the SuperToast.
 	 * 
-	 * <p> This is used to set the Gravity of the SuperToast.  </p>
+	 * <br>
 	 * 
-	 * 	 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (Gravity.TOP|Gravity.LEFT) </p>
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Use {@link #setIconPosition(IconPosition)} to modify the 
+	 * location of the icon.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param iconDrawable 
+	 * <br>
 	 * 
 	 */
-	public void setGravity(int gravityInteger)
-	{
+	public void setIconDrawable(Drawable iconDrawable) {
+
+		this.iconDrawable = iconDrawable;
+
+	}
+	
+	
+	/**
+	 * This is used to set an icon resource to the SuperToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Use {@link #setIconPosition(IconPosition)} to modify the 
+	 * location of the icon.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param iconResource 
+	 * <br>
+	 * 
+	 */
+	public void setIconResource(int iconResource) {
+
+		this.iconResource = iconResource;
+
+	}
+	
+	
+	/**
+	 * This is used to set the position of the icon in the SuperToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * It is preferable to display the icon to the left of the text.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mIconPosition 
+	 * <br>
+	 * Example: IconPosition.LEFT
+	 * <br>
+	 * 
+	 */
+	public void setIconPosition(IconPosition mIconPosition) {
+
+		this.mIconPosition = mIconPosition;
+
+	}
+	
+	
+	/**
+	 * This is used to set the gravity of the SuperToast.
+	 * 
+	 * 
+	 * <br>
+	 * @param gravityInteger 
+	 * <br>
+	 * Example: Gravity.LEFT
+	 * <br>
+	 * 
+	 */
+	public void setGravity(int gravityInteger) {
 
 		this.gravityInteger = gravityInteger;
 
@@ -311,46 +522,54 @@ public class SuperToast
 	
 	
 	/**
-	 * <b><i> setBackgroundResource(int backgroundID) </i></b>
+	 * This is used to set the background of the SuperToast.
 	 * 
-	 * <p> This is used to set the background resource of the SuperToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> If you choose not to use a background defined in this library
-	 *     make sure your background is a nine-patch Drawable. </p>
-	 *	 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use your own backgrounds please make sure that
+	 * the background is nine-patch or XML format. 
+	 * </p>
+	 * 
+	 * <br>
+	 * @param backgroundResource 
+	 * <br>
+	 * Example: (SuperToastConstants.BACKGROUND_BLACK)
+	 * <br>
+	 * 
 	 */
-	public void setBackgroundResource(int backgroundResource)
-	{
-		
+	public void setBackgroundResource(int backgroundResource) {
+
 		this.backgroundResource = backgroundResource;
-		
+
 	}
-	
+
 	
 	/**
-	 * <b><i> setBackgroundDrawable(Drawable backgroundDrawable) </i></b>
+	 * This is used to set the background of the SuperToast.
 	 * 
-	 * <p> This is used to set the background Drawable of the SuperToast.
-	 *     To use a background defined in this library please see 
-	 *     {@link #setBackgroundResource(int)}. </p>
-     *  
-     *  
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> If you choose not to use a background defined in this library
-	 *     make sure your background is a nine-patch Drawable. </p>
-	 *	 
-	 */	
-	public void setBackgroundDrawable(Drawable backgroundDrawable)
-	{
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use them please see {@link #setBackgroundResource(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param backgroundDrawable 
+	 * <br>
+	 * 
+	 */
+	public void setBackgroundDrawable(Drawable backgroundDrawable) {
 		
 		this.backgroundDrawable = backgroundDrawable;
 		
@@ -358,28 +577,38 @@ public class SuperToast
 	
 	
 	/**
-	 * <b><i> public void setTextSize(int textSize) </i></b>
+	 * This is used to set the text size of the SuperToast.
 	 * 
-	 * <p> This is used to set the text size of the SuperActivityToast message. </p>
+	 * <br>
 	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
 	 * 
+	 * <p>
+	 * Generally the text size should be around 14sp.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This method will automatically convert the Integer parameter
-	 *     into scaled pixels.
+	 * <p>
+	 * You may specify an integer value as a parameter.
+	 * This method will automatically convert the integer to 
+	 * scaled pixels. 
+	 * </p>
 	 * 
+	 * <br>
+	 * @param textSize 
+	 * <br>
+	 * Example: (SuperToastConstants.TEXTSIZE_SMALL)		
+	 * <br>
 	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.TEXTSIZE_SMALL) </p>
-	 * 
-	 * <b> OR </b>
-	 * 
-     * <p> (14) </p>
-     *
 	 */
-	public void setTextSize(int textSize)
-	{
+	public void setTextSize(int textSize) {
 
 		this.textSize = textSize;
 		
@@ -387,68 +616,74 @@ public class SuperToast
 	
 	
 	/**
-	 * <b><i> public void setTypeface(Typeface mTypeface) </i></b>
+	 * This is used to set the Typeface of the SuperActivityToast text.
 	 * 
-	 * <p> This is used to set the Typeface of the SuperToast text.	  </p>
+	 * <br>
 	 * 
-	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This library comes with a link to download the Roboto font. To use the fonts see 
-	 *     {@link #loadRobotoTypeface(String)}.
+	 * <p>
+	 * This library comes with a link to download the Roboto font. To use the
+	 * fonts see {@link #loadRobotoTypeface(String)}.
+	 * </p>
 	 * 
+	 * <br>
+	 * @param typeface 
+	 * <br>
+	 * 		Example: (Typeface.DEFAULT) OR (mSuperActivityToast.loadRobotoTypeface(SuperToastConstants.
+	 * FONT_ROBOTO_THIN);	 * 		
+	 * <br>
 	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (Typeface.DEFAULT) </p>
-	 * 
-	 * <b> OR </b>
-	 * 
-	 * <p> (mSuperToast.loadRobotoTypeface(SuperToastConstants.FONT_ROBOTO_THIN);
-	 *
 	 */
-	public void setTypeface(Typeface typeface)
-	{
+	public void setTypeface(Typeface typeface) {
 		
 		this.typeface = typeface;
 		
 	}
 	
-	
+
 	/**
-	 * <b><i> public void setAnimation(int animationStyle) </i></b>
+	 * This is used to set the Animation of the SuperToast.
 	 * 
-	 * <p> This is used to set the Animation of the SuperToast message. You
-	 *     can only use the Animations defined in this class, this is a limitation 
-	 *     of Android not this library. </p>
+	 * <br>
 	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <b> Parameter example: </b>
-     *	 
-     * <p> (SuperToast.ANIMATION_FADE) </p>
-	 *	 
+	 * <p>
+	 * You can only use the four Animations specified in this class. This is a
+	 * limit of Android not this library.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * @param animationStyle
+	 * <br>
+	 *            Example: SuperToast.ANIMATION_FADE
+	 * 
 	 */
-	public void setAnimation(int animationStyle)
-	{
-		
+	public void setAnimation(int animationStyle) {
+
 		this.animationStyle = animationStyle;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setXYCoordinates(int xCoordinate, int yCoordinate) </i></b>
+	 * This is used to set the X and Y offsets of the SuperToast.
 	 * 
-	 * <p> This is used to set the exact coordinates of the SuperToast message. </p>
-	 *     
-	 *     
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (50, 50) </p>
-	 *	 
+	 * <br>
+	 * 
+	 * <br>
+	 * @param xOffset 
+	 * @param yOffset 
+	 * <br>
+	 * 
 	 */
-	public void setXYCoordinates(int xOffset, int yOffset)
-	{
+	public void setXYCoordinates(int xOffset, int yOffset) {
 				
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
@@ -468,69 +703,53 @@ public class SuperToast
 	 *     relevant. </p>
 	 *	 
 	 */
-	public void dismiss()
-	{
-		
-		if(mHandler != null)
-		{
-			
+	public void dismiss() {
+
+		if (mHandler != null) {
+
 			mHandler.removeCallbacks(hideToastRunnable);
 			mHandler = null;
 
 		}
 
-        if(toastView != null && mWindowManager != null)
-        {
+		if (toastView != null && mWindowManager != null) {
 
-        	mWindowManager.removeView(toastView);
-            toastView = null;                		
+			mWindowManager.removeView(toastView);
+			toastView = null;
 
-        }
-		
+		}
+
 	}
 	
 	
-	//Quick Navigation: Getter methods
+	//XXX: Getter methods
 
 	
 	/**
-	 * <b><i> public TextView getTextView() </i></b>
+	 * This is used to get the SuperToast message TextView.
 	 * 
-	 * <p> This is used to get the TextView that displays the SuperToast message. </p>
-     *
+	 * <br>
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> TextView </p>
+	 * @return TextView
 	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
+	 * <br>
 	 * 
 	 */
-	public TextView getTextView()
-	{
-			
+	public TextView getTextView() {
+
 		return messageTextView;
 
 	}
 	
 	
 	/**
-	 * <b><i> public int getXOffset() </i></b>
+	 * This is used to get the X offset of the SuperToast VIew.
 	 * 
-	 * <p> This is used to get the X offset value from the SuperToast message. </p>
+	 * <br>
 	 * 
+	 * @return int
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> int </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> 0 </p>
+	 * <br>
 	 * 
 	 */
 	public int getXOffset()
@@ -542,78 +761,82 @@ public class SuperToast
 	
 	
 	/**
-	 * <b><i> public int getYOffset() </i></b>
+	 * This is used to get the Y offset of the SuperToast VIew.
 	 * 
-	 * <p> This is used to get the Y offset value from the SuperToast message.	  </p>
+	 * <br>
 	 * 
+	 * @return int
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> int </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> 64dp </p>
+	 * <br>
 	 * 
 	 */
-	public int getYOffset()
-	{
-		
+	public int getYOffset() {
+
 		return this.yOffset;
 
 	}
 	
 	
 	/**
-	 * <b><i> public View getView() </i></b>
+	 * This is used to get the SuperToast View.
 	 * 
-	 * <p> This is used to get the SuperToast View.	  </p>
+	 * <br>
 	 * 
+	 * @return View
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> View </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
-	 *	 
 	 */
-	public View getView()
-	{
-		
+	public View getView() {
+
 		return toastView;
 
 	}
 	
 	
-	//Quick Navigation: Utility methods
+	/**
+	 * Returns true of the SuperToast is currently visible 
+	 * to the user. 
+	 * 
+	 * <br>
+	 * 
+	 * @return boolean
+	 * 
+	 * <br>
+	 * 
+	 */
+	public boolean isShowing() {
 
+		if (toastView != null) {
+
+			return toastView.isShown();
+
+		}
+
+		else {
+
+			return false;
+
+		}
+
+	}
+	
 	
 	/**
-	 * <b><i> public Typeface loadRobotoTypeface(String typeface) </i></b>
+	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
+	 * desired font file in the assets folder of your project. The link to
+	 * download the Roboto fonts is included in this library as a text file. Do
+	 * not modify the names of these fonts.
 	 * 
-	 * <p> This is used to load a Roboto Typeface. You <b><i>MUST</i></b>
-	 *     put the desired font file in the assets folder of your project.
-	 *     The link to download the Roboto fonts is included in this library as a text file. 
-	 *     Do not modify the names of these fonts. </p>
+	 * <br>
+	 * @param typefaceString
+	 * <br>
+	 * Example: (SuperToastConstants.FONT_ROBOTO_THIN)
+	 * <br>
 	 * 
+	 * @return Typeface
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> Typeface </p>
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
-     *	 
-     * <p> (SuperToastConstants.FONT_ROBOTO_THIN) </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
+	 * <br>
 	 * 
 	 */
 	public Typeface loadRobotoTypeface(String typefaceString)
@@ -622,27 +845,9 @@ public class SuperToast
 		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
 
 	}
-	
-	
-	public boolean isShowing()
-	{
-		
-		if(toastView != null)
-		{
-			
-			return toastView.isShown();
-			
-		}
-		
-		else
-		{
-			
-			return false;
-			
-		}
-				
-	}
 
+	
+	//XXX: Private methods
 
 
 	private Runnable hideToastRunnable = new Runnable() 
@@ -661,81 +866,121 @@ public class SuperToast
 	
     
 	/**
-	 * <b><i> public static SuperToast createDarkSuperToast(Context context, CharSequence textCharSequence, int durationInteger) </i></b>
+	 * Creates a dark theme SuperToast. Don't forget to call
+	 * {@link #show()}.
 	 * 
-	 * <p> Creates a dark theme SuperToast. Don't forget to call {@link #show()}. </p>
-	 *	 
+	 * <br>
+	 * 
+	 * @param context 
+	 * 
+	 * @param textCharSequence 
+	 * 
+	 * @param durationInteger 
+	 * 
+	 * @return SuperToast
+	 * 
 	 */
-    public static SuperToast createDarkSuperToast(Context context, CharSequence textCharSequence, int durationInteger)
-    {
-    	
-    	SuperToast mSuperToast = new SuperToast(context);
-    	mSuperToast.setText(textCharSequence);
-    	mSuperToast.setDuration(durationInteger);
-    	
+	public static SuperToast createDarkSuperToast(Context context,
+			CharSequence textCharSequence, int durationInteger) {
+
+		SuperToast mSuperToast = new SuperToast(context);
+		mSuperToast.setText(textCharSequence);
+		mSuperToast.setDuration(durationInteger);
+
 		return mSuperToast;
-    	   
-    }
+
+	}
     
     
 	/**
-	 * <b><i> public static SuperToast createLightSuperToast(Context context, CharSequence textCharSequence, int durationInteger) </i></b>
+	 * Creates a light theme SuperToast. Don't forget to call
+	 * {@link #show()}.
 	 * 
-	 * <p> Creates a light theme SuperToast. Don't forget to call {@link #show()}. </p>
-	 *	 
+	 * <br>
+	 * 
+	 * @param context 
+	 * 
+	 * @param textCharSequence 
+	 * 
+	 * @param durationInteger 
+	 * 
+	 * @return SuperToast
+	 * 
 	 */
-    public static SuperToast createLightSuperToast(Context context, CharSequence textCharSequence, int durationInteger)
-    {
-    	
-    	SuperToast mSuperToast = new SuperToast(context);
-    	mSuperToast.setText(textCharSequence);
-    	mSuperToast.setDuration(durationInteger);
-    	mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
-    	mSuperToast.setTextColor(Color.BLACK);
+	public static SuperToast createLightSuperToast(Context context,
+			CharSequence textCharSequence, int durationInteger) {
+
+		SuperToast mSuperToast = new SuperToast(context);
+		mSuperToast.setText(textCharSequence);
+		mSuperToast.setDuration(durationInteger);
+		mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
+		mSuperToast.setTextColor(Color.BLACK);
 
 		return mSuperToast;
-    	    	
-    }
+
+	}
     
     
 	/**
-	 * <b><i> public static SuperToast createDarkSuperToast(Context context, CharSequence textCharSequence, int durationInteger) </i></b>
+	 * Creates a dark theme SuperToast. Don't forget to call
+	 * {@link #show()}.
 	 * 
-	 * <p> Creates a dark theme SuperToast with an option to choose an Animation. Don't forget to call {@link #show()}. </p>
-	 *	 
+	 * <br>
+	 * 
+	 * @param context 
+	 * 
+	 * @param textCharSequence 
+	 * 
+	 * @param durationInteger 
+	 * 
+	 * @param animation 
+	 * 
+	 * @return SuperToast
+	 * 
 	 */
-    public static SuperToast createDarkSuperToast(Context context, CharSequence textCharSequence, int durationInteger, int animation)
-    {
-    	
-    	SuperToast mSuperToast = new SuperToast(context);
-    	mSuperToast.setText(textCharSequence);
-    	mSuperToast.setDuration(durationInteger);
-    	mSuperToast.setAnimation(animation);
+	public static SuperToast createDarkSuperToast(Context context,
+			CharSequence textCharSequence, int durationInteger, int animation) {
+
+		SuperToast mSuperToast = new SuperToast(context);
+		mSuperToast.setText(textCharSequence);
+		mSuperToast.setDuration(durationInteger);
+		mSuperToast.setAnimation(animation);
 
 		return mSuperToast;
-    	   
-    }
+
+	}
     
     
 	/**
-	 * <b><i> public static SuperToast createLightSuperToast(Context context, CharSequence textCharSequence, int durationInteger) </i></b>
+	 * Creates a light theme SuperToast. Don't forget to call
+	 * {@link #show()}.
 	 * 
-	 * <p> Creates a light theme SuperToast with an option to choose an Animation. Don't forget to call {@link #show()}. </p>
-	 *	 
+	 * <br>
+	 * 
+	 * @param context 
+	 * 
+	 * @param textCharSequence 
+	 * 
+	 * @param durationInteger 
+	 * 
+	 * @param animation 
+	 * 
+	 * @return SuperToast
+	 * 
 	 */
-    public static SuperToast createLightSuperToast(Context context, CharSequence textCharSequence, int durationInteger, int animation)
-    {
-    	
-    	SuperToast mSuperToast = new SuperToast(context);
-    	mSuperToast.setText(textCharSequence);
-    	mSuperToast.setDuration(durationInteger);
-    	mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
-    	mSuperToast.setTextColor(Color.BLACK);
-    	mSuperToast.setAnimation(animation);
+	public static SuperToast createLightSuperToast(Context context,
+			CharSequence textCharSequence, int durationInteger, int animation) {
+
+		SuperToast mSuperToast = new SuperToast(context);
+		mSuperToast.setText(textCharSequence);
+		mSuperToast.setDuration(durationInteger);
+		mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
+		mSuperToast.setTextColor(Color.BLACK);
+		mSuperToast.setAnimation(animation);
 
 		return mSuperToast;
-    	    	
-    }
+
+	}
     
 }
 

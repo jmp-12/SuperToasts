@@ -253,7 +253,7 @@ public class SuperButtonToast
 	 *            This must be an Activity Context.
 	 * 
 	 */
-	public SuperButtonToast(final Context mContext) 
+	public SuperButtonToast(Context mContext) 
 	{
 		
 		if(mContext != null)
@@ -489,7 +489,7 @@ public class SuperButtonToast
 	 * <br>
 	 * 
 	 */
-	public void setMessageTextColor(final int messageTextColor) {
+	public void setMessageTextColor(int messageTextColor) {
 
 		this.messageTextColor = messageTextColor;
 
@@ -584,7 +584,7 @@ public class SuperButtonToast
 	 * <br>
 	 * 
 	 */
-	public void setStyle(final SuperButtonToastStyle mSuperButtonToastStyle) {
+	public void setStyle(SuperButtonToastStyle mSuperButtonToastStyle) {
 
 		this.undoButtonResource = mSuperButtonToastStyle.undoButtonResource;
 		this.buttonTextCharSequence = mSuperButtonToastStyle.buttonTextCharSequence;
@@ -608,7 +608,7 @@ public class SuperButtonToast
 	 * <br>
 	 * 
 	 */
-	public void setViewGroup(final ViewGroup mViewGroup) {
+	public void setViewGroup(ViewGroup mViewGroup) {
 
 		this.mViewGroup = mViewGroup;
 
@@ -640,7 +640,7 @@ public class SuperButtonToast
 	 * <br>
 	 * 
 	 */
-	public void setBackgroundResource(final int backgroundResource) {
+	public void setBackgroundResource(int backgroundResource) {
 
 		this.backgroundResource = backgroundResource;
 
@@ -668,7 +668,7 @@ public class SuperButtonToast
 	 * <br>
 	 * 
 	 */
-	public void setBackgroundDrawable(final Drawable backgroundDrawable) {
+	public void setBackgroundDrawable(Drawable backgroundDrawable) {
 
 		this.backgroundDrawable = backgroundDrawable;
 
