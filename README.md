@@ -10,6 +10,15 @@ PLEASE NOTE THAT THIS LIBRARY IS NOT YET READY FOR PRODUCTION AND IS UNDER ACTIV
 
 ![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/supertoasts_githubimage_zps8a5ceb7c.png)
 
+Demo Application
+================
+A simple demo application is available on Google Play. This demo application does not showcase all of the libraries functions 
+rather it is a short demonstration of major features/functions of the library.
+
+<a href="https://play.google.com/store/apps/details?id=com.supertoastsdemo">
+  <img alt="Android app on Google Play"
+       src="https://developer.android.com/images/brand/en_app_rgb_wo_60.png" />
+</a>
 
 
 Developed By
