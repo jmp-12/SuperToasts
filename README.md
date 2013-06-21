@@ -1,8 +1,7 @@
 SuperToasts Library
 =================
 
-The SuperToasts library is a customizable way for a developer to interact with his/her users. 
-This library seeks to give developers a better way of communicating with their users. The idea
+The SuperToasts library is an enhancement of the stock Android Toast class. This library offers developers new ways of communicating with their users. The idea
 for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
 and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
