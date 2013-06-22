@@ -1,3 +1,20 @@
+/**
+ *  Copyright 2013 John Persano
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *	you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	Unless required by applicable law or agreed to in writing, software
+ *	distributed under the License is distributed on an "AS IS" BASIS,
+ *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	See the License for the specific language governing permissions and
+ *	limitations under the License.
+ * 
+ */
+
 package com.extlibsupertoasts;
 
 
@@ -9,6 +26,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,20 +38,30 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * SuperProgressToasts are designed to be used inside of Activities. When the
+ * Activity is destroyed the SuperProgressToast is destroyed along with it.
+ * SuperProgressToasts will not linger to the next screen like standard
+ * Toasts/SuperToasts.
+ * 
+ */
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
-
 public class SuperProgressToast
 {
 	
+	private static final String TAG = "SuperProgressToast";
+
 	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperProgressToast)";
 	private static final String ERROR_CONTEXTNOTACTIVITY= "The Context that you passed was not an Activity! (SuperProgressToast)";
 	private static final String ERROR_TYPENULL = "You cannot supply null as a Type! (SuperProgressToast)";
-
+	private static final String ERROR_VIEWORCONTAINERNULL = "Either the View or Container was null when trying to dismiss. "
+				+ "Did you create and show a SuperProgressToast before trying to dismiss it?";
 	
 	private Context mContext;
 	private LayoutInflater mLayoutInflater;
@@ -41,7 +70,6 @@ public class SuperProgressToast
 	private TextView messageTextView;
 	private int sdkVersion = android.os.Build.VERSION.SDK_INT;
 	private ProgressBar mProgressBar;
-
 		
 	private CharSequence textCharSequence;
 	private int textColor = Color.WHITE;
@@ -56,12 +84,38 @@ public class SuperProgressToast
 	private boolean touchDismiss;
 	private boolean touchImmediateDismiss;
 	
-	
+	/**
+	 * This is used to specify the style of the ProgressBar
+	 * in the SuperProgressToast.
+	 * 
+	 */
 	public enum ProgressStyle {
-		CIRCLE, HORIZONTAL;
+		
+		/**
+		 * Circle style ProgressBar.
+		 */
+		CIRCLE,
+		
+		/**
+		 * Horizontal style ProgressBar.
+		 */
+		HORIZONTAL;
+		
 	}
 		
-	
+	/**
+	 * Instantiates a new SuperProgressToast. You <b>MUST</b> pass an Activity
+	 * as a Context.
+	 * 
+	 * <br>
+	 * 
+	 * @param mContext
+	 * 
+	 * <br>
+	 * This must be an Activity Context.
+	 * <br>
+	 * 
+	 */
 	public SuperProgressToast(Context mContext) 
 	{
 
@@ -98,7 +152,23 @@ public class SuperProgressToast
 		
 	}
 
-	
+	/**
+	 * Instantiates a new SuperProgressToast. You <b>MUST</b> pass an Activity
+	 * as a Context.
+	 * 
+	 * <br>
+	 * 
+	 * @param mContext
+	 * 
+	 * <br>
+	 * This must be an Activity Context.
+	 * <br>
+	 * @param mProgressStyle
+	 * <br>
+	 * Example: (SuperProgressToast.ProgressStyle.HORIZONTAL)
+	 * <br>
+	 * 
+	 */
 	public SuperProgressToast(Context mContext, ProgressStyle mProgressStyle) 
 	{
 				
@@ -155,7 +225,11 @@ public class SuperProgressToast
 		
 	}
 	
-	
+	/**
+	 * This is used to show the SuperProgressToast. You should
+	 * do all of your modifications to the SuperProgressToast before calling
+	 * this method. 
+	 */
 	public void show()
 	{
 		
@@ -163,38 +237,31 @@ public class SuperProgressToast
 				toastView.findViewById(R.id.progressBar);
 		
 		
-		if(isIndeterminate)
-		{
+		if (isIndeterminate) {
 
 			mProgressBar.setIndeterminate(true);
-			
+
 		}
 		
 		
-		if(mOnClickListener != null)
-		{
-				
+		if (mOnClickListener != null) {
+
 			toastView.setOnClickListener(mOnClickListener);
-				
+
 		}
-		
-		if(touchDismiss || touchImmediateDismiss)
-		{
-			
-			if(touchDismiss)
-			{
-				
+
+		if (touchDismiss || touchImmediateDismiss) {
+
+			if (touchDismiss) {
+
 				toastView.setOnTouchListener(mTouchDismissListener);
-				
-			}
-			
-			else if(touchImmediateDismiss)
-			{
-				
+
+			} else if (touchImmediateDismiss) {
+
 				toastView.setOnTouchListener(mTouchImmediateDismissListener);
 
 			}
-						
+
 		}
 
 		messageTextView = (TextView) 
@@ -209,28 +276,20 @@ public class SuperProgressToast
 		final LinearLayout mRootLayout = (LinearLayout) 
 				toastView.findViewById(R.id.toast_rootlayout);
 		
-		if(backgroundDrawable != null)
-		{
-			
-			if(sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) 
-			{
-												
+		if (backgroundDrawable != null) {
+
+			if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
 				mRootLayout.setBackgroundDrawable(backgroundDrawable);
-					
-			}
-				
-			else 
-			{
-					
+
+			} else {
+
 				mRootLayout.setBackground(backgroundDrawable);
-				    
+
 			}
 
-		}
-		
-		else
-		{
-			
+		} else {
+
 			mRootLayout.setBackgroundResource(backgroundResource);
 
 		}
@@ -245,544 +304,520 @@ public class SuperProgressToast
 	
 	
 	/**
-	 * <b><i> public void setText(CharSequence textCharSequence) </i></b>
+	 * This is used to set the message text of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the message text of the SuperProgressToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> ("Hello, I am a SuperProgressToast!") </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This method can should be called after each progress update. </p>
-	 *     
-	 *     
-     * <b> Design guide: </b>
-     *
-	 * <p> SuperProgressToasts are designed to mimic ProgressDialogs but without
-	 *     the UI blocking behavior of ProgressDialogs. Generally you should 
-	 *     display progress in the ActionBar. </p>
+	 * <p>
+	 * This method can be called again while the SuperProgressToast is showing
+	 * to modify the existing message.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param textCharSequence 
+	 * <br>
 	 * 
 	 */
-	public void setText(CharSequence textCharSequence)
-	{
+	public void setText(CharSequence textCharSequence) {
 
 		this.textCharSequence = textCharSequence;
-		
-		if(messageTextView != null)
-		{
-			
+
+		if (messageTextView != null) {
+
 			messageTextView.setText(textCharSequence);
-			
+
 		}
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setProgress(int progress) </i></b>
+	 * This is used to set the progress of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the progress integer of the SuperProgressToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (45) </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This method should be used with a horizontal SuperProgressToast to display visual
-	 *     progress. </p>
+	 * <p>
+	 * This method will only work with a horizontal style SuperProgressToast.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param progress 
+	 * <br>
 	 * 
 	 */
-	public void setProgress(int progress)
-	{
+	public void setProgress(int progress) {
 
-		if(mProgressBar != null)
-		{
-				
+		if (mProgressBar != null) {
+
 			mProgressBar.setProgress(progress);
-				
-		}			
-			
+
+		}
 
 	}
 
-
 	
 	/**
-	 * <b><i> public void setTextColor(int textColor) </i></b>
+	 * This is used to set the message text color of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the message text color of the SuperProgressToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (Color.CYAN) </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
-     *
-	 * <p> The text color you select should contrast the background color. 
-	 *     Generally Color.WHITE and Color.BLACK should be the only two 
-	 *     text colors used. </p>
-	 *	 
+	 * </p>
+	 * 
+	 * <p>
+	 * The text color that you choose should contrast the color of the background.
+	 * Generally the colors white and black are the only colors that should be used
+	 * here.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param textColor 
+	 * <br>
+	 * Example: (Color.WHITE)
+	 * <br>
+	 * 
 	 */
-	public void setTextColor(int textColor)
-	{
+	public void setTextColor(int textColor) {
 
 		this.textColor = textColor;
-		
-		if(messageTextView != null)
-		{
-			
+
+		if (messageTextView != null) {
+
 			messageTextView.setTextColor(textColor);
-			
+
 		}
 	}
-
 	
 	
 	/**
-	 * <b><i> public void setIndeterminate(boolean isIndeterminate) </i></b>
-	 * 
-	 * 
-	 * <p> This is used to set an indeterminate value to the SuperProgressToast.
-	 *     This behavior is similar to indeterminate ProgressDialogs. </p>
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
+	 * This is used to set an indeterminate progress to the 
+	 * ProgressBar in the SuperProgressToast.
 	 * 	 
-	 * <p> (true) </p>
-	 * 
-	 * 
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> This function should be used when the background operation is relatively short. </p>
+	 * <br>
+	 * @param isIndeterminate 
+	 * <br>
 	 * 
 	 */
-	public void setIndeterminate(boolean isIndeterminate)
-	{
+	public void setIndeterminate(boolean isIndeterminate) {
 
 		this.isIndeterminate = isIndeterminate;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setOnClickListener(OnClickListener mOnClickListener) </i></b>
+	 * This is used to set an OnClickListener to the SuperProgressToast.
 	 * 
+	 * <br>
 	 * 
-	 * <p> This is used to attach an OnClickListener to the SuperProgressToast. </p>
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
 	 * 
+	 * <p>
+	 * This method is not compatible with {@link #setTouchToDismiss(boolean)} or
+	 * {@link #setTouchToImmediateDismiss(boolean)}.
+	 * </p>
 	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (mOnClickListener) </p>
-	 * 
-	 * 
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> This function should contain {@link #dismiss()}. </p>
+	 * <br>
+	 * @param mOnClickListener 
+	 * <br>
 	 * 
 	 */
-	public void setOnClickListener(OnClickListener mOnClickListener)
-	{
+	public void setOnClickListener(OnClickListener mOnClickListener) {
 
 		this.mOnClickListener = mOnClickListener;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> setBackgroundResource(int backgroundID) </i></b>
+	 * This is used to set the background of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the background resource of the SuperProgressToast. </p>
+	 * <br>
 	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.BACKGROUND_STANDARDBLACK) </p>
-	 * 
-	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> If you choose not to use a background defined in this library
-	 *     make sure your background is a nine-patch Drawable. </p>
-	 *	 
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use your own backgrounds please make sure that
+	 * the background is nine-patch or XML format. 
+	 * </p>
+	 * 
+	 * <br>
+	 * @param backgroundResource 
+	 * <br>
+	 * Example: (SuperToastConstants.BACKGROUND_BLACK)
+	 * <br>
+	 * 
 	 */
-	public void setBackgroundResource(int backgroundResource)
-	{
-		
+	public void setBackgroundResource(int backgroundResource) {
+
 		this.backgroundResource = backgroundResource;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> setBackgroundDrawable(Drawable backgroundDrawable) </i></b>
+	 * This is used to set the background of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the background Drawable of the SuperProgressToast.
-	 *     To use a background defined in this library please see 
-	 *     {@link #setBackgroundResource(int)}. </p>
-     *  
-     *  
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> If you choose not to use a background defined in this library
-	 *     make sure your background is a nine-patch Drawable. </p>
-	 *	 
-	 */	
-	public void setBackgroundDrawable(Drawable backgroundDrawable)
-	{
-		
+	 * <p>
+	 * This library comes with backgrounds ready to use in your applications. 
+	 * If you would like to use them please see {@link #setBackgroundResource(int)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param backgroundDrawable 
+	 * <br>
+	 * 
+	 */
+	public void setBackgroundDrawable(Drawable backgroundDrawable) {
+
 		this.backgroundDrawable = backgroundDrawable;
-		
-	}
-	
-	
-	/**
-	 * <b><i> public void setTextSize(int textSizeInt) </i></b>
-	 * 
-	 * <p> This is used to set the text size of the SuperProgressToast message. </p>
-	 * 
-	 * 
-	 * <b> Important note: </b>
-	 * 
-	 * <p> This method will automatically convert the Integer parameter
-	 *     into scaled pixels.
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (SuperToastConstants.TEXTSIZE_SMALL) </p>
-	 * 
-	 * <b> OR </b>
-	 * 
-     * <p> (14) </p>
-     *
-	 */
-	public void setTextSize(int textSizeInt)
-	{
 
-		this.textSize = textSizeInt;
-		
 	}
 	
 	
 	/**
-	 * <b><i> public void setTypeface(Typeface mTypeface) </i></b>
+	 * This is used to set the text size of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the Typeface of the SuperProgressToast text.	  </p>
+	 * <br>
 	 * 
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
 	 * 
+	 * <p>
+	 * Generally the text size should be around 14sp.
+	 * </p>
+	 * 
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Important note: </b>
+	 * </p>
 	 * 
-	 * <p> This library comes with a link to download the Roboto font. To use the fonts see 
-	 *     {@link #loadRobotoTypeface(String)}.
+	 * <p>
+	 * You may specify an integer value as a parameter.
+	 * This method will automatically convert the integer to 
+	 * scaled pixels. 
+	 * </p>
 	 * 
+	 * <br>
+	 * @param textSize 
+	 * <br>
+	 * Example: (SuperToastConstants.TEXTSIZE_SMALL)		
+	 * <br>
 	 * 
-	 * <b> Parameter example: </b>
-	 * 	 
-	 * <p> (Typeface.DEFAULT) </p>
-	 * 
-	 * <b> OR </b>
-	 * 
-	 * <p> (mSuperProgressToast.loadRobotoTypeface(SuperProgressToast.FONT_ROBOTO_THIN);
-	 *
 	 */
-	public void setTypeface(Typeface typeface)
-	{
-		
+	public void setTextSize(int textSize) {
+
+		this.textSize = textSize;
+
+	}
+	
+	
+	/**
+	 * This is used to set the Typeface of the SuperProgressToast text.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * This library comes with a link to download the Roboto font. To use the
+	 * fonts see {@link #loadRobotoTypeface(String)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param typeface 
+	 * <br>
+	 * 		Example: (Typeface.DEFAULT) OR (mSuperProgressToast.loadRobotoTypeface(SuperToastConstants.
+	 * FONT_ROBOTO_THIN);	 * 		
+	 * <br>
+	 * 
+	 */
+	public void setTypeface(Typeface typeface) {
+
 		this.typeface = typeface;
-		
+
 	}
 		
 	
 	/**
-	 * <b><i> public void setShowAnimation(Animation showAnimation) </i></b>
+	 * This is used to set the show animation of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the opening Animation of the SuperProgressToast. </p>
-     *
-     *
-     * <b> Design guide: </b>
+	 * <br>
 	 * 
-	 * <p> The Animation you supply here should be simple and not exceed 500 milliseconds.</p>
+	 * <p>
+	 * <b> Design guide: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * The Animation that you supply here should be simple and not exceed
+	 * 500 milliseconds.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param showAnimation 
+	 * <br>
 	 * 
 	 */
-	public void setShowAnimation(Animation showAnimation)
-	{
-		
+	public void setShowAnimation(Animation showAnimation) {
+
 		this.showAnimation = showAnimation;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setDismissAnimation(Animation dismissAnimation) </i></b>
+	 * This is used to set the dismiss animation of the SuperProgressToast.
 	 * 
-	 * <p> This is used to set the dismiss Animation of the SuperProgressToast.
-	 *     
-	 *     
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> The Animation you supply here should be simple and not exceed 500 milliseconds.</p>
-     * 
+	 * <p>
+	 * The Animation that you supply here should be simple and not exceed
+	 * 500 milliseconds.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param dismissAnimation 
+	 * <br>
+	 * 
 	 */
-	public void setDismissAnimation(Animation dismissAnimation)
-	{
-		
+	public void setDismissAnimation(Animation dismissAnimation) {
+
 		this.dismissAnimation = dismissAnimation;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setTouchToDismiss(boolean touchDismiss) </i></b>
+	 * This is used to set a private OnTouchListener to the SuperProgressToast
+	 * that will dismiss the SuperProgressToast with an Animation.
 	 * 
-	 * <p> This is used to set a private OnTouchListener to the SuperProgressToast
-	 *     which will call {@link #dismiss()} if the user touches the SuperProgressToast.
-
-	 *      
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> Using this method can be a good idea for long running SuperProgressToasts. </p>
-     * 
+	 * <p>
+	 * This method should be used with long running SuperProgressToasts in case
+	 * the SuperProgressToast comes in between application content and the user.
+	 * This method is not compatible with {@link #setOnClickListener(OnClickListener)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param touchDismiss 
+	 * <br>
+	 * 
 	 */
-	public void setTouchToDismiss(boolean touchDismiss)
-	{
-		
+	public void setTouchToDismiss(boolean touchDismiss) {
+
 		this.touchDismiss = touchDismiss;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void setTouchToImmediateDismiss(boolean touchImmediateDismiss) </i></b>
+	 * This is used to set a private OnTouchListener to the SuperProgressToast
+	 * that will dismiss the SuperProgressToast immediately without an Animation.
 	 * 
-	 * <p> This is used to set a private OnTouchListener to the SuperProgressToast
-	 *     which will call {@link #dismissImmediately()} if the user touches the SuperProgressToast.
-
-	 *      
+	 * <br>
+	 * 
+	 * <p>
 	 * <b> Design guide: </b>
+	 * </p>
 	 * 
-	 * <p> Using this method can be a good idea for long running SuperProgressToasts. </p>
-     * 
+	 * <p>
+	 * This method should be used with long running SuperProgressToasts in case
+	 * the SuperProgressToast comes in between application content and the user.
+	 * This method is not compatible with {@link #setOnClickListener(OnClickListener)}.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param touchImmediateDismiss 
+	 * <br>
+	 * 
 	 */
-	public void setTouchToImmediateDismiss(boolean touchImmediateDismiss)
-	{
-		
+	public void setTouchToImmediateDismiss(boolean touchImmediateDismiss) {
+
 		this.touchImmediateDismiss = touchImmediateDismiss;
-		
+
 	}
 	
 	
 	/**
-	 * <b><i> public void dismiss() </i></b>
-     *
-	 * <p> This is used to hide and dispose of the SuperProgressToast. </p>
-	 *
-	 *
-	 * <b> Design guide: </b>
+	 * This is used to dismiss the SuperActivityToast.
 	 * 
-	 * <p> Treat your SuperProgressToast like a Dialog, dismiss it when it is no longer
-	 *     relevant. </p>
-	 *	 
+	 * <br>
+	 * 
 	 */
-	public void dismiss()
-	{
-		
-        if(toastView != null && mViewGroup != null) 
-        {
-        		
-        	toastView.startAnimation(dismissAnimation);
+	public void dismiss() {
 
-        	mViewGroup.removeView(toastView);
-        		
-            toastView = null;                		
+		dismissWithAnimation();
 
-        }
-   		
 	}
 	
 	
 	/**
+	 * This is used to dismiss the SuperActivityToast immediately without Animation.
 	 * 
-	 * <b><i> public void dismissImmediately() </i></b>
+	 * <br>
 	 * 
-	 * <p> This is used to hide and dispose of the SuperProgressToast.
-	 *     immediately (without showing an exit Animation). </p>
-	 *	 
 	 */
-	public void dismissImmediately()
-	{
-		
-        if(toastView != null && mViewGroup != null) 
-        {
-        		
-        	mViewGroup.removeView(toastView);
-        		
-            toastView = null;                		
+	public void dismissImmediately() {
 
-        }
-   		
+		if (toastView != null && mViewGroup != null) {
+
+			mViewGroup.removeView(toastView);
+			toastView = null;
+
+		} else {
+
+			Log.e(TAG, ERROR_VIEWORCONTAINERNULL);
+
+		}
+
 	}
 	
 	
-	//Quick Navigation: Getter methods. 
+	//XXX: Getter methods. 
 	
 	
 	/**
-	 * <b><i> public TextView getTextView() </i></b>
+	 * This is used to get the SuperProgressToast message TextView.
 	 * 
-	 * <p> This is used to get the TextView that displays the SuperProgressToast text. </p>
+	 * <br>
+	 * @return TextView
+	 * <br>
 	 * 
-	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> TextView </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
-	 *	 
 	 */
-	public TextView getTextView()
-	{
-		
+	public TextView getTextView() {
+
 		return messageTextView;
 
 	}
 	
 	
 	/**
-	 * <b><i> public View getView() </i></b>
+	 * This is used to get the SuperProgressToast View.
 	 * 
-	 * <p> This is used to get the SuperProgressToast View.	  </p>
+	 * <br>
+	 * @return View
+	 * <br>
 	 * 
-	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> View </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
-	 *	 
 	 */
-	public View getView()
-	{
-		
+	public View getView() {
+
 		return toastView;
 
 	}
 
 	
 	/**
-	 * <b><i> public View getProgressBar() </i></b>
+	 * This is used to get the SuperProgressToast ProgressBar.
 	 * 
-	 * <p> This is used to get the SuperProgressToast ProgressBar.	  </p>
+	 * <br>
+	 * @return View
+	 * <br>
 	 * 
-	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> ProgressBar </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
-	 *	 
 	 */
-	public View getProgressBar()
-	{
-		
+	public View getProgressBar() {
+
 		return mProgressBar;
 
 	}
 	
 	
-	//Quick Navigation: Utility methods
-
-	
 	/**
-	 * <b><i> public Typeface loadRobotoTypeface(String typeface) </i></b>
+	 * Returns true of the SuperProgressToast is currently visible 
+	 * to the user. 
 	 * 
-	 * <p> This is used to load a Roboto Typeface. You <b><i>MUST</i></b>
-	 *     put the desired font file in the assets folder of your project.
-	 *     The Roboto fonts are included in this library as a zip file. Do not modify the
-	 *     names of these fonts. </p>
+	 * <br>
 	 * 
+	 * @return boolean
 	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> Typeface </p>
-	 * 
-	 * 
-	 * <b> Parameter example: </b>
-     *	 
-     * <p> (SuperProgressToast.FONT_ROBOTO_THIN) </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> null </p>
+	 * <br>
 	 * 
 	 */
-	public Typeface loadRobotoTypeface(String typefaceString)
-	{
-		
+	public boolean isShowing() {
+
+		if (toastView != null) {
+
+			return toastView.isShown();
+
+		}
+
+		else {
+
+			return false;
+
+		}
+
+	}
+	
+	
+	/**
+	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
+	 * desired font file in the assets folder of your project. The link to
+	 * download the Roboto fonts is included in this library as a text file. Do
+	 * not modify the names of these fonts.
+	 * 
+	 * <br>
+	 * @param typefaceString
+	 * <br>
+	 * Example: (SuperToastConstants.FONT_ROBOTO_THIN)
+	 * <br>
+	 * @return Typeface
+	 * <br>
+	 * 
+	 */
+	public Typeface loadRobotoTypeface(String typefaceString) {
+
 		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
 
 	}
 	
-	
-	/**
-	 * <b><i> public boolean isShowing() </i></b>
-	 * 
-	 * <p> This returns true if the SuperProgressToast is currently
-	 *     visible to the user. </p>
-	 * 
-	 * 
-	 * <b> Returns: </b>
-	 * 	 
-	 * <p> boolean </p>
-	 * 
-	 * 
-	 * <b> Default value: </b>
-	 * 	 
-	 * <p> false </p>
-	 * 
-	 */
-	public boolean isShowing()
-	{
-		
-		if(toastView != null)
-		{
-			
-			return toastView.isShown();
-			
-		}
-		
-		else
-		{
-			
-			return false;
-			
-		}
-				
-	}
-	
 
-	//Quick Navigation: Private methods.
+	//XXX: Private methods.
     
 	
+	private Runnable mHideImmediateRunnable = new Runnable() 
+	{
+		 
+		public void run() {
+
+			dismissImmediately();
+
+		}
+        
+    };
+    
 	private Animation getFadeInAnimation()
 	{
 		
@@ -807,35 +842,114 @@ public class SuperProgressToast
 		
 	}
 	
-	private OnTouchListener mTouchDismissListener = new OnTouchListener()
-	{
+	private OnTouchListener mTouchDismissListener = new OnTouchListener() {
+
+		int timesTouched;
 
 		@Override
-		public boolean onTouch(View view, MotionEvent event) 
-		{
+		public boolean onTouch(View view, MotionEvent event) {
+
+			/** This is a little hack to prevent the user from repeatedly 
+			 *  touching the SuperProgressToast causing erratic behavior **/
+			if (timesTouched == 0) {
+
+				dismiss();
+
+			} 
 			
-			dismiss();
+			timesTouched++;
 			
 			return false;
-			
+
 		}
-		
+
 	};
-	
-	private OnTouchListener mTouchImmediateDismissListener = new OnTouchListener()
-	{
+
+	private OnTouchListener mTouchImmediateDismissListener = new OnTouchListener() {
 
 		@Override
-		public boolean onTouch(View view, MotionEvent event) 
-		{
-			
+		public boolean onTouch(View view, MotionEvent event) {
+
 			dismissImmediately();
-			
+
 			return false;
-			
+
 		}
-		
+
 	};
+
+	
+	private void dismissWithAnimation() {
+
+		if (dismissAnimation != null) {
+
+			dismissAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(dismissAnimation);
+
+		}
+
+		else {
+
+			Animation mAnimation = getFadeOutAnimation();
+
+			mAnimation.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+					Handler mHandler = new Handler();
+					mHandler.post(mHideImmediateRunnable);
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+					// Not used
+
+				}
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+
+					// Not used
+
+				}
+
+			});
+
+			toastView.startAnimation(mAnimation);
+
+		}
+
+	}
     
 }
 

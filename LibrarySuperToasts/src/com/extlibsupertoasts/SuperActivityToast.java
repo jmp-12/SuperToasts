@@ -52,9 +52,14 @@ import android.widget.TextView;
 @SuppressWarnings("deprecation")
 public class SuperActivityToast {
 
+	
+	private static final String TAG = "SuperActivityToast";
+	
 	private static final String ERROR_CONTEXTNULL = "The Context that you passed was null! (SuperActivityToast)";
 	private static final String ERROR_CONTEXTNOTACTIVITY = "The Context that you passed was not an Activity! (SuperActivityToast)";
-
+	private static final String ERROR_VIEWORCONTAINERNULL = "Either the View or Container was null when trying to dismiss. "
+			+ "Did you create and show a SuperActivityToast before trying to dismiss it?";
+	
 	private Context mContext;
 	private LayoutInflater mLayoutInflater;
 	private ViewGroup mViewGroup;
@@ -168,7 +173,7 @@ public class SuperActivityToast {
 		if (!isIndeterminate) {
 
 			mHandler = new Handler();
-			mHandler.postDelayed(hideToastRunnable, duration);
+			mHandler.postDelayed(mHideToastRunnable, duration);
 
 		}
 
@@ -432,13 +437,13 @@ public class SuperActivityToast {
 
 		if (mHandler != null) {
 
-			mHandler.removeCallbacks(hideToastRunnable);
+			mHandler.removeCallbacks(mHideToastRunnable);
 			mHandler = null;
 
 		}
 
 		mHandler = new Handler();
-		mHandler.postDelayed(hideToastRunnable, newDuration);
+		mHandler.postDelayed(mHideToastRunnable, newDuration);
 
 	}
 
@@ -766,9 +771,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param touchDismiss 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -796,9 +799,7 @@ public class SuperActivityToast {
 	 * </p>
 	 * 
 	 * <br>
-	 * 
 	 * @param touchImmediateDismiss 
-	 * 		
 	 * <br>
 	 * 
 	 */
@@ -832,7 +833,7 @@ public class SuperActivityToast {
 		
 		if(mHandler != null) { 
 			
-			mHandler.removeCallbacks(hideToastRunnable);
+			mHandler.removeCallbacks(mHideToastRunnable);
 			mHandler = null;
 			
 		}
@@ -844,9 +845,7 @@ public class SuperActivityToast {
 
 		} else {
 
-			Log.e("SuperActivityToast",
-					"Either the View or Container was null when trying to dismiss. "
-							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
+			Log.e(TAG, ERROR_VIEWORCONTAINERNULL);
 
 		}
 
@@ -860,9 +859,7 @@ public class SuperActivityToast {
 	 * This is used to get the SuperActivityToast message TextView.
 	 * 
 	 * <br>
-	 * 
 	 * @return TextView
-	 * 
 	 * <br>
 	 * 
 	 */
@@ -877,9 +874,7 @@ public class SuperActivityToast {
 	 * This is used to get the SuperActivityToast View.
 	 * 
 	 * <br>
-	 * 
 	 * @return View
-	 * 
 	 * <br>
 	 * 
 	 */
@@ -929,9 +924,7 @@ public class SuperActivityToast {
 	 * <br>
 	 * Example: (SuperToastConstants.FONT_ROBOTO_THIN)
 	 * <br>
-	 * 
 	 * @return Typeface
-	 * 
 	 * <br>
 	 * 
 	 */
@@ -945,7 +938,7 @@ public class SuperActivityToast {
 	// XXX: Private methods.
 	
 
-	private Runnable hideToastRunnable = new Runnable() {
+	private Runnable mHideToastRunnable = new Runnable() {
 
 		public void run() {
 
@@ -953,6 +946,17 @@ public class SuperActivityToast {
 
 		}
 	};
+	
+	private Runnable mHideImmediateRunnable = new Runnable() 
+	{
+		 
+		public void run() {
+
+			dismissImmediately();
+
+		}
+        
+    };
 
 	private Animation getFadeInAnimation() {
 
@@ -982,7 +986,7 @@ public class SuperActivityToast {
 		public boolean onTouch(View view, MotionEvent event) {
 
 			/** This is a little hack to prevent the user from repeatedly 
-			 *  touching the SuperCardToast causing erratic behavior **/
+			 *  touching the SuperProgressToast causing erratic behavior **/
 			if (timesTouched == 0) {
 
 				dismiss();
@@ -1011,25 +1015,12 @@ public class SuperActivityToast {
 	};
 	
 	
-	private Runnable mHideImmediateRunnable = new Runnable() 
-	{
-		 
-        public void run() 
-        {
-        	        	
-        	dismissImmediately();
-        	 
-        }
-        
-    };
-	
-	
 	private void dismissWithAnimation() {
 		
 		
 		if (mHandler != null) {
 
-			mHandler.removeCallbacks(hideToastRunnable);
+			mHandler.removeCallbacks(mHideToastRunnable);
 			mHandler = null;
 
 		}
