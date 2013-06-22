@@ -77,10 +77,6 @@ public class SuperButtonToast
 	
 	private static final String WARNING_CALLBACKANDONCLICK = "Since an OnClickListener was provided the SuperButtonToastCallback was ignored.";
 
-
-	
-	
-
 	/**
 	 * This style implements a edit icon with a dark theme background.
 	 */
