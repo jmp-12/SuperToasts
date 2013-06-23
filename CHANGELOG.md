@@ -1,4 +1,4 @@
-Version 1.0
+Version 0.1
 ===========
 
-Initial release.
+Alpha build, first release. Probably very buggy!
