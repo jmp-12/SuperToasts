@@ -18,6 +18,7 @@
 package com.extlibsupertoasts;
 
 
+import com.extlibsupertoasts.utilities.OnDismissListener;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
@@ -83,7 +84,8 @@ public class SuperProgressToast
 	private Animation dismissAnimation = getFadeOutAnimation();
 	private boolean touchDismiss;
 	private boolean touchImmediateDismiss;
-	
+	private OnDismissListener mOnDismissListener;
+
 	/**
 	 * This is used to specify the style of the ProgressBar
 	 * in the SuperProgressToast.
@@ -672,6 +674,32 @@ public class SuperProgressToast
 	
 	
 	/**
+	 * This is used to set an OnDismissListener to the SuperProgressToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Make sure that the OnDismissListener is imported from this library.
+	 * This method is not compatible with other OnDismissListeners.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mOnDismissListener 
+	 * <br>
+	 * 
+	 */
+	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+
+		this.mOnDismissListener = mOnDismissListener;
+
+	}
+	
+	
+	/**
 	 * This is used to dismiss the SuperActivityToast.
 	 * 
 	 * <br>
@@ -701,6 +729,12 @@ public class SuperProgressToast
 
 			Log.e(TAG, ERROR_VIEWORCONTAINERNULL);
 
+		}
+		
+		if(mOnDismissListener != null) {
+			
+			mOnDismissListener.onDismiss();
+			
 		}
 
 	}

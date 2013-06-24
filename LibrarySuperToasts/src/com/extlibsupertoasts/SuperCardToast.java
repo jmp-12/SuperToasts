@@ -19,6 +19,7 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.styles.SuperCardToastStyle;
+import com.extlibsupertoasts.utilities.OnDismissListener;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 import com.extlibsupertoasts.utilities.SwipeDismissListener;
 
@@ -68,8 +69,6 @@ public class SuperCardToast
 	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";
 	private static final String ERROR_TYPENULL = "You cannot supply null as a Type! (SuperCardToast)";
 	private static final String ERROR_NOCLICKLISTENER = "There was no OnClickListener set to the Button. Please call setButtonOnClickListener().";
-	private static final String ERROR_VIEWNULL = "The View was null when trying to dismiss. Did you create and " +
-			"show a SuperCardToast before trying to dismiss it?";
 	private static final String ERROR_VIEWCONTAINERNULL = "Either the View or Container was null when trying to dismiss. Did you create and " +
 			"show a SuperCardToast before trying to dismiss it?";
 
@@ -210,7 +209,8 @@ public class SuperCardToast
 	private OnClickListener mOnClickListener;
 	private OnClickListener mButtonOnClickListener;
 	private boolean isProgressIndeterminate;
-
+	private OnDismissListener mOnDismissListener;
+	
 	/**
 	 * This is used to specify the type of SuperCardToast to 
 	 * be used.
@@ -407,9 +407,7 @@ public class SuperCardToast
 
 			}
 
-		}
-	    
-		if (sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1
+		} else if (sdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1
 				&& swipeDismiss) {
 
 			final SwipeDismissListener touchListener = new SwipeDismissListener(
@@ -1031,28 +1029,41 @@ public class SuperCardToast
 	
 	
 	/**
+	 * This is used to set an OnDismissListener to the SuperCardToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Make sure that the OnDismissListener is imported from this library.
+	 * This method is not compatible with other OnDismissListeners.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mOnDismissListener 
+	 * <br>
+	 * 
+	 */
+	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+
+		this.mOnDismissListener = mOnDismissListener;
+
+	}
+	
+	
+	/**
 	 * This is used to dismiss the SuperCardToast.
 	 * 
 	 * <br>
 	 * 
 	 */
-	public void dismiss()
-	{
+	public void dismiss() {
 
-		if(toastView != null)
-		{
-			
 			dismissWithAnimation();
-			
-		}
-		
-		else
-		{
-			
-			Log.e(TAG, ERROR_VIEWNULL);
-			
-		}
-		
+
 	}
 	
 	
@@ -1080,6 +1091,12 @@ public class SuperCardToast
 
 			Log.e(TAG, ERROR_VIEWCONTAINERNULL);
 
+		}
+		
+		if(mOnDismissListener != null) {
+			
+			mOnDismissListener.onDismiss();
+			
 		}
 
 	}
@@ -1703,9 +1720,4 @@ public class SuperCardToast
 
 	};
 
-	
-
-	
-	
-	
 }

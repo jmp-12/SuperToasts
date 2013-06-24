@@ -18,6 +18,7 @@
 package com.extlibsupertoasts;
 
 
+import com.extlibsupertoasts.utilities.OnDismissListener;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
@@ -94,7 +95,8 @@ public class SuperToast
 	private IconPosition mIconPosition = IconPosition.LEFT;
 	private Drawable iconDrawable;
 	private int iconResource;
-		
+	private OnDismissListener mOnDismissListener;
+
 	/**
 	 * This is used to specify the position of a supplied icon in the
 	 * SuperActivityToast.
@@ -690,6 +692,31 @@ public class SuperToast
 
 	}
 	
+	/**
+	 * This is used to set an OnDismissListener to the SuperToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Make sure that the OnDismissListener is imported from this library.
+	 * This method is not compatible with other OnDismissListeners.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mOnDismissListener 
+	 * <br>
+	 * 
+	 */
+	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+
+		this.mOnDismissListener = mOnDismissListener;
+
+	}
+	
 	
 	/**
 	 * <b><i> public void dismiss() </i></b>
@@ -717,6 +744,12 @@ public class SuperToast
 			mWindowManager.removeView(toastView);
 			toastView = null;
 
+		}
+		
+		if(mOnDismissListener != null) {
+			
+			mOnDismissListener.onDismiss();
+			
 		}
 
 	}

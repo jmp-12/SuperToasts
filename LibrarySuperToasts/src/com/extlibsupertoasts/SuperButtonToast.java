@@ -19,6 +19,7 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.styles.SuperButtonToastStyle;
+import com.extlibsupertoasts.utilities.OnDismissListener;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
@@ -74,6 +75,8 @@ public class SuperButtonToast
 	private static final String ERROR_CONTEXTNOTACTIVITY = "The Context that you passed was not an Activity! (SuperButtonToast)";
 	private static final String ERROR_ACTIVITYNOINTERFACE = "You must either set an OnClickListener or the calling Activity must implement the " +
 			"SuperButtonToastCallback. (SuperButtonToast)";
+	private static final String ERROR_VIEWORCONTAINERNULL = "Either the View or Container was null when trying to dismiss. "
+			+ "Did you create and show a SuperButtonToast before trying to dismiss it?";
 	
 	private static final String WARNING_CALLBACKANDONCLICK = "Since an OnClickListener was provided the SuperButtonToastCallback was ignored.";
 
@@ -208,6 +211,7 @@ public class SuperButtonToast
 	private Button mButton;
 	private int undoButtonResource = (SuperToastConstants.BUTTON_DARK_UNDO);
 	private Drawable buttonimageDrawable;
+	private OnDismissListener mOnDismissListener;
 
 		
 	/**
@@ -1084,6 +1088,32 @@ public class SuperButtonToast
 	
 	
 	/**
+	 * This is used to set an OnDismissListener to the SuperButtonToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Make sure that the OnDismissListener is imported from this library.
+	 * This method is not compatible with other OnDismissListeners.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mOnDismissListener 
+	 * <br>
+	 * 
+	 */
+	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+
+		this.mOnDismissListener = mOnDismissListener;
+
+	}
+	
+	
+	/**
 	 * This is used to dismiss the SuperActivityToast.
 	 * 
 	 * <br>
@@ -1124,10 +1154,14 @@ public class SuperButtonToast
 
 		} else {
 
-			Log.e("SuperCardToast",
-					"Either the View or Container was null when trying to dismiss. "
-							+ "Did you create and show a SuperCardToast before trying to dismiss it?");
+			Log.e(TAG, ERROR_VIEWORCONTAINERNULL);
 
+		}
+		
+		if(mOnDismissListener != null) {
+			
+			mOnDismissListener.onDismiss();
+			
 		}
 
 	}

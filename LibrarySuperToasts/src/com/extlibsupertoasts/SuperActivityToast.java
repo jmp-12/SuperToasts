@@ -17,6 +17,7 @@
 
 package com.extlibsupertoasts;
 
+import com.extlibsupertoasts.utilities.OnDismissListener;
 import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
@@ -84,6 +85,7 @@ public class SuperActivityToast {
 	private IconPosition mIconPosition = IconPosition.LEFT;
 	private Drawable iconDrawable;
 	private int iconResource;
+	private OnDismissListener mOnDismissListener;
 
 	/**
 	 * This is used to specify the position of a supplied icon in the
@@ -811,6 +813,32 @@ public class SuperActivityToast {
 
 	
 	/**
+	 * This is used to set an OnDismissListener to the SuperActivityToast.
+	 * 
+	 * <br>
+	 * 
+	 * <p>
+	 * <b> Important note: </b>
+	 * </p>
+	 * 
+	 * <p>
+	 * Make sure that the OnDismissListener is imported from this library.
+	 * This method is not compatible with other OnDismissListeners.
+	 * </p>
+	 * 
+	 * <br>
+	 * @param mOnDismissListener 
+	 * <br>
+	 * 
+	 */
+	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+
+		this.mOnDismissListener = mOnDismissListener;
+
+	}
+	
+	
+	/**
 	 * This is used to dismiss the SuperActivityToast.
 	 * 
 	 * <br>
@@ -847,6 +875,12 @@ public class SuperActivityToast {
 
 			Log.e(TAG, ERROR_VIEWORCONTAINERNULL);
 
+		}
+		
+		if(mOnDismissListener != null) {
+			
+			mOnDismissListener.onDismiss();
+			
 		}
 
 	}
@@ -1013,7 +1047,7 @@ public class SuperActivityToast {
 		}
 
 	};
-	
+
 	
 	private void dismissWithAnimation() {
 		
