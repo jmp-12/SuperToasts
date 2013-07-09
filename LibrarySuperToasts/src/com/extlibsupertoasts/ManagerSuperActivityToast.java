@@ -25,11 +25,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 /** Manages the life of a SuperActivityToast. Copied from the Crouton library */
 public class ManagerSuperActivityToast extends Handler {
+	
+	private static final String TAG = "ManagerSuperActivityToast";
 
 	private static final class Messages {
 
@@ -90,7 +93,7 @@ public class ManagerSuperActivityToast extends Handler {
 
 		final SuperActivityToast superActivityToast = toastQueue.peek();
 
-		if (superActivityToast.getActivity() == null) {
+		if(superActivityToast.getActivity() == null) {
 
 			toastQueue.poll();
 
@@ -191,11 +194,23 @@ public class ManagerSuperActivityToast extends Handler {
 
 		final View toastView = superActivityToast.getView();
 		
+		//TODO: Temporary fix for orientation change crash.
 		if(viewGroup != null) {
 			
-			viewGroup.addView(toastView);
+			try {
+				
+				viewGroup.addView(toastView);
 
-			toastView.startAnimation(superActivityToast.getShowAnimation());
+				toastView.startAnimation(superActivityToast.getShowAnimation());
+				
+			} catch(IllegalStateException e) {
+				
+				Log.e(TAG, e.toString());		
+				
+				clearSuperActivityToastsForActivity(superActivityToast.getActivity());
+
+			}
+
 		}
 
 		
