@@ -12,6 +12,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 @SuppressLint("NewApi")
+@SuppressWarnings("javadoc")
 public class SwipeDismissListener implements View.OnTouchListener 
 {
 	
@@ -33,10 +34,10 @@ public class SwipeDismissListener implements View.OnTouchListener
  private float mTranslationX;
 
 
- public interface OnDismissCallback 
- {
+public interface OnDismissCallback {
 
      void onDismiss(View view);
+     
  }
 
 

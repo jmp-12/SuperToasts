@@ -19,7 +19,6 @@ package com.extlibsupertoasts;
 
 
 import com.extlibsupertoasts.utilities.OnDismissListener;
-import com.extlibsupertoasts.utilities.SuperToastConstants;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,16 +26,13 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-
 
 /**
  * SuperToasts are designed to replace stock Android Toasts. 
@@ -44,113 +40,140 @@ import android.widget.TextView;
  * please see the class SuperActivityToast.
  * 
  */
-@SuppressLint("NewApi")
-@SuppressWarnings("deprecation")
+
+@SuppressWarnings("javadoc")
 public class SuperToast
 {
 	
 	private static final String ERROR_CONTEXTNULL= "The Context that you passed was null! (SuperToast)";
-	
-	/**
-	 * This Animation resembles the stock Toast Animation.
-	 */
+
+	/** Can only be used in the SuperToast class. */
 	public static final int ANIMATION_FADE = (android.R.style.Animation_Toast);
-	
-	/**
-	 * This Animation makes the SuperToast fly in from the right and disappear to the right.
-	 */
+	/** Can only be used in the SuperToast class. */
 	public static final int ANIMATION_FLYIN = (android.R.style.Animation_Translucent);
-	
-	/**
-	 * This Animation makes the SuperToast scale in from 0% of its size to 100% and disappear 
-	 * by scaling the SuperToast from 100% of its size to 0%. 
-	 */
+	/** Can only be used in the SuperToast class. */
 	public static final int ANIMATION_SCALE = (android.R.style.Animation_Dialog);
-	
-	/**
-	 * This Animation makes the SuperToast pop-up from the bottom of the screen and disappear 
-	 * to the bottom of the screen.
-	 */
+	/** Can only be used in the SuperToast class. */
 	public static final int ANIMATION_POPUP = (android.R.style.Animation_InputMethod);
+
+	public static final int BACKGROUND_BLACK = (R.drawable.background_black);
+	public static final int BACKGROUND_BLACKTRANSLUCENT = (R.drawable.background_blacktranslucent);
+	public static final int BACKGROUND_BLUE = (R.drawable.background_blue);
+	public static final int BACKGROUND_BLUETRANSLUCENT = (R.drawable.background_bluetranslucent);
+	public static final int BACKGROUND_GREEN = (R.drawable.background_green);
+	public static final int BACKGROUND_GREENTRANSLUCENT = (R.drawable.background_greentranslucent);
+	public static final int BACKGROUND_GREY = (R.drawable.background_grey);
+	public static final int BACKGROUND_GREYTRANSLUCENT = (R.drawable.background_greytranslucent);
+	public static final int BACKGROUND_PURPLE = (R.drawable.background_purple);
+	public static final int BACKGROUND_PURPLETRANSLUCENT = (R.drawable.background_purpletranslucent);
+	public static final int BACKGROUND_RED = (R.drawable.background_red);
+	public static final int BACKGROUND_REDTRANSLUCENT = (R.drawable.background_redtranslucent);
+	public static final int BACKGROUND_WHITE = (R.drawable.background_white);
+	public static final int BACKGROUND_WHITETRANSLUCENT = (R.drawable.background_whitetranslucent);
+	public static final int BACKGROUND_ORANGE = (R.drawable.background_orange);
+	public static final int BACKGROUND_ORANGETRANSLUCENT = (R.drawable.background_orangetranslucent);
+
+	public static final int BUTTON_DARK_EDIT = (com.extlibsupertoasts.R.drawable.icon_dark_edit);
+	public static final int BUTTON_DARK_EXIT = (com.extlibsupertoasts.R.drawable.icon_dark_exit);	
+	public static final int BUTTON_DARK_INFO = (com.extlibsupertoasts.R.drawable.icon_dark_info);
+	public static final int BUTTON_DARK_REDO = (com.extlibsupertoasts.R.drawable.icon_dark_redo);
+	public static final int BUTTON_DARK_SAVE = (com.extlibsupertoasts.R.drawable.icon_dark_save);
+	public static final int BUTTON_DARK_SHARE = (com.extlibsupertoasts.R.drawable.icon_dark_share);
+	public static final int BUTTON_DARK_UNDO = (com.extlibsupertoasts.R.drawable.icon_dark_undo);
+	public static final int BUTTON_LIGHT_EDIT = (com.extlibsupertoasts.R.drawable.icon_light_edit);
+	public static final int BUTTON_LIGHT_EXIT = (com.extlibsupertoasts.R.drawable.icon_light_exit);
+	public static final int BUTTON_LIGHT_INFO = (com.extlibsupertoasts.R.drawable.icon_light_info);
+	public static final int BUTTON_LIGHT_REDO = (com.extlibsupertoasts.R.drawable.icon_light_redo);
+	public static final int BUTTON_LIGHT_SAVE = (com.extlibsupertoasts.R.drawable.icon_light_save);
+	public static final int BUTTON_LIGHT_SHARE = (com.extlibsupertoasts.R.drawable.icon_light_share);
+	public static final int BUTTON_LIGHT_UNDO = (com.extlibsupertoasts.R.drawable.icon_light_undo);
 	
-	private Context mContext;
-	private LayoutInflater mLayoutInflater;
-	private WindowManager mWindowManager;
-	private View toastView;
-	private TextView messageTextView;
-	private Handler mHandler;
-	private int sdkVersion = android.os.Build.VERSION.SDK_INT;;
-		
-	private CharSequence textCharSequence;
-	private int textColor = Color.WHITE;
-	private int backgroundResource = SuperToastConstants.BACKGROUND_BLACK;
-	private int gravityInteger = Gravity.BOTTOM|Gravity.CENTER;
-	private Drawable backgroundDrawable;
-	private Typeface typeface = Typeface.DEFAULT;
-	private int duration = SuperToastConstants.DURATION_SHORT;
-	private int animationStyle = ANIMATION_FADE;
-	private int xOffset = 0;
-	private int yOffset = 0;
-	private float textSize = SuperToastConstants.TEXTSIZE_SMALL;
-	private IconPosition mIconPosition = IconPosition.LEFT;
-	private Drawable iconDrawable;
-	private int iconResource;
-	private OnDismissListener mOnDismissListener;
+	public static final int DURATION_SHORT = (2000);
+	public static final int DURATION_MEDIUM = (2750);
+	public static final int DURATION_LONG = (3500);
+	public static final int DURATION_XLONG = (4500);
+	
+	public static final int TEXTSIZE_SMALL = (14);
+	public static final int TEXTSIZE_MEDIUM = (18);
+	public static final int TEXTSIZE_LARGE = (22);
+	
+	/** Specifies the type of SuperToast. */
+	public enum Type {
 
-	/**
-	 * This is used to specify the position of a supplied icon in the
-	 * SuperActivityToast.
-	 * 
-	 */
-	public enum IconPosition {
+		/**  Standard Toast type used for displaying messages. */
+		STANDARD,
 
-		/**
-		 * Set the icon to the left of the text.
-		 */
-		LEFT,
+		/** Progress type used for showing progress. */
+		PROGRESS,
 
-		/**
-		 * Set the icon to the right of the text.
-		 */
-		RIGHT,
+		/** Progress type used for showing progress. */
+		PROGRESS_HORIZONTAL,
 
-		/**
-		 * Set the icon on top of the text.
-		 */
-		TOP,
-
-		/**
-		 * Set the icon on the bottom of the text.
-		 */
-		BOTTOM;
+		/** Button type used for user interaction. */
+		BUTTON;
 
 	}
 	
+	/** Specifies the position of a supplied icon. */
+	public enum IconPosition {
+
+		/** Set the icon to the left of the text. */
+		LEFT,
+
+		/** Set the icon to the right of the text. */
+		RIGHT,
+
+		/** Set the icon on top of the text. */
+		TOP,
+
+		/** Set the icon on the bottom of the text. */
+		BOTTOM;
+
+	}
+
+	private Context mContext;
+	private LayoutInflater mLayoutInflater;
+	private WindowManager mWindowManager;
+	private LinearLayout mRootLayout;
+	private WindowManager.LayoutParams mWindowManagerParams;
+	private View mToastView;
+	private TextView mMessageTextView;
+	private int mSdkVersion = android.os.Build.VERSION.SDK_INT;
+	private int mGravity = Gravity.BOTTOM|Gravity.CENTER;
+	private int mDuration = DURATION_SHORT;
+	private int mAnimation = ANIMATION_FADE;
+	private int mXOffset = 0;
+	private int mYOffset = 0;
+	private OnDismissListener mOnDismissListener;
+	
 	/**
 	 * Instantiates a new SuperToast.
-	 * 
 	 * <br>
-	 * 
-	 * @param mContext
-	 * 
+	 * @param context
 	 */
-	public SuperToast(Context mContext) {
+	public SuperToast(Context context) {
 
-		if (mContext != null) {
+		if (context != null) {
 
-			this.mContext = mContext;
+			this.mContext = context;
 
-			yOffset = mContext.getResources().getDimensionPixelSize(
+			mYOffset = mContext.getResources().getDimensionPixelSize(
 					com.extlibsupertoasts.R.dimen.toast_yoffset);
 
 			mLayoutInflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			toastView = mLayoutInflater.inflate(R.layout.supertoast, null);
+			mToastView = mLayoutInflater.inflate(R.layout.supertoast, 
+					null);
 
-			mWindowManager = (WindowManager) toastView.getContext()
-					.getApplicationContext()
-					.getSystemService(Context.WINDOW_SERVICE);
+			mWindowManager = (WindowManager) mToastView.getContext()
+					.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+			
+			mRootLayout = (LinearLayout) 
+					mToastView.findViewById(R.id.root_layout);
+			
+			mMessageTextView = (TextView) 
+					mToastView.findViewById(R.id.message_textView);
 
 		} else {
 
@@ -160,689 +183,279 @@ public class SuperToast
 
 	}
 
-	
-	/**
-	 * This is used to show the SuperToast. You should
-	 * do all of your modifications to the SuperToast before calling
-	 * this method. 
-	 */
+	/** Shows the SuperToast. */
 	public void show()
 	{
 
-		mHandler = new Handler();
-		mHandler.postDelayed(hideToastRunnable, duration);
-		
-		messageTextView = (TextView) 
-				toastView.findViewById(R.id.messageTextView);
-		
-		messageTextView.setText(textCharSequence);
-		messageTextView.setTypeface(typeface);
-		messageTextView.setTextColor(textColor);
-		messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-		
-
-		final FrameLayout mRootLayout = (FrameLayout) 
-				toastView.findViewById(R.id.root);
-		
-		if (backgroundDrawable != null) {
-
-			if (sdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-
-				mRootLayout.setBackgroundDrawable(backgroundDrawable);
-
-			} else {
-
-				mRootLayout.setBackground(backgroundDrawable);
-
-			}
-
-		} else {
-
-			mRootLayout.setBackgroundResource(backgroundResource);
-
-		}
-
-		
-		if (iconDrawable != null) {
-
-			if (mIconPosition == IconPosition.BOTTOM) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-						null, null, backgroundDrawable);
-
-			} else if (mIconPosition == IconPosition.LEFT) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
-						backgroundDrawable, null, null, null);
-
-			} else if (mIconPosition == IconPosition.RIGHT) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-						null, backgroundDrawable, null);
-
-			} else if (mIconPosition == IconPosition.TOP) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-						backgroundDrawable, null, null);
-
-			}
-
-		} else if (iconResource > 0) {
-
-			if (mIconPosition == IconPosition.BOTTOM) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-						null, null,
-						mContext.getResources().getDrawable(iconResource));
-
-			} else if (mIconPosition == IconPosition.LEFT) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(
-						mContext.getResources().getDrawable(iconResource),
-						null, null, null);
-
-			} else if (mIconPosition == IconPosition.RIGHT) {
-
-				messageTextView
-						.setCompoundDrawablesWithIntrinsicBounds(
-								null, null, mContext.getResources().getDrawable(iconResource), 
-								null);
-
-			} else if (mIconPosition == IconPosition.TOP) {
-
-				messageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-						mContext.getResources().getDrawable(iconResource),
-						null, null);
-
-			}
-
-		}
-
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+		mWindowManagerParams = new WindowManager.LayoutParams();
         
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE 
+        mWindowManagerParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowManagerParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowManagerParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE 
         		       | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE 
         		       | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        mWindowManagerParams.format = PixelFormat.TRANSLUCENT;      
+        mWindowManagerParams.windowAnimations = mAnimation;
+        mWindowManagerParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        mWindowManagerParams.gravity = mGravity;
+        mWindowManagerParams.x = mXOffset;       
+        mWindowManagerParams.y = mYOffset;      
         
-        params.format = PixelFormat.TRANSLUCENT;      
-        params.windowAnimations = animationStyle;
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
-        params.gravity = (gravityInteger);
-        params.x = xOffset;       
-        params.y = yOffset;      
+        ManagerSuperToast.getInstance().add(this);
         
-        mWindowManager.addView(toastView, params);
-		
 	}
 
-	
 	/**
-	 * This is used to set the message text of the SuperToast.
-	 * 
+	 * Sets the message text of the SuperToast.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Important note: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This method can be called again while the SuperToast is showing
-	 * to modify the existing message. If your application might show two
-	 * SuperToasts at one time you should try to reuse the same
-	 * SuperToast by calling this method and {@link #resetDuration(int)}
-	 * </p>
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Toasts/SuperToasts are designed to display short non-essential
-	 * messages such as "Message sent!" after the user sends a SMS. Generally
-	 * these messages should rarely display more than one line of text.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param textCharSequence 
-	 * <br>
-	 * 
+	 * @param text
 	 */
-	public void setText(CharSequence textCharSequence) {
+	public void setText(CharSequence text) {
 
-		this.textCharSequence = textCharSequence;
-
-		if (messageTextView != null) {
-
-			messageTextView.setText(textCharSequence);
-
-		}
+		mMessageTextView.setText(text);
 
 	}
 
-	
 	/**
-	 * This is used to set the message text color of the SuperToast.
-	 * 
+	 * Sets the message text color of the SuperToast.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * The text color that you choose should contrast the color of the background.
-	 * Generally the colors white and black are the only colors that should be used
-	 * here.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param textColor 
-	 * <br>
-	 * Example: (Color.WHITE)
-	 * <br>
-	 * 
+	 * @param textColor
 	 */
 	public void setTextColor(int textColor) {
 
-		this.textColor = textColor;
-
-		if (messageTextView != null) {
-
-			messageTextView.setTextColor(textColor);
-
-		}
+		mMessageTextView.setTextColor(textColor);
 
 	}
-	
-	
+
 	/**
-	 * This is used to set the duration of the SuperToast.
-	 * 
+	 * Sets the text size of the SuperToast. 
+	 * This method will automatically convert the integer 
+	 * parameter to scaled pixels.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Generally short durations are preferred. 
-	 * </p>
-	 * 
+	 * @param textSize	
+	 */
+	public void setTextSize(int textSize) {
+
+		mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+
+	}
+
+	/**
+	 * Sets the duration of the SuperToast.
 	 * <br>
 	 * @param duration
-	 * <br>
-	 * Example: (SuperToastConstants.DURATION_SHORT)
-	 * <br>
-	 * 
 	 */
 	public void setDuration(int duration) {
 
-		this.duration = duration;
+		this.mDuration = duration;
 
 	}
-	
-	
 
 	/**
-	 * This is used to reset the duration of the SuperToast 
-	 * while it is showing.
-	 * 
+	 * Sets an icon Drawable to the SuperToast with
+	 * a position.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Instead of having overlapping or sequential messages you
-	 * should use this method to reuse an already showing SuperToast
-	 * in instances where two or more messages can be showing at the same time.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param newDuration 
-	 * <br>
-	 * Example: (SuperToastConstants.DURATION_SHORT)
-	 * <br>
-	 * 
+	 * @param iconDrawable
+	 * @param iconPosition
 	 */
-	public void resetDuration(int newDuration) {
+	public void setIconDrawable(Drawable iconDrawable, IconPosition iconPosition) {
 
-		if (mHandler != null) {
+		if (iconPosition == IconPosition.BOTTOM) {
 
-			mHandler.removeCallbacks(hideToastRunnable);
-			mHandler = null;
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					null, iconDrawable);
+
+		} else if (iconPosition == IconPosition.LEFT) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(
+					iconDrawable, null, null, null);
+
+		} else if (iconPosition == IconPosition.RIGHT) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					iconDrawable, null);
+
+		} else if (iconPosition == IconPosition.TOP) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+					iconDrawable, null, null);
 
 		}
 
-		mHandler = new Handler();
-		mHandler.postDelayed(hideToastRunnable, newDuration);
-
 	}
-	
-	
+
 	/**
-	 * This is used to set an icon Drawable to the SuperToast.
-	 * 
+	 * Sets an icon resource to the SuperToast 
+	 * with a position.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Use {@link #setIconPosition(IconPosition)} to modify the 
-	 * location of the icon.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param iconDrawable 
-	 * <br>
-	 * 
+	 * @param iconResource
+	 * @param iconPosition
 	 */
-	public void setIconDrawable(Drawable iconDrawable) {
+	public void setIconResource(int iconResource, IconPosition iconPosition) {
 
-		this.iconDrawable = iconDrawable;
+		if (iconPosition == IconPosition.BOTTOM) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					null, mContext.getResources().getDrawable(iconResource));
+
+		} else if (iconPosition == IconPosition.LEFT) {
+
+			mMessageTextView
+					.setCompoundDrawablesWithIntrinsicBounds(mContext
+							.getResources().getDrawable(iconResource), null,
+							null, null);
+
+		} else if (iconPosition == IconPosition.RIGHT) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					mContext.getResources().getDrawable(iconResource), null);
+
+		} else if (iconPosition == IconPosition.TOP) {
+
+			mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+					mContext.getResources().getDrawable(iconResource), null,
+					null);
+
+		}
 
 	}
 	
-	
 	/**
-	 * This is used to set an icon resource to the SuperToast.
-	 * 
+	 * Sets the Gravity of the SuperToast.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Use {@link #setIconPosition(IconPosition)} to modify the 
-	 * location of the icon.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param iconResource 
-	 * <br>
-	 * 
+	 * @param gravity
 	 */
-	public void setIconResource(int iconResource) {
+	public void setGravity(int gravity) {
 
-		this.iconResource = iconResource;
-
-	}
-	
-	
-	/**
-	 * This is used to set the position of the icon in the SuperToast.
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * It is preferable to display the icon to the left of the text.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param mIconPosition 
-	 * <br>
-	 * Example: IconPosition.LEFT
-	 * <br>
-	 * 
-	 */
-	public void setIconPosition(IconPosition mIconPosition) {
-
-		this.mIconPosition = mIconPosition;
+		this.mGravity = gravity;
 
 	}
 	
-	
 	/**
-	 * This is used to set the gravity of the SuperToast.
-	 * 
-	 * 
+	 * Sets the background resource of the SuperToast.
 	 * <br>
-	 * @param gravityInteger 
-	 * <br>
-	 * Example: Gravity.LEFT
-	 * <br>
-	 * 
-	 */
-	public void setGravity(int gravityInteger) {
-
-		this.gravityInteger = gravityInteger;
-
-	}
-	
-	
-	/**
-	 * This is used to set the background of the SuperToast.
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This library comes with backgrounds ready to use in your applications. 
-	 * If you would like to use your own backgrounds please make sure that
-	 * the background is nine-patch or XML format. 
-	 * </p>
-	 * 
-	 * <br>
-	 * @param backgroundResource 
-	 * <br>
-	 * Example: (SuperToastConstants.BACKGROUND_BLACK)
-	 * <br>
+	 * @param backgroundResource
 	 * 
 	 */
 	public void setBackgroundResource(int backgroundResource) {
 
-		this.backgroundResource = backgroundResource;
+		mRootLayout.setBackgroundResource(backgroundResource);
 
 	}
 
-	
 	/**
-	 * This is used to set the background of the SuperToast.
-	 * 
+	 * Sets the background Drawable of the SuperToast.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This library comes with backgrounds ready to use in your applications. 
-	 * If you would like to use them please see {@link #setBackgroundResource(int)}.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param backgroundDrawable 
-	 * <br>
+	 * @param backgroundDrawable
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	public void setBackgroundDrawable(Drawable backgroundDrawable) {
-		
-		this.backgroundDrawable = backgroundDrawable;
-		
-	}
-	
-	
-	/**
-	 * This is used to set the text size of the SuperToast.
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Design guide: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Generally the text size should be around 14sp.
-	 * </p>
-	 * 
-	 * <br>
-	 * 
-	 * <p>
-	 * <b> Important note: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * You may specify an integer value as a parameter.
-	 * This method will automatically convert the integer to 
-	 * scaled pixels. 
-	 * </p>
-	 * 
-	 * <br>
-	 * @param textSize 
-	 * <br>
-	 * Example: (SuperToastConstants.TEXTSIZE_SMALL)		
-	 * <br>
-	 * 
-	 */
-	public void setTextSize(int textSize) {
 
-		this.textSize = textSize;
-		
+		if (mSdkVersion < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
+			mRootLayout.setBackgroundDrawable(backgroundDrawable);
+
+		}
+
+		else {
+
+			mRootLayout.setBackground(backgroundDrawable);
+
+		}
+
 	}
-	
-	
+
 	/**
-	 * This is used to set the Typeface of the SuperActivityToast text.
-	 * 
+	 * Sets the Typeface of the SuperToast TextView.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Important note: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * This library comes with a link to download the Roboto font. To use the
-	 * fonts see {@link #loadRobotoTypeface(String)}.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param typeface 
-	 * <br>
-	 * 		Example: (Typeface.DEFAULT) OR (mSuperActivityToast.loadRobotoTypeface(SuperToastConstants.
-	 * FONT_ROBOTO_THIN);	 * 		
-	 * <br>
-	 * 
+	 * @param typeface
 	 */
 	public void setTypeface(Typeface typeface) {
-		
-		this.typeface = typeface;
-		
+
+		mMessageTextView.setTypeface(typeface);
+
 	}
 	
-
 	/**
-	 * This is used to set the Animation of the SuperToast.
-	 * 
+	 * Sets the Animation of the SuperToast.
+	 * This is limited to the constants of this class.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Important note: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * You can only use the four Animations specified in this class. This is a
-	 * limit of Android not this library.
-	 * </p>
-	 * 
-	 * <br>
-	 * 
-	 * @param animationStyle
-	 * <br>
-	 *            Example: SuperToast.ANIMATION_FADE
-	 * 
+	 * @param animation
 	 */
-	public void setAnimation(int animationStyle) {
+	public void setAnimation(int animation) {
 
-		this.animationStyle = animationStyle;
+		this.mAnimation = animation;
 
 	}
 	
-	
 	/**
-	 * This is used to set the X and Y offsets of the SuperToast.
-	 * 
+	 * Sets the X and Y offsets of the SuperToast.
 	 * <br>
-	 * 
-	 * <br>
-	 * @param xOffset 
-	 * @param yOffset 
-	 * <br>
-	 * 
+	 * @param xOffset
+	 * @param yOffset
 	 */
 	public void setXYCoordinates(int xOffset, int yOffset) {
 				
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+		this.mXOffset = xOffset;
+		this.mYOffset = yOffset;
 
 	}
 	
 	/**
-	 * This is used to set an OnDismissListener to the SuperToast.
-	 * 
+	 * Sets an OnDismissListener defined in this library
+	 * to the SuperToast.
 	 * <br>
-	 * 
-	 * <p>
-	 * <b> Important note: </b>
-	 * </p>
-	 * 
-	 * <p>
-	 * Make sure that the OnDismissListener is imported from this library.
-	 * This method is not compatible with other OnDismissListeners.
-	 * </p>
-	 * 
-	 * <br>
-	 * @param mOnDismissListener 
-	 * <br>
-	 * 
+	 * @param onDismissListener
 	 */
-	public void setOnDismissListener(OnDismissListener mOnDismissListener) {
+	public void setOnDismissListener(OnDismissListener onDismissListener) {
 
-		this.mOnDismissListener = mOnDismissListener;
+		this.mOnDismissListener = onDismissListener;
 
 	}
 	
-	
-	/**
-	 * <b><i> public void dismiss() </i></b>
-     *
-	 * <p> This is used to hide and dispose of the SuperButtonToast. </p>
-	 *
-	 *
-	 * <b> Design guide: </b>
-	 * 
-	 * <p> Treat your SuperToast like a Dialog, dismiss it when it is no longer
-	 *     relevant. </p>
-	 *	 
-	 */
+	/** Dismisses the SuperToast. */
 	public void dismiss() {
 
-		if (mHandler != null) {
-
-			mHandler.removeCallbacks(hideToastRunnable);
-			mHandler = null;
-
-		}
-
-		if (toastView != null && mWindowManager != null) {
-
-			mWindowManager.removeView(toastView);
-			toastView = null;
-
-		}
-		
-		if(mOnDismissListener != null) {
-			
-			mOnDismissListener.onDismiss();
-			
-		}
+		ManagerSuperToast.getInstance().removeSuperToast(this);
 
 	}
 	
 	
 	//XXX: Getter methods
-
-	
 	/**
-	 * This is used to get the SuperToast message TextView.
-	 * 
+	 * Returns the SuperToast TextView.
 	 * <br>
-	 * 
-	 * @return TextView
-	 * 
-	 * <br>
-	 * 
+	 * @return TextView <br>
 	 */
 	public TextView getTextView() {
 
-		return messageTextView;
+		return mMessageTextView;
 
 	}
-	
-	
-	/**
-	 * This is used to get the X offset of the SuperToast VIew.
-	 * 
-	 * <br>
-	 * 
-	 * @return int
-	 * 
-	 * <br>
-	 * 
-	 */
-	public int getXOffset()
-	{
-		
-		return this.xOffset;
 
-	}
-	
-	
 	/**
-	 * This is used to get the Y offset of the SuperToast VIew.
-	 * 
+	 * Returns the SuperToast View.
 	 * <br>
-	 * 
-	 * @return int
-	 * 
-	 * <br>
-	 * 
-	 */
-	public int getYOffset() {
-
-		return this.yOffset;
-
-	}
-	
-	
-	/**
-	 * This is used to get the SuperToast View.
-	 * 
-	 * <br>
-	 * 
-	 * @return View
-	 * 
-	 * <br>
-	 * 
+	 * @return View <br>
 	 */
 	public View getView() {
 
-		return toastView;
+		return mToastView;
 
 	}
-	
-	
+
 	/**
-	 * Returns true of the SuperToast is currently visible 
-	 * to the user. 
-	 * 
+	 * Returns true if the SuperToast is showing.
 	 * <br>
-	 * 
-	 * @return boolean
-	 * 
-	 * <br>
-	 * 
+	 * @return boolean <br>
 	 */
 	public boolean isShowing() {
 
-		if (toastView != null) {
+		if (mToastView != null) {
 
-			return toastView.isShown();
+			return mToastView.isShown();
 
 		}
 
@@ -853,49 +466,53 @@ public class SuperToast
 		}
 
 	}
-	
-	
+
 	/**
-	 * This is used to get and load a Roboto font. You <b><i>MUST</i></b> put the
-	 * desired font file in the assets folder of your project. The link to
-	 * download the Roboto fonts is included in this library as a text file. Do
-	 * not modify the names of these fonts.
-	 * 
+	 * Returns the set duration of the SuperToast.
 	 * <br>
-	 * @param typefaceString
-	 * <br>
-	 * Example: (SuperToastConstants.FONT_ROBOTO_THIN)
-	 * <br>
-	 * 
-	 * @return Typeface
-	 * 
-	 * <br>
-	 * 
+	 * @return long <br>
 	 */
-	public Typeface loadRobotoTypeface(String typefaceString)
-	{
-		
-		return Typeface.createFromAsset(mContext.getAssets(), typefaceString);
+	public long getDuration() {
+
+		return mDuration;
+
+	}
+
+	/**
+	 * Returns the OnDismissListener of the SuperToast.
+	 * <br>
+	 * @return OnDismissListener <br>
+	 */
+	public OnDismissListener getOnDismissListener() {
+
+		return mOnDismissListener;
+
+	}
+
+	/**
+	 * Returns the WindowManager that the SuperToast is attached to.
+	 * <br>
+	 * @return ViewGroup <br>
+	 */
+	public WindowManager getWindowManager() {
+
+		return mWindowManager;
+
+	}
+
+	/**
+	 * Returns the WindowManager.Params of the SuperToast.
+	 * <br>
+	 * @return ViewGroup <br>
+	 */
+	public WindowManager.LayoutParams getWindowManagerParams() {
+
+		return mWindowManagerParams;
 
 	}
 
 	
-	//XXX: Private methods
-
-
-	private Runnable hideToastRunnable = new Runnable() 
-	{
-		 
-        public void run() 
-        {
-        	        	
-        	dismiss();
-	 
-        }        
-    };
-    
-    
-    //Quick Navigation: Static methods.
+	//XXX: Static methods.
 	
     
 	/**
@@ -946,7 +563,7 @@ public class SuperToast
 		SuperToast mSuperToast = new SuperToast(context);
 		mSuperToast.setText(textCharSequence);
 		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
+		mSuperToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
 		mSuperToast.setTextColor(Color.BLACK);
 
 		return mSuperToast;
@@ -1007,11 +624,18 @@ public class SuperToast
 		SuperToast mSuperToast = new SuperToast(context);
 		mSuperToast.setText(textCharSequence);
 		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setBackgroundResource(SuperToastConstants.BACKGROUND_WHITE);
+		mSuperToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
 		mSuperToast.setTextColor(Color.BLACK);
 		mSuperToast.setAnimation(animation);
 
 		return mSuperToast;
+
+	}
+	
+	/** Dismisses and removes all showing/pending SuperActivityToasts. */
+	public static void cancelAllSuperToasts() {
+
+		ManagerSuperToast.getInstance().clearQueue();
 
 	}
     
