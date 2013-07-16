@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>LibrarySuperToasts</name>
+	<name>SuperToasts-Library</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -44,7 +44,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1371067116970</id>
+			<id>0</id>
 			<name></name>
 			<type>14</type>
 			<matcher>
