@@ -1,5 +1,8 @@
 <resources>
 
     <string name="app_name">EXTLIBSuperToasts</string>
+<array name="navigation_list">
+<item>"Stuff"</item>
 
+</array>
 </resources>
