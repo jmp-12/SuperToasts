@@ -1,4 +1,4 @@
-package com.test;
+package com.supertoastsdemo;
 
 import android.os.Bundle;
 import android.app.Activity;
