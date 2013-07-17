@@ -40,8 +40,6 @@ import android.widget.TextView;
  * please see the class SuperActivityToast.
  * 
  */
-
-@SuppressWarnings("javadoc")
 public class SuperToast
 {
 	
@@ -157,10 +155,10 @@ public class SuperToast
 
 			this.mContext = context;
 
-			mYOffset = mContext.getResources().getDimensionPixelSize(
+			mYOffset = context.getResources().getDimensionPixelSize(
 					com.extlibsupertoasts.R.dimen.toast_yoffset);
 
-			mLayoutInflater = (LayoutInflater) mContext
+			mLayoutInflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			mToastView = mLayoutInflater.inflate(R.layout.supertoast, 
@@ -533,11 +531,11 @@ public class SuperToast
 	public static SuperToast createDarkSuperToast(Context context,
 			CharSequence textCharSequence, int durationInteger) {
 
-		SuperToast mSuperToast = new SuperToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
+		SuperToast superToast = new SuperToast(context);
+		superToast.setText(textCharSequence);
+		superToast.setDuration(durationInteger);
 
-		return mSuperToast;
+		return superToast;
 
 	}
     
@@ -560,13 +558,13 @@ public class SuperToast
 	public static SuperToast createLightSuperToast(Context context,
 			CharSequence textCharSequence, int durationInteger) {
 
-		SuperToast mSuperToast = new SuperToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
-		mSuperToast.setTextColor(Color.BLACK);
+		SuperToast superToast = new SuperToast(context);
+		superToast.setText(textCharSequence);
+		superToast.setDuration(durationInteger);
+		superToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
+		superToast.setTextColor(Color.BLACK);
 
-		return mSuperToast;
+		return superToast;
 
 	}
     
@@ -591,12 +589,12 @@ public class SuperToast
 	public static SuperToast createDarkSuperToast(Context context,
 			CharSequence textCharSequence, int durationInteger, int animation) {
 
-		SuperToast mSuperToast = new SuperToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setAnimation(animation);
+		SuperToast superToast = new SuperToast(context);
+		superToast.setText(textCharSequence);
+		superToast.setDuration(durationInteger);
+		superToast.setAnimation(animation);
 
-		return mSuperToast;
+		return superToast;
 
 	}
     
@@ -621,14 +619,14 @@ public class SuperToast
 	public static SuperToast createLightSuperToast(Context context,
 			CharSequence textCharSequence, int durationInteger, int animation) {
 
-		SuperToast mSuperToast = new SuperToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
-		mSuperToast.setTextColor(Color.BLACK);
-		mSuperToast.setAnimation(animation);
+		SuperToast superToast = new SuperToast(context);
+		superToast.setText(textCharSequence);
+		superToast.setDuration(durationInteger);
+		superToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
+		superToast.setTextColor(Color.BLACK);
+		superToast.setAnimation(animation);
 
-		return mSuperToast;
+		return superToast;
 
 	}
 	

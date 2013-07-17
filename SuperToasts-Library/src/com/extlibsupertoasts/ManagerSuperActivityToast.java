@@ -36,9 +36,9 @@ public class ManagerSuperActivityToast extends Handler {
 
 	private static final class Messages {
 
-		public static final int DISPLAY_SUPERACTIVITYTOAST = 0xc2007;
-		public static final int ADD_SUPERACTIVITYTOAST = 0xc20074dd;
-		public static final int REMOVE_SUPERACTIVITYTOAST = 0xc2007de1;
+		private static final int DISPLAY_SUPERACTIVITYTOAST = 0xc2007;
+		private static final int ADD_SUPERACTIVITYTOAST = 0xc20074dd;
+		private static final int REMOVE_SUPERACTIVITYTOAST = 0xc2007de1;
 
 		private Messages() {
 
@@ -48,27 +48,27 @@ public class ManagerSuperActivityToast extends Handler {
 
 	}
 
-	private static ManagerSuperActivityToast manager;
+	private static ManagerSuperActivityToast mManagerSuperActivityToast;
 
-	private Queue<SuperActivityToast> toastQueue;
+	private Queue<SuperActivityToast> mQueue;
 
 	private ManagerSuperActivityToast() {
 
-		toastQueue = new LinkedBlockingQueue<SuperActivityToast>();
+		mQueue = new LinkedBlockingQueue<SuperActivityToast>();
 
 	}
 
 	protected static synchronized ManagerSuperActivityToast getInstance() {
 
-		if (manager != null) {
+		if (mManagerSuperActivityToast != null) {
 
-			return manager;
+			return mManagerSuperActivityToast;
 
 		} else {
 
-			manager = new ManagerSuperActivityToast();
+			mManagerSuperActivityToast = new ManagerSuperActivityToast();
 
-			return manager;
+			return mManagerSuperActivityToast;
 
 		}
 
@@ -77,7 +77,7 @@ public class ManagerSuperActivityToast extends Handler {
 
 	protected void add(SuperActivityToast superActivityToast) {
 
-		toastQueue.add(superActivityToast);
+		mQueue.add(superActivityToast);
 		this.showNextSuperToast();
 
 	}
@@ -85,17 +85,17 @@ public class ManagerSuperActivityToast extends Handler {
 	
 	private void showNextSuperToast() {
 
-		if (toastQueue.isEmpty()) {
+		if (mQueue.isEmpty()) {
 
 			return;
 
 		}
 
-		final SuperActivityToast superActivityToast = toastQueue.peek();
+		final SuperActivityToast superActivityToast = mQueue.peek();
 
 		if(superActivityToast.getActivity() == null) {
 
-			toastQueue.poll();
+			mQueue.poll();
 
 		}
 
@@ -234,7 +234,7 @@ public class ManagerSuperActivityToast extends Handler {
 
 			toastView.startAnimation(superActivityToast.getDismissAnimation());
 
-			toastQueue.poll();
+			mQueue.poll();
 
 			viewGroup.removeView(toastView);
 
@@ -257,9 +257,9 @@ public class ManagerSuperActivityToast extends Handler {
 
 		removeAllMessages();
 
-		if (toastQueue != null) {
+		if (mQueue != null) {
 
-			for (SuperActivityToast superActivityToast : toastQueue) {
+			for (SuperActivityToast superActivityToast : mQueue) {
 
 				if (superActivityToast.isShowing()) {
 
@@ -270,7 +270,7 @@ public class ManagerSuperActivityToast extends Handler {
 
 			}
 
-			toastQueue.clear();
+			mQueue.clear();
 
 		}
 
@@ -278,9 +278,9 @@ public class ManagerSuperActivityToast extends Handler {
 
 	protected void clearSuperActivityToastsForActivity(Activity activity) {
 
-		if (toastQueue != null) {
+		if (mQueue != null) {
 
-			Iterator<SuperActivityToast> superActivityToastIterator = toastQueue
+			Iterator<SuperActivityToast> superActivityToastIterator = mQueue
 					.iterator();
 
 			while (superActivityToastIterator.hasNext()) {

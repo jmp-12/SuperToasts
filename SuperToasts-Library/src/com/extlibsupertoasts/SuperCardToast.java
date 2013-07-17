@@ -914,8 +914,8 @@ public class SuperCardToast
 				public void onAnimationEnd(Animation animation) {
 
 					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
-					Handler mHandler = new Handler();
-					mHandler.post(mHideImmediateRunnable);
+					Handler handler = new Handler();
+					handler.post(mHideImmediateRunnable);
 
 				}
 

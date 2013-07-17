@@ -784,11 +784,11 @@ public class SuperActivityToast {
 	public static SuperActivityToast createDarkSuperActivityToast(
 			Context context, CharSequence textCharSequence, int durationInteger) {
 
-		SuperActivityToast mSuperToast = new SuperActivityToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
+		SuperActivityToast superActivityToast = new SuperActivityToast(context);
+		superActivityToast.setText(textCharSequence);
+		superActivityToast.setDuration(durationInteger);
 
-		return mSuperToast;
+		return superActivityToast;
 
 	}
 
@@ -803,13 +803,13 @@ public class SuperActivityToast {
 	public static SuperActivityToast createLightSuperActivityToast(
 			Context context, CharSequence textCharSequence, int durationInteger) {
 
-		SuperActivityToast mSuperToast = new SuperActivityToast(context);
-		mSuperToast.setText(textCharSequence);
-		mSuperToast.setDuration(durationInteger);
-		mSuperToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
-		mSuperToast.setTextColor(Color.BLACK);
+		SuperActivityToast superActivityToast = new SuperActivityToast(context);
+		superActivityToast.setText(textCharSequence);
+		superActivityToast.setDuration(durationInteger);
+		superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_WHITE);
+		superActivityToast.setTextColor(Color.BLACK);
 
-		return mSuperToast;
+		return superActivityToast;
 
 	}
 
@@ -839,21 +839,21 @@ public class SuperActivityToast {
 	
 	private Animation getFadeInAnimation() {
 
-		AlphaAnimation mAlphaAnimation = new AlphaAnimation(0f, 1f);
-		mAlphaAnimation.setDuration(500);
-		mAlphaAnimation.setInterpolator(new AccelerateInterpolator());
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);
+		alphaAnimation.setDuration(500);
+		alphaAnimation.setInterpolator(new AccelerateInterpolator());
 
-		return mAlphaAnimation;
+		return alphaAnimation;
 
 	}
 
 	private Animation getFadeOutAnimation() {
 
-		AlphaAnimation mAlphaAnimation = new AlphaAnimation(1f, 0f);
-		mAlphaAnimation.setDuration(500);
-		mAlphaAnimation.setInterpolator(new AccelerateInterpolator());
+		AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
+		alphaAnimation.setDuration(500);
+		alphaAnimation.setInterpolator(new AccelerateInterpolator());
 
-		return mAlphaAnimation;
+		return alphaAnimation;
 
 	}
 

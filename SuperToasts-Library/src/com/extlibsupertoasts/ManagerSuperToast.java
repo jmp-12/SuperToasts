@@ -32,9 +32,9 @@ public class ManagerSuperToast extends Handler {
 	private static final class Messages {
 		
 		//TODO:
-		public static final int DISPLAY_SUPERTOAST = 0xc2008;
-		public static final int ADD_SUPERTOAST = 0xc20084dd;
-		public static final int REMOVE_SUPERTOAST = 0xc2008de1;
+		private static final int DISPLAY_SUPERTOAST = 0xc2008;
+		private static final int ADD_SUPERTOAST = 0xc20084dd;
+		private static final int REMOVE_SUPERTOAST = 0xc2008de1;
 
 		private Messages() {
 
@@ -44,27 +44,28 @@ public class ManagerSuperToast extends Handler {
 
 	}
 
-	private static ManagerSuperToast manager;
+	private static ManagerSuperToast mManagerSuperToast;
 
-	private Queue<SuperToast> toastQueue;
+	private Queue<SuperToast> mQueue;
+	
 
 	private ManagerSuperToast() {
 
-		toastQueue = new LinkedBlockingQueue<SuperToast>();
+		mQueue = new LinkedBlockingQueue<SuperToast>();
 
 	}
 
 	protected static synchronized ManagerSuperToast getInstance() {
 
-		if (manager != null) {
+		if (mManagerSuperToast != null) {
 
-			return manager;
+			return mManagerSuperToast;
 
 		} else {
 
-			manager = new ManagerSuperToast();
+			mManagerSuperToast = new ManagerSuperToast();
 
-			return manager;
+			return mManagerSuperToast;
 
 		}
 
@@ -73,7 +74,7 @@ public class ManagerSuperToast extends Handler {
 
 	protected void add(SuperToast superToast) {
 
-		toastQueue.add(superToast);
+		mQueue.add(superToast);
 		this.showNextSuperToast();
 
 	}
@@ -81,13 +82,13 @@ public class ManagerSuperToast extends Handler {
 	
 	private void showNextSuperToast() {
 
-		if (toastQueue.isEmpty()) {
+		if (mQueue.isEmpty()) {
 
 			return;
 
 		}
 
-		final SuperToast superToast = toastQueue.peek();
+		final SuperToast superToast = mQueue.peek();
 
 		if (!superToast.isShowing()) {
 
@@ -204,7 +205,7 @@ public class ManagerSuperToast extends Handler {
 
 		if (windowManager != null) {
 
-			toastQueue.poll();
+			mQueue.poll();
 
 			windowManager.removeView(toastView);
 
@@ -225,9 +226,9 @@ public class ManagerSuperToast extends Handler {
 
 		removeAllMessages();
 
-		if (toastQueue != null) {
+		if (mQueue != null) {
 
-			for (SuperToast superToast : toastQueue) {
+			for (SuperToast superToast : mQueue) {
 
 				if (superToast.isShowing()) {
 
@@ -238,7 +239,7 @@ public class ManagerSuperToast extends Handler {
 
 			}
 
-			toastQueue.clear();
+			mQueue.clear();
 
 		}
 
