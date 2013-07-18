@@ -4,5 +4,12 @@
     <string name="app_name">SuperToasts-Demo</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="animation">Animation</string>
+    <string name="duration">Duration</string>
+    <string name="background">Background</string>
+    <string name="text_size">Text size</string>
+    <string name="show_image">Show image</string>
+
+
 
 </resources>

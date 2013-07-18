@@ -1,15 +1,15 @@
 package com.supertoastsdemo;
 
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.extlibsupertoasts.SuperToast;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class MainActivity extends SherlockActivity {
 
+public class MainActivity extends SherlockFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class MainActivity extends SherlockActivity {
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
@@ -26,12 +27,17 @@ public class MainActivity extends SherlockActivity {
 
         actionBar.setListNavigationCallbacks(arrayAdapter, new ActionBar.OnNavigationListener() {
 
+            SherlockFragment fragment;
+
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+
 
                 switch (itemPosition) {
 
                     case 0:
+
+                        fragment = new FragmentSuperToast();
 
                         break;
 
@@ -45,7 +51,18 @@ public class MainActivity extends SherlockActivity {
 
                         break;
 
+
+                    default:
+
+                        fragment = new FragmentSuperToast();
+
+                        break;
+
                 }
+
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
 
                 return false;
 
