@@ -1,4 +1,4 @@
-package com.supertoastsdemo;
+package com.supertoaststest;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
