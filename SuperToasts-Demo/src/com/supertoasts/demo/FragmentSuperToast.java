@@ -1,4 +1,4 @@
-package com.supertoastsdemo;
+package com.supertoasts.demo;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.extlibsupertoasts.SuperToast;
-import com.supertoaststest.R;
+import com.supertoasts.demo.R;
 
 public class FragmentSuperToast extends SherlockFragment {
 

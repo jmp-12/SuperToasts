@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SuperToasts-Demo</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">SuperToasts-Test</string>
     <string name="animation">Animation</string>
     <string name="duration">Duration</string>
     <string name="background">Background</string>

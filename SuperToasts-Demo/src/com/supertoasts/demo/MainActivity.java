@@ -1,4 +1,4 @@
-package com.supertoastsdemo;
+package com.supertoasts.demo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.supertoaststest.R;
+import com.supertoasts.demo.R;
 
 
 public class MainActivity extends SherlockFragmentActivity {
