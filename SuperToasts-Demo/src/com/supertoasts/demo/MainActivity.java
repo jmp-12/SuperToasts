@@ -45,6 +45,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
                     case 1:
 
+                        fragment = new FragmentSuperActivityToast();
+
                         break;
 
 

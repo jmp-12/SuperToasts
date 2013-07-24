@@ -9,7 +9,9 @@
     <string name="background">Background</string>
     <string name="text_size">Text size</string>
     <string name="show_image">Show image</string>
-
-
+    <string name="toast_type">Toast type</string>
+    <string name="button_type">Button type</string>
+    <string name="progress_type">Progress type</string>
+    <string name="horizontal_progress_type">Horizontal progress type</string>
 
 </resources>
