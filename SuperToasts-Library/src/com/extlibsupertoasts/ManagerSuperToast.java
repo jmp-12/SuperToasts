@@ -26,15 +26,17 @@ import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 
-/** Manages the life of a SuperActivityToast. Copied from the Crouton library */
+/** Manages the life of a SuperActivityToast. Copied from the Crouton library. */
 public class ManagerSuperToast extends Handler {
 
-	private static final class Messages {
-		
-		//TODO:
-		private static final int DISPLAY_SUPERTOAST = 0xc2008;
-		private static final int ADD_SUPERTOAST = 0xc20084dd;
-		private static final int REMOVE_SUPERTOAST = 0xc2008de1;
+    private static final String TAG = "ManagerSuperToast";
+
+    private static final class Messages {
+
+        /** Hexadecimal numbers that represent acronyms for the operation. **/
+		private static final int DISPLAY_SUPERTOAST = 0x445354;
+		private static final int ADD_SUPERTOAST = 0x415354;
+		private static final int REMOVE_SUPERTOAST = 0x525354;
 
 		private Messages() {
 
@@ -47,7 +49,6 @@ public class ManagerSuperToast extends Handler {
 	private static ManagerSuperToast mManagerSuperToast;
 
 	private Queue<SuperToast> mQueue;
-	
 
 	private ManagerSuperToast() {
 

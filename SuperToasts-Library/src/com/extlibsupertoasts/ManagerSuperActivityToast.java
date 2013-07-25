@@ -29,16 +29,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-/** Manages the life of a SuperActivityToast. Copied from the Crouton library */
+/** Manages the life of a SuperActivityToast. Copied from the Crouton library. */
 public class ManagerSuperActivityToast extends Handler {
 	
 	private static final String TAG = "ManagerSuperActivityToast";
 
 	private static final class Messages {
 
-		private static final int DISPLAY_SUPERACTIVITYTOAST = 0xc2007;
-		private static final int ADD_SUPERACTIVITYTOAST = 0xc20074dd;
-		private static final int REMOVE_SUPERACTIVITYTOAST = 0xc2007de1;
+        /** Hexadecimal numbers that represent acronyms for the operation. **/
+		private static final int DISPLAY_SUPERACTIVITYTOAST = 0x44534154;
+		private static final int ADD_SUPERACTIVITYTOAST = 0x41534154;
+		private static final int REMOVE_SUPERACTIVITYTOAST = 0x52534154;
 
 		private Messages() {
 
