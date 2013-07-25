@@ -55,6 +55,7 @@ import android.widget.TextView;
  * SuperCardToasts are designed to be used inside of Activities. SuperCardToasts
  * are designed to be displayed at the top of an Activity to display non-essential messages. 
  */
+
 public class SuperCardToast
 {
 	
