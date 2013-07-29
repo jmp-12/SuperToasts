@@ -1,4 +1,4 @@
-package com.supertoasts.demo;
+package com.supertoastsdemo;
 
 import android.content.Intent;
 import android.net.Uri;

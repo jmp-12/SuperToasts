@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.extlibsupertoasts.SuperActivityToast;
+import com.supertoaststest.R;
 
 /** This class simulates an error of the library. If a new
  *  Activity is launched while a SuperActivityToast is showing

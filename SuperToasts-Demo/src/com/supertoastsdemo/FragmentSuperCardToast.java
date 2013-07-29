@@ -1,4 +1,4 @@
-package com.supertoasts.demo;
+package com.supertoastsdemo;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
