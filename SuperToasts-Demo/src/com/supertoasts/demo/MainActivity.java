@@ -27,8 +27,8 @@ public class MainActivity extends SherlockFragmentActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
-                android.R.layout.simple_spinner_item, android.R.id.text1, getResources().getStringArray(R.array.navigation_list));
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.spinner_item, android.R.id.text1, getResources().getStringArray(R.array.navigation_list));
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
 
         actionBar.setListNavigationCallbacks(arrayAdapter, new ActionBar.OnNavigationListener() {
 
