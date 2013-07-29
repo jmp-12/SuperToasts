@@ -1,10 +1,10 @@
-Version 0.1
+Version 1.0
 ===========
 
 Alpha build, first release. Probably very buggy!
 
 
-Version 0.2
+Version 1.1
 ===========
 
 Beta build, second release. Still buggy!
