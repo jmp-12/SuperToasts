@@ -65,7 +65,7 @@ public class FragmentSuperToast extends SherlockFragment {
         super.onPause();
 
         /* Don't let the SuperToast linger */
-        SuperToast.cancelAllSuperToasts();
+        //SuperToast.cancelAllSuperToasts();
 
     }
 

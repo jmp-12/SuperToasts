@@ -1,5 +1,7 @@
 package com.supertoasts.demo;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
@@ -7,7 +9,9 @@ import android.widget.ArrayAdapter;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.supertoasts.demo.R;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -52,6 +56,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
                     case 2:
 
+                        fragment = new FragmentSuperCardToast();
+
                         break;
 
 
@@ -75,11 +81,68 @@ public class MainActivity extends SherlockFragmentActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.wiki:
+
+                switch(getSupportActionBar().getSelectedNavigationIndex()) {
+
+                    case 0:
+
+                        gotoWebsite(getResources().getString(R.string.url_wiki_supertoast));
+
+                        break;
+
+                    case 1:
+
+                        gotoWebsite(getResources().getString(R.string.url_wiki_superactivitytoast));
+
+                        break;
+
+                    case 2:
+
+                        gotoWebsite(getResources().getString(R.string.url_wiki_supercardtoast));
+
+                        break;
+
+                }
+
+                return true;
+
+
+            case R.id.github:
+
+                gotoWebsite(getResources().getString(R.string.url_project_page));
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
 
 
     }
 
+    private void gotoWebsite(String url) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+
+    }
 
 }

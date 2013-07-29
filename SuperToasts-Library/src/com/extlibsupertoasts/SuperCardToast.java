@@ -416,9 +416,7 @@ public class SuperCardToast
 
 			mRootLayout.setBackgroundDrawable(backgroundDrawable);
 
-		}
-
-		else {
+		} else {
 
 			mRootLayout.setBackground(backgroundDrawable);
 

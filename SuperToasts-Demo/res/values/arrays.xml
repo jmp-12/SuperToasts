@@ -35,4 +35,10 @@
         <item>"Large"</item>
     </array>
 
+    <array name="dismiss_function_list">
+        <item>"None"</item>
+        <item>"Swipe"</item>
+        <item>"Touch"</item>
+    </array>
+
 </resources>

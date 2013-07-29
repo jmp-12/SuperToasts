@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show"
+            android:id="@+id/showButton"
+            android:background="@drawable/selector_showbutton"
+            android:textColor="@color/white"/>
+
+    <LinearLayout
+            android:id="@+id/card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#15000000"
+            android:orientation="vertical"/>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <RadioGroup
+                    android:id="@+id/type_radiogroup"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:paddingTop="@dimen/layout_medium_padding">
+
+                <RadioButton
+                        android:id="@+id/toast_radiobutton"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/toast_type"
+                        android:layout_margin="@dimen/layout_medium_padding"
+                        android:checked="true"/>
+
+                <RadioButton
+                        android:id="@+id/button_radiobutton"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_type"
+                        android:layout_margin="@dimen/layout_medium_padding"
+                        android:checked="false"/>
+
+                <RadioButton
+                        android:id="@+id/progress_radiobutton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/progress_type"
+                        android:layout_margin="@dimen/layout_medium_padding"/>
+
+                <RadioButton
+                        android:id="@+id/hprogress_radiobutton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/horizontal_progress_type"
+                        android:layout_margin="@dimen/layout_medium_padding"/>
+
+            </RadioGroup>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/duration"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
+
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/duration_spinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/duration_list"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/background"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
+
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/background_spinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/background_list"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/text_size"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
+
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textsize_spinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/text_size_list"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/user_dismiss_function"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
+
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dismissfunction_spinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/dismiss_function_list"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
