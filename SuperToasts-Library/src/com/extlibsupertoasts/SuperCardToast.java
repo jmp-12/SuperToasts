@@ -25,6 +25,7 @@ import com.extlibsupertoasts.utilities.SwipeDismissListener;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -61,10 +62,11 @@ public class SuperCardToast
 	
 	private static final String TAG  = "(SuperCardToast)";
 
-	private static final String ERROR_CONTEXTNOTACTIVITY  = "Context must be an instance of Activity (SuperCardToast)";
-	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout! (SuperCardToast)";
+	private static final String ERROR_CONTEXTNOTACTIVITY  = "Context must be an instance of Activity";
+	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout!";
 	private static final String ERROR_VIEWCONTAINERNULL = "Either the View or Container was null when trying to dismiss. Did you create and " +
 			"show a SuperCardToast before trying to dismiss it?";
+    private static final String ERROR_PREHONEYCOMB  = "Swipe to dismiss was enabled but the SDK version is pre-Honeycomb";
 
 	private Context mContext;
 	private ViewGroup mViewGroup;
@@ -156,29 +158,28 @@ public class SuperCardToast
 					mToastButton = (Button) 
 							mToastView.findViewById(R.id.button);
 					
-					mDividerView = (View) 
-							mToastView.findViewById(R.id.divider);
+					mDividerView = mToastView.findViewById(R.id.divider);
 					
 				} else if(type == Type.PROGRESS) {
 					
 					mToastView = mLayoutInflater
 					    	.inflate(R.layout.supercardtoast_progresscircle, mViewGroup, false);
-					
-					mProgressBar = (ProgressBar) 
+
+					mProgressBar = (ProgressBar)
 							mToastView.findViewById(R.id.progressBar);
-					
+
 				} else if(type == Type.PROGRESS_HORIZONTAL) {
 
 					mToastView = mLayoutInflater
 				    		.inflate(R.layout.supercardtoast_progresshorizontal, mViewGroup, false);
-					
-					mProgressBar = (ProgressBar) 
+
+					mProgressBar = (ProgressBar)
 							mToastView.findViewById(R.id.progressBar);
-					
+
 				}
-				
-				mMessageTextView = (TextView) 
-			    		mToastView.findViewById(R.id.message_textView);	
+
+                mMessageTextView = (TextView)
+			    		mToastView.findViewById(R.id.message_textView);
 			    
 			    mRootLayout = (LinearLayout)
 						   mToastView.findViewById(R.id.root_layout);
@@ -196,10 +197,7 @@ public class SuperCardToast
 		}
 
 	}
-	
-	
-	//XXX: Setter methods
-	
+
 
 	/** Shows the SuperCardToast. */
 	public void show()
@@ -486,7 +484,7 @@ public class SuperCardToast
 							@Override
 							public void onDismiss(View view) {
 
-								mViewGroup.removeView(mToastView);
+								dismissImmediately();
 
 							}
 
@@ -495,8 +493,9 @@ public class SuperCardToast
 				mToastView.setOnTouchListener(swipeDismissListener);
 				
 			} else {
-				
-				//TODO: SDK ERROR
+
+                Log.e(TAG, ERROR_PREHONEYCOMB);
+
 			}
 			
 		} else {
@@ -517,10 +516,11 @@ public class SuperCardToast
 	/** Dismisses the SuperCardToast without Animation. */
 	public void dismissImmediately() {
 		
-		if(mHandler != null) { 
-			
+		if(mHandler != null) {
+
 			mHandler.removeCallbacks(mHideRunnable);
-			mHandler = null;
+            mHandler.removeCallbacks(mHideWithAnimationRunnable);
+            mHandler = null;
 			
 		}
 
@@ -542,8 +542,6 @@ public class SuperCardToast
 		}
 
 	}
-	
-	// XXX: Button Type methods
 
 	
 	/**
@@ -700,9 +698,7 @@ public class SuperCardToast
 
 	}
 
-	
-	//XXX Progress specific methods.
-	
+
 	/**
 	 * Sets the progress of the ProgressBar in 
 	 * a PROGRESS_HORIZONTAL Type SuperCardToast.
@@ -734,9 +730,6 @@ public class SuperCardToast
 		}
 
 	}
-
-	
-	// XXX: Getter methods.
 
 	
 	/**
@@ -837,10 +830,52 @@ public class SuperCardToast
 
 	}
 
-	
-	//XXX: Private methods.
-	
-	
+    /** Hide the SuperCardToast and animate the Layout. Post Honeycomb only. **/
+    @SuppressLint("NewApi")
+    private void dismissWithLayoutAnimation() {
+
+        if(mToastView != null) {
+
+            final ViewGroup.LayoutParams layoutParams = mToastView.getLayoutParams();
+            final int originalHeight = mToastView.getHeight();
+
+            ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1)
+                    .setDuration(mContext.getResources().getInteger(android.R.integer.config_shortAnimTime));
+
+            animator.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                    Handler mHandler = new Handler();
+                    mHandler.post(mHideImmediateRunnable);
+
+                }
+
+            });
+
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                    layoutParams.height = (Integer) valueAnimator.getAnimatedValue();
+                    mToastView.setLayoutParams(layoutParams);
+
+                }
+
+            });
+
+            animator.start();
+
+        } else {
+
+            dismissImmediately();
+
+        }
+
+    }
+
 	private Animation getCardAnimation() {
 
 		AnimationSet animationSet = new AnimationSet(false);
@@ -867,8 +902,8 @@ public class SuperCardToast
 	}
 	
 	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	private void dismissWithAnimation(){
+    @SuppressWarnings("deprecation")
+    private void dismissWithAnimation(){
 				
 		if (mSdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
 
@@ -880,9 +915,9 @@ public class SuperCardToast
 			    @Override
 				public void onAnimationEnd(Animator animation) {
 
-				   /** Must use Handler to modify ViewGroup in onAnimationEnd() */
+                    /** Must use Handler to modify ViewGroup in onAnimationEnd() */
 			        Handler mHandler = new Handler();
-					mHandler.post(mHideImmediateRunnable);
+                    mHandler.post(mHideWithAnimationRunnable);
 
 				}
 
@@ -959,6 +994,17 @@ public class SuperCardToast
 		}
 
 	};
+
+
+    private Runnable mHideWithAnimationRunnable = new Runnable() {
+
+        public void run() {
+
+            dismissWithLayoutAnimation();
+
+        }
+
+    };
     
 	private Runnable mInvalidateRunnable = new Runnable() {
 
