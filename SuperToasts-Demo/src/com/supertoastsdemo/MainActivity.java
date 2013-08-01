@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -15,6 +16,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 
 public class MainActivity extends SherlockFragmentActivity {
+
+    private static final String NAVIGAION_SELECTION = "navigationSelection";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,6 @@ public class MainActivity extends SherlockFragmentActivity {
 
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-
 
                 switch (itemPosition) {
 
@@ -77,6 +79,14 @@ public class MainActivity extends SherlockFragmentActivity {
 
             }
         });
+
+
+        if(savedInstanceState != null) {
+
+            actionBar.setSelectedNavigationItem(savedInstanceState.getInt(NAVIGAION_SELECTION));
+
+        }
+
     }
 
 
@@ -85,10 +95,18 @@ public class MainActivity extends SherlockFragmentActivity {
 
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main, menu);
+
         return true;
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(NAVIGAION_SELECTION, getSupportActionBar().getSelectedNavigationIndex());
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

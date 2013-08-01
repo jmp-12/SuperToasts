@@ -108,7 +108,7 @@ public class SuperToast
 		PROGRESS_HORIZONTAL,
 
 		/** Button type used for user interaction. */
-		BUTTON;
+		BUTTON
 
 	}
 	
@@ -125,7 +125,7 @@ public class SuperToast
 		TOP,
 
 		/** Set the icon on the bottom of the text. */
-		BOTTOM;
+		BOTTOM
 
 	}
 

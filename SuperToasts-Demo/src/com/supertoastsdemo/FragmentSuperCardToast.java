@@ -70,7 +70,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
     private void showSuperCardToast() {
 
-        SuperCardToast superCardToast;
+        final SuperCardToast superCardToast;
 
         switch (mTypeRadioGroup.getCheckedRadioButtonId()) {
 
@@ -85,6 +85,18 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.BUTTON);
+                superCardToast.setButtonOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        superCardToast.dismiss();
+
+                        SuperActivityToast.createDarkSuperActivityToast(getActivity(), getActivity().getResources().getString(R.string.onclick),
+                                SuperToast.DURATION_MEDIUM).show();
+
+                    }
+                });
 
                 break;
 

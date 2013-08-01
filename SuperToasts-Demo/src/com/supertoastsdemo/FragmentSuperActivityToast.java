@@ -76,7 +76,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     private void showSuperToast() {
 
-        SuperActivityToast superActivityToast;
+        final SuperActivityToast superActivityToast;
 
         switch (typeRadioGroup.getCheckedRadioButtonId()) {
 
@@ -91,6 +91,17 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.BUTTON);
+                superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        superActivityToast.dismiss();
+
+                        SuperActivityToast.createDarkSuperActivityToast(getActivity(), getActivity().getResources().getString(R.string.onclick),
+                                SuperToast.DURATION_MEDIUM).show();
+
+                    }
+                });
 
                 break;
 
@@ -213,6 +224,12 @@ public class FragmentSuperActivityToast extends SherlockFragment {
                 superActivityToast.setTextSize(SuperToast.TEXTSIZE_LARGE);
 
                 break;
+
+        }
+
+        if(mImageCheckBox.isChecked()) {
+
+            superActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 
         }
 

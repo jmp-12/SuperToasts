@@ -130,8 +130,19 @@
                 android:entries="@array/text_size_list"/>
     </LinearLayout>
 
+
+    <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_medium_padding"
+            android:text="@string/show_image"
+            android:id="@+id/imageCheckBox"
+            android:layout_gravity="left|center_vertical"
+            android:checked="false"/>
+
     </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>

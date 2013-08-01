@@ -20,6 +20,7 @@
         android:paddingRight="@dimen/superbuttontoast_textview_x_padding"
         android:paddingTop="@dimen/superbuttontoast_textview_y_padding"
         android:text="Default"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
 

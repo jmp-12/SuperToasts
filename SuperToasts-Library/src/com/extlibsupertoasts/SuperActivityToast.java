@@ -50,7 +50,6 @@ import android.widget.TextView;
  */
 public class SuperActivityToast {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = "SuperActivityToast";
 
 	private static final String ERROR_CONTEXTNULL = "The Context that you passed was null! (SuperActivityToast)";

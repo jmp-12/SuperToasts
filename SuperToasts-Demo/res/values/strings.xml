@@ -17,5 +17,6 @@
     <string name="error_prehoneycomb">Swipe dismiss is not compatible with pre-Honeycomb devices!</string>
     <string name="wiki">Wiki</string>
     <string name="github">Github</string>
+    <string name="onclick">On click!</string>
 
 </resources>
