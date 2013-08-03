@@ -193,10 +193,7 @@ public class SuperActivityToast {
 		}
 
 	}
-	
-	
-	//XXX: Setter methods
-	
+		
 
 	/** Shows the SuperActivityToast. */
 	public void show() {
@@ -451,9 +448,6 @@ public class SuperActivityToast {
 	}
 
 	
-	// XXX: Button Type methods
-
-	
 	/**
 	 * Sets an OnClickListener to the Button of a BUTTON Type
 	 * SuperActivityToast. 
@@ -607,10 +601,7 @@ public class SuperActivityToast {
 		}
 
 	}
-	
-
-	// XXX: Progress Type methods
-	
+		
 
 	/**
 	 * Sets the progress of the ProgressBar in 
@@ -643,9 +634,6 @@ public class SuperActivityToast {
 		}
 
 	}
-
-	
-	// XXX: Getter methods.
 
 	
 	/**
@@ -769,9 +757,6 @@ public class SuperActivityToast {
 	}
 
 	
-	// XXX: Static methods.
-
-	
 	/**
 	 * Returns a dark theme SuperActivityToast.
 	 * <br>
@@ -831,10 +816,7 @@ public class SuperActivityToast {
 				.clearSuperActivityToastsForActivity(activity);
 
 	}
-	
-
-	// XXX: Private methods.
-	
+		
 	
 	private Animation getFadeInAnimation() {
 
