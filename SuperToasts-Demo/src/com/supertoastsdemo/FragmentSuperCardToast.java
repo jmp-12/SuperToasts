@@ -304,16 +304,24 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         @Override
         protected void onPostExecute(Void voids) {
+        	
+        	if(mSuperCardToast != null) {
+        		
+                mSuperCardToast.dismiss();
 
-            mSuperCardToast.dismiss();
+        	} 
 
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
+            
+        	if(mSuperCardToast != null) {
 
             mSuperCardToast.setProgress(progress[0]);
+            
+        	}
 
         }
 
