@@ -109,7 +109,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case R.id.hprogress_radiobutton:
 
-                superCardToast = new SuperCardToast(getActivity(),
+                  superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
 
                 /** Since this SuperCardToast will show actual
@@ -268,6 +268,9 @@ public class FragmentSuperCardToast extends SherlockFragment {
     }
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
+
+        /** This setup is a little hacky due to the customization in the demo.
+         *  Check the examples package in the demo for a proper example */
 
         SuperCardToast mSuperCardToast;
 

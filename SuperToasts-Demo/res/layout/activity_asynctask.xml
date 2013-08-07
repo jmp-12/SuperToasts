@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:id="@+id/card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#15000000"
+            android:orientation="vertical"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder"
+            android:id="@+id/textView"
+            android:padding="@dimen/layout_medium_padding"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show"
+            android:id="@+id/showButton"
+            android:padding="@dimen/layout_medium_padding"/>
+
+</LinearLayout>
