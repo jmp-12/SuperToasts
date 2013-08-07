@@ -17,6 +17,7 @@
 
 package com.extlibsupertoasts;
 
+import android.util.Log;
 import com.extlibsupertoasts.SuperToast.IconPosition;
 import com.extlibsupertoasts.SuperToast.Type;
 import com.extlibsupertoasts.utilities.OnDismissListener;
@@ -70,6 +71,8 @@ public class SuperActivityToast {
 	private Animation mShowAnimation = getFadeInAnimation();
 	private Animation mDismissAnimation = getFadeOutAnimation();
 	private OnDismissListener mOnDismissListener;
+    private OnClickListener mOnClickListener;
+
 
 	/**
 	 * Instantiates a new SuperActivityToast.
@@ -152,8 +155,32 @@ public class SuperActivityToast {
 					mToastButton = (Button) mToastView
 							.findViewById(R.id.button);
 
-					mDividerView = (View) mToastView
+					mDividerView = mToastView
 							.findViewById(R.id.divider);
+
+                    try {
+
+                        mOnClickListener = (OnClickListener) mContext;
+
+                    }  catch (ClassCastException e) {
+
+                        Log.d(TAG, e.toString());
+
+                    }
+
+                    if(mOnClickListener != null) {
+
+                        mToastButton.setOnClickListener(new OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+
+                                mOnClickListener.onClick(v);
+
+                            }
+                        });
+
+                    }
 
 				} else if (type == Type.PROGRESS) {
 
@@ -193,10 +220,7 @@ public class SuperActivityToast {
 		}
 
 	}
-	
-	
-	//XXX: Setter methods
-	
+
 
 	/** Shows the SuperActivityToast. */
 	public void show() {
