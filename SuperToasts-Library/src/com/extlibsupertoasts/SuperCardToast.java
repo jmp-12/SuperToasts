@@ -162,7 +162,15 @@ public class SuperCardToast
 					
 					mDividerView = mToastView.findViewById(R.id.divider);
 
-                    mOnClickListener = (OnClickListener) mContext;
+                    try {
+
+                        mOnClickListener = (OnClickListener) mContext;
+
+                    }  catch (ClassCastException e) {
+
+                        Log.d(TAG, e.toString());
+
+                    }
 
                     if(mOnClickListener != null) {
 
