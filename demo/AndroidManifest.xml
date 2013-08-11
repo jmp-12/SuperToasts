@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.supertoastsdemo.MainActivity"
+            android:name="com.github.johnpersano.supertoastsdemo.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
 
         <!--The example Activities below can be run via run configurations -->
         <activity
-            android:name="com.supertoastsdemo.examples.ASyncTask">
+            android:name="com.github.johnpersano.supertoastsdemo.examples.ASyncTask">
             android:label="@string/app_name"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
         </activity>
 
         <activity
-            android:name="com.supertoastsdemo.examples.UndoAction">
+            android:name="com.github.johnpersano.supertoastsdemo.examples.UndoAction">
             android:label="@string/app_name"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name="com.supertoastsdemo.examples.UndoActionWithCallBack">
+            android:name="com.github.johnpersano.supertoastsdemo.examples.UndoActionWithCallBack">
             android:label="@string/app_name"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

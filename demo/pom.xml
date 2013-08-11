@@ -2,13 +2,13 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-    
-	<artifactId>SuperToasts-Demo</artifactId>
-	<name>SuperToasts-Demo</name>
+
+    <name>Demo</name>
+    <artifactId>demo</artifactId>
 	<packaging>apk</packaging>
     
 	<parent>
-		<groupId>com.extlibsupertoasts</groupId>
+		<groupId>com.github.johnpersano</groupId>
 		<artifactId>parent</artifactId>
 		<version>1.1</version>
 		<relativePath>../pom.xml</relativePath>
@@ -22,10 +22,9 @@
 		</dependency>
         
 		<dependency>
-			<groupId>com.extlibsupertoasts</groupId>
-			<artifactId>SuperToasts-Library</artifactId>
+			<groupId>com.github.johnpersano</groupId>
+			<artifactId>supertoasts</artifactId>
 			<version>${project.version}</version>
-			<type>apklib</type>
 		</dependency>
         
         <dependency>

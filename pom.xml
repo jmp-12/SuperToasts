@@ -9,7 +9,7 @@
         <version>7</version>
     </parent>
     
-    <groupId>com.extlibsupertoasts</groupId>
+    <groupId>com.github.johnpersano</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <version>1.1</version>
@@ -20,8 +20,8 @@
     <inceptionYear>2013</inceptionYear>
     
     <modules>
-        <module>SuperToasts-Library</module>
-        <module>SuperToasts-Demo</module>
+        <module>supertoasts</module>
+        <module>demo</module>
     </modules>
     
     <scm>
