@@ -10,6 +10,24 @@ This is a Beta release, expect bugs.
 
 ![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/supertoasts_githubimage_zps8a5ceb7c.png)
 
+
+Adding SuperToasts to your project
+================
+###Eclipse
+1) Download the ZIP file <br>
+2) Extract the SuperToasts project from the ZIP file <br>
+3) In Eclipse: New > Android Project from Existing Code > SuperToasts project > Finish <br>
+4) Right click on your project <br>
+5) Android > Library: Add > SuperToasts <br>
+
+###Maven coming very soon!
+
+
+Using the library
+================
+Check out the Wiki pages [here](https://github.com/JohnPersano/SuperToasts/wiki).
+
+
 Demo Application
 ================
 A simple demo application is available on Google Play. This demo application does not showcase all of the libraries functions 
