@@ -12,7 +12,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.1-SNAPSHOT</version>
     
     <name>Supertoasts (Parent)</name>
     <description>Android library for Supertoasts.</description>
@@ -68,24 +68,19 @@
         <java.version>1.6</java.version>
         <android.version>4.1.1.4</android.version>
         <android.platform>16</android.platform>
-        <android.support.version>r7</android.support.version>
-        
+
         <android-maven.version>3.3.0</android-maven.version>
     </properties>
     
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.google.android</groupId>
                 <artifactId>android</artifactId>
                 <version>${android.version}</version>
             </dependency>
-            
-            <dependency>
-                <groupId>com.google.android</groupId>
-                <artifactId>support-v4</artifactId>
-                <version>${android.support.version}</version>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
     
@@ -105,7 +100,7 @@
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>
-                    <version>${android-maven.version}</version>
+                    <version>3.6.0</version>
                     <configuration>
                         <sdk>
                             <platform>${android.platform}</platform>

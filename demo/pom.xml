@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.github.johnpersano</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.1</version>
+        <version>1.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
     
@@ -19,12 +19,6 @@
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
-		</dependency>
-        
-		<dependency>
-			<groupId>com.github.johnpersano</groupId>
-			<artifactId>supertoasts</artifactId>
-			<version>${project.version}</version>
 		</dependency>
         
         <dependency>
