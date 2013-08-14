@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoastsdemo.R;
+import com.github.johnpersano.supertoasts.SuperToast;
 
 public class FragmentSuperToast extends SherlockFragment {
 
