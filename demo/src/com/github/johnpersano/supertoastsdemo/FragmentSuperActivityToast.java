@@ -2,7 +2,6 @@ package com.github.johnpersano.supertoastsdemo;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoastsdemo.R;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
