@@ -12,7 +12,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.1-SNAPSHOT</version>
     
     <name>Supertoasts (Parent)</name>
     <description>Android library for Supertoasts.</description>
@@ -24,7 +24,7 @@
     </modules>
     
     <scm>
-        <url>https://github.com/JohnPersano/Supertoasts</url>
+        <url>https://github.com/JohnPersano/SuperToasts</url>
         <connection>scm:git:git://github.com/JohnPersano/SuperToasts.git</connection>
         <developerConnection>scm:git:git@github.com:JohnPersano/SuperToasts.git</developerConnection>
     </scm>
