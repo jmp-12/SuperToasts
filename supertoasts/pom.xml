@@ -13,7 +13,7 @@
   <name>SuperToasts Library</name>
   <description>Better Toasts for Android</description>
   <artifactId>supertoasts</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <url>https://github.com/JohnPersano/SuperToasts</url>
   <groupId>com.github.johnpersano</groupId>
   <packaging>apklib</packaging>
@@ -22,7 +22,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.version>4.1.1.4</android.version>
-        <android.version.platform>17</android.version.platform>
+        <android.version.platform>8</android.version.platform>
     </properties>
 
     <developers>
