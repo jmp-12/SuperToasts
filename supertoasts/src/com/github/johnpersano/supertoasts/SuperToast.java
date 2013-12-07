@@ -76,14 +76,16 @@ public class SuperToast
 	public static final int BUTTON_DARK_EXIT = (R.drawable.icon_dark_exit);	
 	public static final int BUTTON_DARK_INFO = (R.drawable.icon_dark_info);
 	public static final int BUTTON_DARK_REDO = (R.drawable.icon_dark_redo);
-	public static final int BUTTON_DARK_SAVE = (R.drawable.icon_dark_save);
+    public static final int BUTTON_DARK_REFRESH = (R.drawable.icon_dark_refresh);
+    public static final int BUTTON_DARK_SAVE = (R.drawable.icon_dark_save);
 	public static final int BUTTON_DARK_SHARE = (R.drawable.icon_dark_share);
 	public static final int BUTTON_DARK_UNDO = (R.drawable.icon_dark_undo);
 	public static final int BUTTON_LIGHT_EDIT = (R.drawable.icon_light_edit);
 	public static final int BUTTON_LIGHT_EXIT = (R.drawable.icon_light_exit);
 	public static final int BUTTON_LIGHT_INFO = (R.drawable.icon_light_info);
 	public static final int BUTTON_LIGHT_REDO = (R.drawable.icon_light_redo);
-	public static final int BUTTON_LIGHT_SAVE = (R.drawable.icon_light_save);
+    public static final int BUTTON_LIGHT_REFRESH = (R.drawable.icon_light_refresh);
+    public static final int BUTTON_LIGHT_SAVE = (R.drawable.icon_light_save);
 	public static final int BUTTON_LIGHT_SHARE = (R.drawable.icon_light_share);
 	public static final int BUTTON_LIGHT_UNDO = (R.drawable.icon_light_undo);
 	
