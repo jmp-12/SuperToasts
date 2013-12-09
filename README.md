@@ -20,6 +20,14 @@ Adding SuperToasts to your project
 4) Right click on your project <br>
 5) Android > Library: Add > SuperToasts <br>
 
+
+###IntelliJ
+1) Download the ZIP file <br>
+2) Extract the SuperToasts project from the ZIP file <br>
+3) In IntelliJ: File > Project Structure > Modules > Add > Import Module > SuperToasts <br>
+4) Select your project module in project structure > Dependencies > Add > Module dependency > SuperToasts
+
+
 ###Maven
 Add this to your projects POM file (not tested yet!)
 ```xml
@@ -30,12 +38,6 @@ Add this to your projects POM file (not tested yet!)
   <type>apklib</type>
 </dependency>
 ```
-
-###IntelliJ
-1) Download the ZIP file <br>
-2) Extract the SuperToasts project from the ZIP file <br>
-3) In IntelliJ: File > Project Structure > Modules > Add > Import Module > SuperToasts <br>
-4) Select your project module in project structure > Dependencies > Add > Module dependency > SuperToasts
 
 
 Using the library
