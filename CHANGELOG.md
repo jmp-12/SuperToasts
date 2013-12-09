@@ -18,3 +18,13 @@ Beta build, second release. Still buggy!
 - Code cleanup
 - Removed Roboto font features
 - Fixed naming conventions
+
+
+Version 1.2
+===========
+
+Beta build, third release. Still buggy!
+
+- Published to Maven central
+- Added refresh icon
+- Removed test folder
