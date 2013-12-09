@@ -12,7 +12,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     
     <name>Supertoasts (Parent)</name>
     <description>Android library for Supertoasts.</description>
