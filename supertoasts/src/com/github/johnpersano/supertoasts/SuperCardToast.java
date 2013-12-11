@@ -80,7 +80,7 @@ public class SuperCardToast
 	private Button mToastButton;
 	private View mDividerView;
 	private LinearLayout mRootLayout;	
-	private int mDuration = (SuperToast.DURATION_LONG);
+	private int mDuration = (SuperToast.Duration.LONG);
 	private boolean isIndeterminate;
 	private OnDismissListener mOnDismissListener;
     private OnClickListener mOnClickListener;
