@@ -21,6 +21,7 @@
     
     <modules>
         <module>supertoasts</module>
+        <module>demo</module>
     </modules>
     
     <scm>

@@ -1,5 +1,6 @@
 package com.github.johnpersano.supertoastsdemo;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,13 +10,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoastsdemo.R;
 
-public class FragmentSuperCardToast extends SherlockFragment {
+public class FragmentSuperCardToast extends Fragment {
 
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
@@ -93,7 +92,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
                         superCardToast.dismiss();
 
                         SuperActivityToast.createDarkSuperActivityToast(getActivity(), getActivity().getResources().getString(R.string.onclick),
-                                SuperToast.DURATION_MEDIUM).show();
+                                SuperToast.Duration.MEDIUM).show();
 
                     }
                 });
@@ -109,7 +108,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case R.id.hprogress_radiobutton:
 
-                  superCardToast = new SuperCardToast(getActivity(),
+                superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
 
                 /** Since this SuperCardToast will show actual
@@ -136,19 +135,19 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case 0:
 
-                superCardToast.setDuration(SuperToast.DURATION_SHORT);
+                superCardToast.setDuration(SuperToast.Duration.SHORT);
 
                 break;
 
             case 1:
 
-                superCardToast.setDuration(SuperToast.DURATION_MEDIUM);
+                superCardToast.setDuration(SuperToast.Duration.MEDIUM);
 
                 break;
 
             case 2:
 
-                superCardToast.setDuration(SuperToast.DURATION_LONG);
+                superCardToast.setDuration(SuperToast.Duration.LONG);
 
                 break;
 
@@ -158,43 +157,43 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case 0:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_BLACKTRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_GREYTRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_GREENTRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_BLUETRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_REDTRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_PURPLETRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superCardToast.setBackgroundResource(SuperToast.BACKGROUND_ORANGETRANSLUCENT);
+                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -204,19 +203,19 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case 0:
 
-                superCardToast.setTextSize(SuperToast.TEXTSIZE_SMALL);
+                superCardToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
             case 1:
 
-                superCardToast.setTextSize(SuperToast.TEXTSIZE_MEDIUM);
+                superCardToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 
             case 2:
 
-                superCardToast.setTextSize(SuperToast.TEXTSIZE_LARGE);
+                superCardToast.setTextSize(SuperToast.TextSize.LARGE);
 
                 break;
 
@@ -239,7 +238,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                     /** Notify user that this does nothing on pre-honeycomb devices **/
                     SuperActivityToast.createDarkSuperActivityToast(getActivity(),
-                            getActivity().getResources().getString(R.string.error_prehoneycomb), SuperToast.DURATION_MEDIUM).show();
+                            getActivity().getResources().getString(R.string.error_prehoneycomb), SuperToast.Duration.MEDIUM).show();
 
                 }
 
@@ -269,8 +268,10 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 
-        /** This setup is a little hacky due to the customization in the demo.
-         *  Check the examples package in the demo for a proper example */
+        /**
+         * This setup is a little hacky due to the customization in the demo.
+         * Check the examples package in the demo for a proper example
+         */
 
         SuperCardToast mSuperCardToast;
 
@@ -283,7 +284,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            for(int i = 0; i < 11 ; i++) {
+            for (int i = 0; i < 11; i++) {
 
                 try {
 
@@ -304,24 +305,24 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         @Override
         protected void onPostExecute(Void voids) {
-        	
-        	if(mSuperCardToast != null) {
-        		
+
+            if (mSuperCardToast != null) {
+
                 mSuperCardToast.dismiss();
 
-        	} 
+            }
 
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            
-        	if(mSuperCardToast != null) {
 
-            mSuperCardToast.setProgress(progress[0]);
-            
-        	}
+            if (mSuperCardToast != null) {
+
+                mSuperCardToast.setProgress(progress[0]);
+
+            }
 
         }
 

@@ -1,5 +1,6 @@
 package com.github.johnpersano.supertoastsdemo;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +10,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
 
-public class FragmentSuperActivityToast extends SherlockFragment {
+public class FragmentSuperActivityToast extends Fragment {
 
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
@@ -24,11 +24,14 @@ public class FragmentSuperActivityToast extends SherlockFragment {
     CheckBox mImageCheckBox;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_superactivitytoast,
                 container, false);
+
+        SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
 
         typeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -63,11 +66,10 @@ public class FragmentSuperActivityToast extends SherlockFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        /* Don't let the SuperActivityToast linger */
-        SuperActivityToast.cancelAllSuperActivityToasts();
+        SuperActivityToast.onSaveState(outState);
 
     }
 
@@ -96,7 +98,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
                         superActivityToast.dismiss();
 
                         SuperActivityToast.createDarkSuperActivityToast(getActivity(), getActivity().getResources().getString(R.string.onclick),
-                                SuperToast.DURATION_MEDIUM).show();
+                                SuperToast.Duration.MEDIUM).show();
 
                     }
                 });
@@ -139,19 +141,19 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 0:
 
-                superActivityToast.setDuration(SuperToast.DURATION_SHORT);
+                superActivityToast.setDuration(SuperToast.Duration.SHORT);
 
                 break;
 
             case 1:
 
-                superActivityToast.setDuration(SuperToast.DURATION_MEDIUM);
+                superActivityToast.setDuration(SuperToast.Duration.MEDIUM);
 
                 break;
 
             case 2:
 
-                superActivityToast.setDuration(SuperToast.DURATION_LONG);
+                superActivityToast.setDuration(SuperToast.Duration.LONG);
 
                 break;
 
@@ -161,43 +163,43 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 0:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_BLACKTRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_GREYTRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_GREENTRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_BLUETRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_REDTRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_PURPLETRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superActivityToast.setBackgroundResource(SuperToast.BACKGROUND_ORANGETRANSLUCENT);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -207,25 +209,25 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 0:
 
-                superActivityToast.setTextSize(SuperToast.TEXTSIZE_SMALL);
+                superActivityToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
             case 1:
 
-                superActivityToast.setTextSize(SuperToast.TEXTSIZE_MEDIUM);
+                superActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 
             case 2:
 
-                superActivityToast.setTextSize(SuperToast.TEXTSIZE_LARGE);
+                superActivityToast.setTextSize(SuperToast.TextSize.LARGE);
 
                 break;
 
         }
 
-        if(mImageCheckBox.isChecked()) {
+        if (mImageCheckBox.isChecked()) {
 
             superActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 
@@ -248,7 +250,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            for(int i = 0; i < 11 ; i++) {
+            for (int i = 0; i < 11; i++) {
 
                 try {
 

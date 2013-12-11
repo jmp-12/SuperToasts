@@ -57,7 +57,7 @@ public class ASyncTask extends Activity {
             mSuperCardToast = new SuperCardToast(ASyncTask.this,
                     SuperToast.Type.PROGRESS_HORIZONTAL);
             mSuperCardToast.setIndeterminate(true);
-            mSuperCardToast.setBackgroundResource(SuperToast.BACKGROUND_GREYTRANSLUCENT);
+            mSuperCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
             mSuperCardToast.setTextColor(Color.WHITE);
 
             /** Allow the user to dismiss the SuperCardToast. **/
@@ -70,7 +70,7 @@ public class ASyncTask extends Activity {
         protected Void doInBackground(Void... voids) {
 
             /** Sleep the thread to simulate backgound activity. **/
-            for(int i = 0; i < 11 ; i++) {
+            for (int i = 0; i < 11; i++) {
 
                 try {
 

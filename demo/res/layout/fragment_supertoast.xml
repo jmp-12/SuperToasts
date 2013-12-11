@@ -18,113 +18,113 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_medium_padding"
-            android:orientation="horizontal">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_gravity="left|center_vertical"
-                android:padding="@dimen/textview_medium_padding"
-                android:text="@string/animation"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"
+                        android:text="@string/animation"/>
 
-        <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/animationSpinner"
-                android:layout_gravity="left|center_vertical"
-                android:spinnerMode="dropdown"
-                android:entries="@array/animation_list"/>
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/animationSpinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/animation_list"/>
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_medium_padding"
-            android:orientation="horizontal">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/duration"
-                android:layout_gravity="left|center_vertical"
-                android:padding="@dimen/textview_medium_padding"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/duration"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
 
-        <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/durationSpinner"
-                android:layout_gravity="left|center_vertical"
-                android:spinnerMode="dropdown"
-                android:entries="@array/duration_list"/>
-    </LinearLayout>
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/durationSpinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/duration_list"/>
+            </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_medium_padding"
-            android:orientation="horizontal">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/background"
-                android:layout_gravity="left|center_vertical"
-                android:padding="@dimen/textview_medium_padding"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/background"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
 
-        <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/backgroundSpinner"
-                android:layout_gravity="left|center_vertical"
-                android:spinnerMode="dropdown"
-                android:entries="@array/background_list"/>
-    </LinearLayout>
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/backgroundSpinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/background_list"/>
+            </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_medium_padding"
-            android:orientation="horizontal">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_medium_padding"
+                    android:orientation="horizontal">
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/text_size"
-                android:layout_gravity="left|center_vertical"
-                android:padding="@dimen/textview_medium_padding"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/text_size"
+                        android:layout_gravity="left|center_vertical"
+                        android:padding="@dimen/textview_medium_padding"/>
 
-        <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textsizeSpinner"
-                android:layout_gravity="left|center_vertical"
-                android:spinnerMode="dropdown"
-                android:entries="@array/text_size_list"/>
-    </LinearLayout>
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textsizeSpinner"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/text_size_list"/>
+            </LinearLayout>
 
-    <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_medium_padding"
-            android:text="@string/show_image"
-            android:id="@+id/imageCheckBox"
-            android:layout_gravity="left|center_vertical"
-            android:checked="false"/>
-    </LinearLayout>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_medium_padding"
+                    android:text="@string/show_image"
+                    android:id="@+id/imageCheckBox"
+                    android:layout_gravity="left|center_vertical"
+                    android:checked="false"/>
+        </LinearLayout>
 
     </ScrollView>
 

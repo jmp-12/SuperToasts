@@ -21,10 +21,10 @@ public class UndoAction extends Activity {
         final SuperActivityToast superActivityToast = new SuperActivityToast(UndoAction.this,
                 SuperToast.Type.BUTTON);
         superActivityToast.setText("Action performed.");
-        superActivityToast.setDuration(SuperToast.DURATION_LONG);
+        superActivityToast.setDuration(SuperToast.Duration.LONG);
         superActivityToast.setButtonText("UNDO");
-        superActivityToast.setButtonResource(SuperToast.BUTTON_DARK_UNDO);
-        superActivityToast.setTextSize(SuperToast.TEXTSIZE_MEDIUM);
+        superActivityToast.setButtonResource(SuperToast.Icon.Dark.UNDO);
+        superActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
 
             @Override

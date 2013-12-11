@@ -25,10 +25,10 @@ public class UndoActionWithCallBack extends Activity implements View.OnClickList
         mSuperActivityToast = new SuperActivityToast(UndoActionWithCallBack.this,
                 SuperToast.Type.BUTTON);
         mSuperActivityToast.setText("Action performed.");
-        mSuperActivityToast.setDuration(SuperToast.DURATION_LONG);
+        mSuperActivityToast.setDuration(SuperToast.Duration.LONG);
         mSuperActivityToast.setButtonText("UNDO");
-        mSuperActivityToast.setButtonResource(SuperToast.BUTTON_DARK_UNDO);
-        mSuperActivityToast.setTextSize(SuperToast.TEXTSIZE_MEDIUM);
+        mSuperActivityToast.setButtonResource(SuperToast.Icon.Dark.UNDO);
+        mSuperActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
         Button deleteButton = (Button)
                 findViewById(R.id.delete_button);
@@ -39,7 +39,7 @@ public class UndoActionWithCallBack extends Activity implements View.OnClickList
 
                 mDummyTextView.setVisibility(View.GONE);
 
-                if(!mSuperActivityToast.isShowing()) {
+                if (!mSuperActivityToast.isShowing()) {
 
                     mSuperActivityToast.show();
 

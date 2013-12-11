@@ -1,5 +1,6 @@
 package com.github.johnpersano.supertoastsdemo;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +9,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoastsdemo.R;
 import com.github.johnpersano.supertoasts.SuperToast;
 
-public class FragmentSuperToast extends SherlockFragment {
+public class FragmentSuperToast extends Fragment {
 
     Spinner mAnimationSpinner;
     Spinner mDurationSpinner;
@@ -79,25 +77,25 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setAnimation(SuperToast.ANIMATION_FADE);
+                superToast.setAnimation(SuperToast.Animation.FADE);
 
                 break;
 
             case 1:
 
-                superToast.setAnimation(SuperToast.ANIMATION_FLYIN);
+                superToast.setAnimation(SuperToast.Animation.FLYIN);
 
                 break;
 
             case 2:
 
-                superToast.setAnimation(SuperToast.ANIMATION_POPUP);
+                superToast.setAnimation(SuperToast.Animation.POPUP);
 
                 break;
 
             case 3:
 
-                superToast.setAnimation(SuperToast.ANIMATION_SCALE);
+                superToast.setAnimation(SuperToast.Animation.SCALE);
 
                 break;
 
@@ -107,19 +105,19 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setDuration(SuperToast.DURATION_SHORT);
+                superToast.setDuration(SuperToast.Duration.SHORT);
 
                 break;
 
             case 1:
 
-                superToast.setDuration(SuperToast.DURATION_MEDIUM);
+                superToast.setDuration(SuperToast.Duration.MEDIUM);
 
                 break;
 
             case 2:
 
-                superToast.setDuration(SuperToast.DURATION_LONG);
+                superToast.setDuration(SuperToast.Duration.LONG);
 
                 break;
 
@@ -129,43 +127,43 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_BLACKTRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_GREYTRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_GREENTRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_BLUETRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_REDTRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_PURPLETRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superToast.setBackgroundResource(SuperToast.BACKGROUND_ORANGETRANSLUCENT);
+                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -175,25 +173,25 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setTextSize(SuperToast.TEXTSIZE_SMALL);
+                superToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
             case 1:
 
-                superToast.setTextSize(SuperToast.TEXTSIZE_MEDIUM);
+                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 
             case 2:
 
-                superToast.setTextSize(SuperToast.TEXTSIZE_LARGE);
+                superToast.setTextSize(SuperToast.TextSize.LARGE);
 
                 break;
 
         }
 
-        if(mImageCheckBox.isChecked()) {
+        if (mImageCheckBox.isChecked()) {
 
             superToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 

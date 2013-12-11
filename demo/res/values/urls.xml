@@ -2,7 +2,8 @@
 <resources>
 
     <string name="url_wiki_supertoast">https://github.com/JohnPersano/Supertoasts/wiki/SuperToast</string>
-    <string name="url_wiki_superactivitytoast">https://github.com/JohnPersano/Supertoasts/wiki/SuperActivityToast</string>
+    <string name="url_wiki_superactivitytoast">https://github.com/JohnPersano/Supertoasts/wiki/SuperActivityToast
+    </string>
     <string name="url_wiki_supercardtoast">https://github.com/JohnPersano/Supertoasts/wiki/SuperCardToast</string>
     <string name="url_project_page">https://github.com/JohnPersano/Supertoasts/</string>
 
