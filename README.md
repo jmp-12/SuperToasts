@@ -6,7 +6,9 @@ for this library came from the [UndoBar Library](https://code.google.com/p/roman
 and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
 
-This is a Beta release, expect bugs.
+This is a Beta release, expect bugs. <br>
+
+Version 1.3 is on the way, please check back soon for a very important update!
 
 ![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/supertoasts_githubimage_zps8a5ceb7c.png)
 
