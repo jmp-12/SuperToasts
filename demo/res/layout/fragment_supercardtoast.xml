@@ -1,34 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="Show"
-            android:id="@+id/showButton"
-            android:background="@drawable/selector_showbutton"
-            android:textColor="@color/white"/>
-
-    <LinearLayout
-            android:id="@+id/card_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#15000000"
-            android:orientation="vertical"/>
 
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/showButton">
 
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             <RadioGroup
                     android:id="@+id/type_radiogroup"
@@ -165,4 +150,14 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="Show"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/showButton"
+            android:background="@drawable/selector_showbutton"
+            android:textColor="@color/white"/>
+
+</RelativeLayout>

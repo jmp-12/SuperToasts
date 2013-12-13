@@ -25,6 +25,8 @@ public class FragmentSuperCardToast extends Fragment {
 
     CheckBox mImageCheckBox;
 
+    SuperCardToast mSuperCardToast;
+
     private int mSdkVersion = android.os.Build.VERSION.SDK_INT;
 
 
@@ -33,6 +35,8 @@ public class FragmentSuperCardToast extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_supercardtoast,
                 container, false);
+
+        SuperCardToast.onRestoreState(savedInstanceState, getActivity());
 
         mTypeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -56,7 +60,9 @@ public class FragmentSuperCardToast extends Fragment {
             @Override
             public void onClick(View view) {
 
-                showSuperCardToast();
+                mSuperCardToast = getSuperCardToast();
+
+                mSuperCardToast.show();
 
             }
 
@@ -66,8 +72,16 @@ public class FragmentSuperCardToast extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-    private void showSuperCardToast() {
+        SuperCardToast.onSaveState(outState, getActivity());
+
+    }
+
+
+    private SuperCardToast getSuperCardToast() {
 
         final SuperCardToast superCardToast;
 
@@ -252,7 +266,7 @@ public class FragmentSuperCardToast extends Fragment {
 
         }
 
-        superCardToast.show();
+        return superCardToast;
 
     }
 
