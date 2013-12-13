@@ -70,9 +70,10 @@ public class SuperCardToast
 			"show a SuperCardToast before trying to dismiss it?";
     private static final String ERROR_PREHONEYCOMB  = "Swipe to dismiss was enabled but the SDK version is pre-Honeycomb";
 
-	private Context mContext;
+    private final int mSdkVersion = android.os.Build.VERSION.SDK_INT;
+
+    private Context mContext;
 	private ViewGroup mViewGroup;
-	private int mSdkVersion = android.os.Build.VERSION.SDK_INT;
 	private Handler mHandler;
 	private View mToastView;
 	private LayoutInflater mLayoutInflater;
@@ -85,6 +86,7 @@ public class SuperCardToast
 	private boolean isIndeterminate;
 	private OnDismissListener mOnDismissListener;
 
+    // Values below are used only for the call onRestoreState()
     private Drawable mIconDrawable;
     private int mIconResouce;
     private IconPosition mIconPosition;
@@ -170,14 +172,7 @@ public class SuperCardToast
 				mViewGroup = (LinearLayout) activity
 						.findViewById(R.id.card_container);
 				
-				if(type == Type.STANDARD) {
-
-                    mType = Type.STANDARD;
-					
-					mToastView = mLayoutInflater
-				    		.inflate(R.layout.supercardtoast, mViewGroup, false);
-					
-				} else if(type == Type.BUTTON) {
+                if(type == Type.BUTTON) {
 
                     mType = Type.BUTTON;
 
@@ -211,7 +206,14 @@ public class SuperCardToast
 					mProgressBar = (ProgressBar)
 							mToastView.findViewById(R.id.progressBar);
 
-				}
+				} else {
+
+                    mType = Type.STANDARD;
+
+                    mToastView = mLayoutInflater
+                            .inflate(R.layout.supercardtoast, mViewGroup, false);
+
+                }
 
                 mMessageTextView = (TextView)
 			    		mToastView.findViewById(R.id.message_textView);
@@ -249,9 +251,9 @@ public class SuperCardToast
 			
 		mViewGroup.addView(mToastView);
 		
-		final Animation mAnimation = getCardAnimation();
-		
-		mAnimation.setAnimationListener(new AnimationListener() {
+		final Animation animation = getCardAnimation();
+
+        animation.setAnimationListener(new AnimationListener() {
 
 			@Override
 			public void onAnimationEnd(Animation arg0) {
@@ -276,7 +278,7 @@ public class SuperCardToast
 
 		});
 
-		mToastView.startAnimation(mAnimation);
+		mToastView.startAnimation(animation);
 			
 	}
 
@@ -292,11 +294,11 @@ public class SuperCardToast
     /**
      * Sets the message text of the SuperCardToast.
      * <br>
-     * @param text
+     * @param charSequence
      */
-    public void setText(CharSequence text) {
+    public void setText(CharSequence charSequence) {
 
-        mMessageTextView.setText(text);
+        mMessageTextView.setText(charSequence);
 
     }
 
@@ -347,7 +349,7 @@ public class SuperCardToast
      */
     public void setTextSizeFloat(float textSize) {
 
-        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
     }
 
@@ -392,7 +394,7 @@ public class SuperCardToast
 	}
 
     /**
-     * Returns an indeterminate duration of the SuperCardToast.
+     * Returns true if the SuperCardToast is indeterminate.
      */
     public boolean isIndeterminate() {
 
@@ -437,7 +439,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the icon Drawable of the SuperCardToast
+     * Returns the icon Drawable of the SuperCardToast.
      */
     public Drawable getIconDrawable() {
 
@@ -446,7 +448,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the icon position of the SuperCardToast
+     * Returns the icon position of the SuperCardToast.
      */
     public IconPosition getIconPosition() {
 
@@ -455,7 +457,7 @@ public class SuperCardToast
     }
 
     /**
-     * Sets an icon resource to the SuperCardToast
+     * Sets an icon resource to the SuperCardToast.
      * with a position.
      * <br>
      * @param iconResource
@@ -494,7 +496,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the Drawable resource of the SuperCardToast
+     * Returns the icon resource of the SuperCardToast.
      */
     public int getIconResource() {
 
@@ -516,7 +518,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the onClickListener of the SuperCardToast
+     * Returns the onClickListener of the SuperCardToast root View.
      */
     public OnClickListener getOnClickListener() {
 
@@ -528,7 +530,6 @@ public class SuperCardToast
      * Sets the background resource of the SuperCardToast.
      * <br>
      * @param backgroundResource
-     *
      */
     public void setBackgroundResource(int backgroundResource) {
 
@@ -539,7 +540,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the background resource of the SuperCardToast
+     * Returns the background resource of the SuperCardToast.
      */
     public int getBackgroundResource() {
 
@@ -551,7 +552,6 @@ public class SuperCardToast
      * Sets the background Drawable of the SuperCardToast.
      * <br>
      * @param backgroundDrawable
-     *
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
@@ -563,9 +563,7 @@ public class SuperCardToast
 
             mRootLayout.setBackgroundDrawable(backgroundDrawable);
 
-        }
-
-        else {
+        } else {
 
             mRootLayout.setBackground(backgroundDrawable);
 
@@ -574,7 +572,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns the background Drawable of the SuperCardToast
+     * Returns the background Drawable of the SuperCardToast.
      */
     public Drawable getBackgroundDrawable() {
 
@@ -583,7 +581,7 @@ public class SuperCardToast
     }
 
     /**
-	 * Sets the Typeface of the SuperCardToast TextView.
+	 * Sets the Typeface of the SuperCardToast message.
 	 * <br>
 	 * @param typeface
 	 */
@@ -594,7 +592,7 @@ public class SuperCardToast
 	}
 
     /**
-     * Returns the Typeface of the SuperCardToast TextView.
+     * Returns the Typeface of the SuperCardToast message.
      */
     public Typeface getTypeface() {
 
@@ -604,7 +602,7 @@ public class SuperCardToast
 
     /**
 	 * Sets a private OnTouchListener to the SuperCardToast
-	 * that will dismiss it when touched.
+	 * that will dismiss the SuperCardToast when touched.
 	 * <br>
 	 * @param touchDismiss
 	 */
@@ -625,7 +623,7 @@ public class SuperCardToast
 	}
 
     /**
-     * Returns true if the SuperCardToast is touch dismissable
+     * Returns true if the SuperCardToast is touch dismissable.
      */
     public boolean isTouchDismissable() {
 
@@ -634,8 +632,7 @@ public class SuperCardToast
     }
 
 	/**
-	 * Sets an OnDismissListener defined in this library
-	 * to the SuperCardToast.
+	 * Sets an OnDismissListener to the SuperCardToast.
 	 * <br>
 	 * @param onDismissListener
 	 */
@@ -646,7 +643,7 @@ public class SuperCardToast
 	}
 
     /**
-     * Returns the OnDismissListener of the SuperActivityToast
+     * Returns the OnDismissListener of the SuperActivityToast.
      */
     public OnDismissListener getOnDismissListener() {
 
@@ -655,8 +652,8 @@ public class SuperCardToast
     }
 
 	/**
-	 * Sets an SwipeDismissListener defined in this library
-	 * to the SuperCardToast.
+     * Sets a private OnTouchListener to the SuperCardToast
+     * that will dismiss the SuperCardToast when swiped.
 	 * <br>
 	 * @param swipeDismiss
 	 */
@@ -697,7 +694,7 @@ public class SuperCardToast
 	}
 
     /**
-     *   Returns true if the SuperCardToast is swipe dismissable
+     *   Returns true if the SuperCardToast is swipe dismissable.
      */
     public boolean isSwipeDismissable() {
 
@@ -705,7 +702,7 @@ public class SuperCardToast
 
     }
 	
-	/** Dismisses the SuperCardToast with Animation. */
+	/** Dismisses the SuperCardToast with an animation. */
 	public void dismiss() {
 
         ManagerSuperCardToast.getInstance().remove(this);
@@ -714,7 +711,7 @@ public class SuperCardToast
 
     }
 	
-	/** Dismisses the SuperCardToast without Animation. */
+	/** Dismisses the SuperCardToast without an animation. */
 	public void dismissImmediately() {
 
         ManagerSuperCardToast.getInstance().remove(this);
@@ -766,7 +763,7 @@ public class SuperCardToast
     }
 
     /**
-     * Returns an OnClickListener to the Button of a BUTTON Type
+     * Returns the OnClickListener of the Button in a BUTTON Type
      * SuperCardToast.
      */
     public OnClickListener getButtonOnClickListener() {
@@ -983,7 +980,7 @@ public class SuperCardToast
 
         if (mToastButton != null) {
 
-            mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
+            mMessageTextView.setTextSize(buttonTextSize);
 
         }
 
@@ -997,7 +994,7 @@ public class SuperCardToast
      */
     public void setButtonTextSizeFloat(float buttonTextSize) {
 
-        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
+        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
 
     }
 
@@ -1067,8 +1064,6 @@ public class SuperCardToast
 	
 	/**
 	 * Returns the SuperCardToast TextView.
-	 * <br>
-	 * @return TextView <br>
 	 */
 	public TextView getTextView() {
 
@@ -1078,8 +1073,6 @@ public class SuperCardToast
 
 	/**
 	 * Returns the SuperCardToast View.
-	 * <br>
-	 * @return View <br>
 	 */
 	public View getView() {
 
@@ -1089,8 +1082,6 @@ public class SuperCardToast
 
 	/**
 	 * Returns true if the SuperCardToast is showing.
-	 * <br>
-	 * @return boolean <br>
 	 */
 	public boolean isShowing() {
 
@@ -1100,8 +1091,6 @@ public class SuperCardToast
 
 	/**
 	 * Returns the calling Activity of the SuperCardToast.
-	 * <br>
-	 * @return Activity <br>
 	 */
 	public Activity getActivity() {
 
@@ -1111,8 +1100,6 @@ public class SuperCardToast
 
 	/**
 	 * Returns true if the SuperCardToast is indeterminate.
-	 * <br>
-	 * @return boolean <br>
 	 */
 	public boolean getIsIndeterminate() {
 
@@ -1123,8 +1110,6 @@ public class SuperCardToast
 
 	/**
 	 * Returns the ViewGroup that the SuperCardToast is attached to.
-	 * <br>
-	 * @return ViewGroup <br>
 	 */
 	public ViewGroup getViewGroup() {
 
@@ -1285,9 +1270,10 @@ public class SuperCardToast
 
 	}
 	
-	private Runnable mHideRunnable = new Runnable() {
+	private final Runnable mHideRunnable = new Runnable() {
 
-		public void run() {
+        @Override
+        public void run() {
 
 			dismiss();
 
@@ -1295,9 +1281,10 @@ public class SuperCardToast
 
 	};
     
-	private Runnable mHideImmediateRunnable = new Runnable() {
+	private final Runnable mHideImmediateRunnable = new Runnable() {
 
-		public void run() {
+        @Override
+        public void run() {
 
 			dismissImmediately();
 
@@ -1306,8 +1293,9 @@ public class SuperCardToast
 	};
 
 
-    private Runnable mHideWithAnimationRunnable = new Runnable() {
+    private final Runnable mHideWithAnimationRunnable = new Runnable() {
 
+        @Override
         public void run() {
 
             dismissWithLayoutAnimation();
@@ -1316,9 +1304,10 @@ public class SuperCardToast
 
     };
     
-	private Runnable mInvalidateRunnable = new Runnable() {
+	private final Runnable mInvalidateRunnable = new Runnable() {
 
-		public void run() {
+        @Override
+        public void run() {
 
 			if(mViewGroup != null) {
 
@@ -1331,16 +1320,16 @@ public class SuperCardToast
 	};
 
     /**
-     * Saves pending/shown SuperCardToasts to a bundle.
+     * Saves currently showing SuperCardToasts to a bundle.
      * <br>
      * @param bundle
      */
-    public static void onSaveState(Bundle bundle, Activity activity) {
+    public static void onSaveState(Bundle bundle) {
 
         SuperCardToast[] list = new SuperCardToast[ManagerSuperCardToast
                 .getInstance().getList().size()];
 
-        // Convert LinkedList to SuperActivityToast[] to be saved in Bundle
+        // Convert LinkedList to SuperCardToast[] to be saved in Bundle
         for(int i=0; i < ManagerSuperCardToast.getInstance().getList().size(); i++) {
 
             list[i] = ManagerSuperCardToast.getInstance().getList().get(i);
@@ -1349,8 +1338,16 @@ public class SuperCardToast
 
         bundle.putSerializable(BUNDLE, list);
 
+        ManagerSuperCardToast.getInstance().clear();
+
     }
 
+    /**
+     * Recreates SuperCardToasts that were showing during an orientation change.
+     * <br>
+     * @param bundle
+     * @param activity
+     */
     public static void onRestoreState(Bundle bundle, Activity activity) {
 
         if(bundle == null) {
@@ -1358,9 +1355,7 @@ public class SuperCardToast
             return;
         }
 
-        SuperCardToast[] savedArray = (SuperCardToast[]) bundle.getSerializable(BUNDLE);
-
-        for (SuperCardToast oldSuperCardToast : savedArray) {
+        for (SuperCardToast oldSuperCardToast : (SuperCardToast[]) bundle.getSerializable(BUNDLE)) {
 
             SuperCardToast newSuperCardToast;
 
@@ -1393,7 +1388,6 @@ public class SuperCardToast
 
                 }
 
-
             } else if(oldSuperCardToast.getType() == Type.PROGRESS) {
 
                 newSuperCardToast = new SuperCardToast(activity, Type.PROGRESS);
@@ -1412,9 +1406,9 @@ public class SuperCardToast
 
             }
 
-        //    newSuperCardToast.setText(oldSuperCardToast.getText());
-        //    newSuperCardToast.setTextColor(oldSuperCardToast.getTextColor());
-        //    newSuperCardToast.setTextSizeFloat(oldSuperCardToast.getTextSize());
+            newSuperCardToast.setText(oldSuperCardToast.getText());
+            newSuperCardToast.setTextColor(oldSuperCardToast.getTextColor());
+            newSuperCardToast.setTextSizeFloat(oldSuperCardToast.getTextSize());
             newSuperCardToast.setDuration(oldSuperCardToast.getDuration());
             newSuperCardToast.setIndeterminate(oldSuperCardToast.isIndeterminate());
 
@@ -1436,14 +1430,14 @@ public class SuperCardToast
 
             } else {
 
-        //        newSuperCardToast.setBackgroundResource(oldSuperCardToast.getBackgroundResource());
+                newSuperCardToast.setBackgroundResource(oldSuperCardToast.getBackgroundResource());
 
             }
 
-       //     newSuperCardToast.setTypeface(oldSuperCardToast.getTypeface());
+            newSuperCardToast.setTypeface(oldSuperCardToast.getTypeface());
             newSuperCardToast.setTouchToDismiss(oldSuperCardToast.isTouchDismissable());
             newSuperCardToast.setOnDismissListener(oldSuperCardToast.getOnDismissListener());
-
+            newSuperCardToast.setSwipeToDismiss(oldSuperCardToast.isSwipeDismissable());
             newSuperCardToast.show();
 
         }
