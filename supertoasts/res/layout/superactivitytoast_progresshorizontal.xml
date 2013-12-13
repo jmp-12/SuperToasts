@@ -25,7 +25,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/superprogresstoast_progressbar_x_padding"
-        android:paddingRight="@dimen/superprogresstoast_progressbar_x_padding"/>
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"/>
 
 </LinearLayout>
