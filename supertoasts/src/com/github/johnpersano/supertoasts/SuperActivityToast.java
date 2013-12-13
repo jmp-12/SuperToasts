@@ -43,6 +43,8 @@ import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
 import com.github.johnpersano.supertoasts.SuperToast.Type;
 import com.github.johnpersano.supertoasts.util.OnDismissListener;
 
+import java.lang.reflect.Method;
+
 /**
  * SuperActivityToasts are designed to be used inside of Activities. When the
  * Activity is destroyed the SuperActivityToast is destroyed along with it.
@@ -172,31 +174,9 @@ public class SuperActivityToast {
 					mDividerView = mToastView
 							.findViewById(R.id.divider);
 
+                    mToastButton.setOnTouchListener(mTouchDismissListener);
+
                     mType = Type.BUTTON;
-
-                    try {
-
-                        mButtonOnClickListener = (OnClickListener) mContext;
-
-                    } catch (ClassCastException e) {
-
-                        Log.d(TAG, e.toString());
-
-                    }
-
-                    if(mButtonOnClickListener != null) {
-
-                        mToastButton.setOnClickListener(new OnClickListener() {
-
-                            @Override
-                            public void onClick(View v) {
-
-                                mButtonOnClickListener.onClick(v);
-
-                            }
-                        });
-
-                    }
 
 				} else if (type == Type.PROGRESS) {
 
@@ -205,6 +185,8 @@ public class SuperActivityToast {
 
 					mProgressBar = (ProgressBar) mToastView
 							.findViewById(R.id.progressBar);
+
+                    mProgressBar.setMax(100);
 
                     mType = Type.PROGRESS;
 
@@ -250,6 +232,9 @@ public class SuperActivityToast {
 
 	}
 
+    /**
+     * Returns the Type of SuperActivityToast
+     */
     public Type getType() {
 
         return mType;
@@ -613,7 +598,7 @@ public class SuperActivityToast {
 
 	/**
 	 * Sets a private OnTouchListener to the SuperActivityToast
-	 * that will dismiss it when touched.
+	 * View that will dismiss it when touched.
 	 * <br>
 	 * @param touchDismiss
 	 */
@@ -666,7 +651,7 @@ public class SuperActivityToast {
 	/** Dismisses the SuperActivityToast. */
 	public void dismiss() {
 
-		ManagerSuperActivityToast.getInstance().removeSuperToast(this);
+        ManagerSuperActivityToast.getInstance().removeSuperToast(this);
 
 	}
 
@@ -678,6 +663,8 @@ public class SuperActivityToast {
 	 * @param onClickListener
 	 */
 	public void setButtonOnClickListener(OnClickListener onClickListener) {
+
+        this.mButtonOnClickListener = onClickListener;
 
 		if (mToastButton != null) {
 
@@ -1124,6 +1111,8 @@ public class SuperActivityToast {
 
         bundle.putSerializable(BUNDLE, list);
 
+        SuperActivityToast.cancelAllSuperActivityToasts();
+
     }
 
 
@@ -1134,10 +1123,7 @@ public class SuperActivityToast {
             return;
         }
 
-        SuperActivityToast.cancelAllSuperActivityToasts();
-
         SuperActivityToast[] savedArray = (SuperActivityToast[]) bundle.getSerializable(BUNDLE);
-        Log.d(TAG, String.valueOf(savedArray.length));
 
         for (SuperActivityToast oldSuperActivityToast : savedArray) {
 
@@ -1147,6 +1133,8 @@ public class SuperActivityToast {
 
                 newSuperActivityToast = new SuperActivityToast(activity, Type.BUTTON);
                 newSuperActivityToast.setButtonOnClickListener(oldSuperActivityToast.getButtonOnClickListener());
+
+
                 newSuperActivityToast.setButtonText(oldSuperActivityToast.getButtonText());
                 newSuperActivityToast.setButtonTextSizeFloat(oldSuperActivityToast.getButtonTextSize());
                 newSuperActivityToast.setButtonTextColor(oldSuperActivityToast.getButtonTextColor());
@@ -1224,7 +1212,10 @@ public class SuperActivityToast {
             newSuperActivityToast.setDismissAnimation(oldSuperActivityToast.getDismissAnimation());
             newSuperActivityToast.setTouchToDismiss(oldSuperActivityToast.isTouchDismissable());
             newSuperActivityToast.setOnDismissListener(oldSuperActivityToast.getOnDismissListener());
-            newSuperActivityToast.show();
+
+            oldSuperActivityToast = newSuperActivityToast;
+
+            oldSuperActivityToast.show();
 
         }
     }
@@ -1255,7 +1246,7 @@ public class SuperActivityToast {
 		int timesTouched;
 
 		@Override
-		public boolean onTouch(View view, MotionEvent event) {
+		public boolean onTouch(View view, MotionEvent motionEvent) {
 
 			/**
 			 * Hack to prevent the user from repeatedly
@@ -1263,7 +1254,11 @@ public class SuperActivityToast {
 			 */
 			if (timesTouched == 0) {
 
-				dismiss();
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    dismiss();
+
+                }
 
 			}
 

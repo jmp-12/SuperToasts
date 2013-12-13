@@ -23,6 +23,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -209,21 +210,43 @@ public class ManagerSuperActivityToast extends Handler {
 
 	protected void removeSuperToast(SuperActivityToast superActivityToast) {
 
-		final ViewGroup viewGroup = superActivityToast.getViewGroup();
+        final ViewGroup viewGroup = superActivityToast.getViewGroup();
 
 		final View toastView = superActivityToast.getView();
 
 		if (viewGroup != null) {
 
-			toastView.startAnimation(superActivityToast.getDismissAnimation());
+            Animation animation = superActivityToast.getDismissAnimation();
 
-            mList.poll();
+            animation.setAnimationListener(new Animation.AnimationListener() {
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                    ManagerSuperActivityToast.this.showNextSuperToast();
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+			toastView.startAnimation(animation);
 
 			viewGroup.removeView(toastView);
 
+            mList.poll();
+
 			sendMessageDelayed(superActivityToast,
-					Messages.DISPLAY, superActivityToast
-							.getDismissAnimation().getDuration());
+                    Messages.DISPLAY, superActivityToast
+                    .getDismissAnimation().getDuration());
 			
 			if(superActivityToast.getOnDismissListener() != null) {
 				
@@ -233,7 +256,11 @@ public class ManagerSuperActivityToast extends Handler {
 
 		}
 
-	}
+        removeMessages(Messages.ADD);
+        removeMessages(Messages.DISPLAY);
+        removeMessages(Messages.REMOVE);
+
+    }
 
 	protected void clearQueue() {
 
