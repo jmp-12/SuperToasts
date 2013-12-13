@@ -110,6 +110,12 @@ public class SuperCardToast
 				
 				mToastView = mLayoutInflater
 			    		.inflate(R.layout.supercardtoast, mViewGroup, false);
+
+                mMessageTextView = (TextView)
+                        mToastView.findViewById(R.id.message_textView);
+
+                mRootLayout = (LinearLayout)
+                        mToastView.findViewById(R.id.root_layout);
 				
 			} else {
 
