@@ -28,10 +28,14 @@ public class UndoAction extends Activity {
         superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+
+                /**
+                 * Any Context used in this method should be view.getContext() otherwise there will be
+                 * a null pointer exception on orientation change.
+                 */
 
                 dummyTextView.setVisibility(View.VISIBLE);
-                superActivityToast.dismiss();
 
             }
         });
