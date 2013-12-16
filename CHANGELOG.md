@@ -7,7 +7,7 @@ Alpha build, first release. Probably very buggy!
 Version 1.1
 ===========
 
-Beta build, second release. Still buggy!
+Second release. Still buggy!
 
 - Removed SuperProgressToast and SuperButtonToast
 - Added BUTTON, PROGRESS, and HORIZONTAL_PROGRESS Types to SuperActivityToast
@@ -23,8 +23,18 @@ Beta build, second release. Still buggy!
 Version 1.2
 ===========
 
-Beta build, third release. Still buggy!
+Third release. Still buggy!
 
 - Published to Maven central
 - Added refresh icon
 - Removed test folder
+
+Version 1.3
+===========
+
+Fourth release. Still buggy!
+
+- Added orientation change support
+- Bug fixes
+- Javadoc fixes
+- Reworked SuperToast presets
