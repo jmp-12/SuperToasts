@@ -72,6 +72,35 @@ public class ManagerSuperCardToast {
 
     }
 
+    protected void clear() {
+
+        mList.clear();
+
+    }
+
+    protected void clearQueue() {
+
+        if (mList != null) {
+
+            for (SuperCardToast superCardToast : mList) {
+
+                if (superCardToast.isShowing()) {
+
+                    superCardToast.getViewGroup().removeView(
+                            superCardToast.getView());
+
+                    superCardToast.getViewGroup().invalidate();
+
+                }
+
+            }
+
+            mList.clear();
+
+        }
+
+    }
+
     protected LinkedList<SuperCardToast> getList() {
 
         return mList;

@@ -349,7 +349,7 @@ public class SuperCardToast
      */
     public void setTextSizeFloat(float textSize) {
 
-        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 
     }
 
@@ -994,7 +994,7 @@ public class SuperCardToast
      */
     public void setButtonTextSizeFloat(float buttonTextSize) {
 
-        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonTextSize);
+        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
 
     }
 
@@ -1318,6 +1318,13 @@ public class SuperCardToast
 		}
 
 	};
+
+    /** Dismisses and removes all showing/pending SuperCardToasts. */
+    public static void cancelAllSuperCardToasts() {
+
+        ManagerSuperCardToast.getInstance().clearQueue();
+
+    }
 
     /**
      * Saves currently showing SuperCardToasts to a bundle.

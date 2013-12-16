@@ -277,7 +277,9 @@ public class ManagerSuperActivityToast extends Handler {
 					superActivityToast.getViewGroup().removeView(
 							superActivityToast.getView());
 
-				}
+                    superActivityToast.getViewGroup().invalidate();
+
+                }
 
 			}
 
