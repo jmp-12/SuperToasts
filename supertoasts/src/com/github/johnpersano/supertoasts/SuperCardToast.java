@@ -1442,9 +1442,18 @@ public class SuperCardToast
             }
 
             newSuperCardToast.setTypeface(oldSuperCardToast.getTypeface());
-            newSuperCardToast.setTouchToDismiss(oldSuperCardToast.isTouchDismissable());
+
+            if(oldSuperCardToast.isTouchDismissable()) {
+
+                newSuperCardToast.setTouchToDismiss(oldSuperCardToast.isTouchDismissable());
+
+            } else if (oldSuperCardToast.isSwipeDismissable()) {
+
+                newSuperCardToast.setSwipeToDismiss(oldSuperCardToast.isSwipeDismissable());
+
+            }
+
             newSuperCardToast.setOnDismissListener(oldSuperCardToast.getOnDismissListener());
-            newSuperCardToast.setSwipeToDismiss(oldSuperCardToast.isSwipeDismissable());
             newSuperCardToast.show();
 
         }
