@@ -1,4 +1,4 @@
-package com.github.johnpersano.supertoastsdemo.examples;
+package com.supertoastsdemo.examples;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoastsdemo.R;
+import com.supertoastsdemo.R;
 
 public class UndoAction extends Activity {
     public void onCreate(Bundle savedInstanceState) {

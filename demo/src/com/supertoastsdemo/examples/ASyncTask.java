@@ -1,4 +1,4 @@
-package com.github.johnpersano.supertoastsdemo.examples;
+package com.supertoastsdemo.examples;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoastsdemo.R;
+import com.supertoastsdemo.R;
 
 public class ASyncTask extends Activity {
 
@@ -70,7 +70,7 @@ public class ASyncTask extends Activity {
         protected Void doInBackground(Void... voids) {
 
             /** Sleep the thread to simulate backgound activity. **/
-            for (int i = 0; i < 11; i++) {
+            for(int i = 0; i < 11 ; i++) {
 
                 try {
 
