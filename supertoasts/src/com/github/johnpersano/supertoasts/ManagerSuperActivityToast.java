@@ -37,7 +37,6 @@ public class ManagerSuperActivityToast extends Handler {
 
         /** Hexadecimal numbers that represent acronyms for the operation. **/
 		private static final int DISPLAY= 0x44534154;
-		private static final int ADD = 0x41534154;
 		private static final int REMOVE= 0x52534154;
 
 	}
@@ -89,13 +88,7 @@ public class ManagerSuperActivityToast extends Handler {
 
 		if (!superActivityToast.isShowing()) {
 
-			sendMessage(superActivityToast, Messages.ADD);
-
-		} else {
-
-			sendMessageDelayed(superActivityToast,
-					Messages.DISPLAY,
-					getDuration(superActivityToast));
+			sendMessage(superActivityToast, Messages.DISPLAY);
 
 		}
 
@@ -120,16 +113,6 @@ public class ManagerSuperActivityToast extends Handler {
 
 	}
 
-	private long getDuration(SuperActivityToast superActivityToast) {
-
-		long duration = superActivityToast.getDuration();
-		duration += superActivityToast.getShowAnimation().getDuration();
-		duration += superActivityToast.getDismissAnimation().getDuration();
-
-		return duration;
-
-	}
-
 	@Override
 	public void handleMessage(Message message) {
 
@@ -139,12 +122,6 @@ public class ManagerSuperActivityToast extends Handler {
 		switch (message.what) {
 
 			case Messages.DISPLAY:
-
-				showNextSuperToast();
-
-				break;
-
-			case Messages.ADD:
 
 				displaySuperToast(superActivityToast);
 
@@ -180,7 +157,6 @@ public class ManagerSuperActivityToast extends Handler {
 
 		final View toastView = superActivityToast.getView();
 		
-		//TODO: Temporary fix for orientation change crash.
 		if(viewGroup != null) {
 			
 			try {
@@ -243,10 +219,6 @@ public class ManagerSuperActivityToast extends Handler {
 			viewGroup.removeView(toastView);
 
             mList.poll();
-
-			sendMessageDelayed(superActivityToast,
-                    Messages.DISPLAY, superActivityToast
-                    .getDismissAnimation().getDuration());
 			
 			if(superActivityToast.getOnDismissListener() != null) {
 				
@@ -256,15 +228,10 @@ public class ManagerSuperActivityToast extends Handler {
 
 		}
 
-        removeMessages(Messages.ADD);
-        removeMessages(Messages.DISPLAY);
-        removeMessages(Messages.REMOVE);
-
     }
 
 	protected void clearQueue() {
 
-        removeMessages(Messages.ADD);
         removeMessages(Messages.DISPLAY);
         removeMessages(Messages.REMOVE);
 
@@ -311,7 +278,6 @@ public class ManagerSuperActivityToast extends Handler {
 
 					}
 
-                    removeMessages(Messages.ADD, superActivityToast);
                     removeMessages(Messages.DISPLAY, superActivityToast);
                     removeMessages(Messages.REMOVE, superActivityToast);
 
