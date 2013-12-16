@@ -1,4 +1,4 @@
-package com.github.johnpersano.supertoastsdemo;
+package com.supertoastsdemo;
 
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -10,11 +10,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.supertoastsdemo.R;
 
-public class FragmentSuperCardToast extends Fragment {
+public class FragmentSuperCardToast extends SherlockFragment {
 
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
@@ -25,9 +27,7 @@ public class FragmentSuperCardToast extends Fragment {
 
     CheckBox mImageCheckBox;
 
-    SuperCardToast mSuperCardToast;
-
-    private int mSdkVersion = android.os.Build.VERSION.SDK_INT;
+    DummyOperation mDummyOperation;
 
 
     @Override
@@ -60,9 +60,7 @@ public class FragmentSuperCardToast extends Fragment {
             @Override
             public void onClick(View view) {
 
-                mSuperCardToast = getSuperCardToast();
-
-                mSuperCardToast.show();
+                showSuperCardToast();
 
             }
 
@@ -72,16 +70,33 @@ public class FragmentSuperCardToast extends Fragment {
 
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(mDummyOperation != null){
+
+            if(mDummyOperation.getStatus() == AsyncTask.Status.PENDING ||
+                    mDummyOperation.getStatus() == AsyncTask.Status.RUNNING) {
+
+                mDummyOperation.cancel(true);
+
+            }
+
+        }
+    }
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        SuperCardToast.onSaveState(outState, getActivity());
+        SuperCardToast.onSaveState(outState);
 
     }
 
-
-    private SuperCardToast getSuperCardToast() {
+    private void showSuperCardToast() {
 
         final SuperCardToast superCardToast;
 
@@ -103,10 +118,8 @@ public class FragmentSuperCardToast extends Fragment {
                     @Override
                     public void onClick(View view) {
 
-                        superCardToast.dismiss();
-
-                        SuperActivityToast.createDarkSuperActivityToast(getActivity(), getActivity().getResources().getString(R.string.onclick),
-                                SuperToast.Duration.MEDIUM).show();
+                        SuperActivityToast.createDarkSuperActivityToast(view.getContext(), view.getContext().getResources()
+                                .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
 
                     }
                 });
@@ -122,7 +135,7 @@ public class FragmentSuperCardToast extends Fragment {
 
             case R.id.hprogress_radiobutton:
 
-                superCardToast = new SuperCardToast(getActivity(),
+                  superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
 
                 /** Since this SuperCardToast will show actual
@@ -130,9 +143,8 @@ public class FragmentSuperCardToast extends Fragment {
                  *  SuperCardToast must be indeterminate **/
                 superCardToast.setIndeterminate(true);
 
-                /** This dummy ASyncTask will dismiss the SuperCardToast
-                 *  when finished **/
-                new DummyOperation(superCardToast).execute();
+                mDummyOperation = new DummyOperation(superCardToast);
+                mDummyOperation.execute();
 
                 break;
 
@@ -213,6 +225,7 @@ public class FragmentSuperCardToast extends Fragment {
 
         }
 
+
         switch (mTextsizeSpinner.getSelectedItemPosition()) {
 
             case 0:
@@ -223,7 +236,7 @@ public class FragmentSuperCardToast extends Fragment {
 
             case 1:
 
-                superCardToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                superCardToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
@@ -248,14 +261,6 @@ public class FragmentSuperCardToast extends Fragment {
                 /** No need to check Android version for this call. The library does this automatically. **/
                 superCardToast.setSwipeToDismiss(true);
 
-                if (mSdkVersion < android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
-
-                    /** Notify user that this does nothing on pre-honeycomb devices **/
-                    SuperActivityToast.createDarkSuperActivityToast(getActivity(),
-                            getActivity().getResources().getString(R.string.error_prehoneycomb), SuperToast.Duration.MEDIUM).show();
-
-                }
-
                 break;
 
             case 2:
@@ -266,26 +271,14 @@ public class FragmentSuperCardToast extends Fragment {
 
         }
 
-        return superCardToast;
-
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        /* Don't let a SuperActivityToast linger */
-        SuperActivityToast.cancelAllSuperActivityToasts();
+        superCardToast.show();
 
     }
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 
-        /**
-         * This setup is a little hacky due to the customization in the demo.
-         * Check the examples package in the demo for a proper example
-         */
+        /** This setup is a little hacky due to the customization in the demo.
+         *  Check the examples package in the demo for a proper example */
 
         SuperCardToast mSuperCardToast;
 
@@ -298,7 +291,7 @@ public class FragmentSuperCardToast extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            for (int i = 0; i < 11; i++) {
+            for(int i = 0; i < 11 ; i++) {
 
                 try {
 
@@ -319,27 +312,34 @@ public class FragmentSuperCardToast extends Fragment {
 
         @Override
         protected void onPostExecute(Void voids) {
-
-            if (mSuperCardToast != null) {
-
+        	
+        	if(mSuperCardToast != null) {
+        		
                 mSuperCardToast.dismiss();
 
-            }
+        	} 
 
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
+            
+        	if(mSuperCardToast != null) {
 
-            if (mSuperCardToast != null) {
-
-                mSuperCardToast.setProgress(progress[0]);
-
-            }
+            mSuperCardToast.setProgress(progress[0]);
+            
+        	}
 
         }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            SuperCardToast.cancelAllSuperCardToasts();
+
+        }
     }
 
 }

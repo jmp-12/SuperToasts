@@ -1,6 +1,5 @@
-package com.github.johnpersano.supertoastsdemo;
+package com.supertoastsdemo;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
-
+import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.supertoastsdemo.R;
 
-public class FragmentSuperToast extends Fragment {
+
+public class FragmentSuperToast extends SherlockFragment {
 
     Spinner mAnimationSpinner;
     Spinner mDurationSpinner;
@@ -59,14 +60,6 @@ public class FragmentSuperToast extends Fragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        /* Don't let the SuperToast linger */
-        //SuperToast.cancelAllSuperToasts();
-
-    }
 
 
     private void showSuperToast() {
@@ -167,6 +160,7 @@ public class FragmentSuperToast extends Fragment {
 
                 break;
 
+
         }
 
         switch (mTextsizeSpinner.getSelectedItemPosition()) {
@@ -179,7 +173,7 @@ public class FragmentSuperToast extends Fragment {
 
             case 1:
 
-                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                superToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
@@ -191,7 +185,7 @@ public class FragmentSuperToast extends Fragment {
 
         }
 
-        if (mImageCheckBox.isChecked()) {
+        if(mImageCheckBox.isChecked()) {
 
             superToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 

@@ -1,21 +1,20 @@
+package com.supertoastsdemo;
 
-package com.github.johnpersano.supertoastsdemo;
-
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.supertoastsdemo.R;
 
 
-
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockFragmentActivity {
 
     private static final String NAVIGAION_SELECTION = "navigationSelection";
 
@@ -24,7 +23,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -35,7 +34,7 @@ public class MainActivity extends Activity {
 
         actionBar.setListNavigationCallbacks(arrayAdapter, new ActionBar.OnNavigationListener() {
 
-            Fragment fragment;
+            SherlockFragment fragment;
 
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -71,7 +70,7 @@ public class MainActivity extends Activity {
 
                 }
 
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.commit();
 
@@ -81,7 +80,7 @@ public class MainActivity extends Activity {
         });
 
 
-        if (savedInstanceState != null) {
+        if(savedInstanceState != null) {
 
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt(NAVIGAION_SELECTION));
 
@@ -93,7 +92,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
         return true;
@@ -104,7 +103,7 @@ public class MainActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(NAVIGAION_SELECTION, getActionBar().getSelectedNavigationIndex());
+        outState.putInt(NAVIGAION_SELECTION, getSupportActionBar().getSelectedNavigationIndex());
 
     }
 
@@ -115,7 +114,7 @@ public class MainActivity extends Activity {
 
             case R.id.wiki:
 
-                switch (getActionBar().getSelectedNavigationIndex()) {
+                switch(getSupportActionBar().getSelectedNavigationIndex()) {
 
                     case 0:
 

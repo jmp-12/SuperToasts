@@ -1,19 +1,20 @@
-package com.github.johnpersano.supertoastsdemo;
+package com.supertoastsdemo;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.supertoastsdemo.R;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
-public class FragmentSuperActivityToast extends Fragment {
+public class FragmentSuperActivityToast extends SherlockFragment {
 
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
@@ -24,9 +25,6 @@ public class FragmentSuperActivityToast extends Fragment {
     CheckBox mImageCheckBox;
 
     DummyOperation mDummyOperation;
-
-    SuperActivityToast mSuperActivityToast;
-
 
 
     @Override
@@ -70,18 +68,10 @@ public class FragmentSuperActivityToast extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        SuperActivityToast.onSaveState(outState);
-
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
 
-        if(mDummyOperation != null) {
+        if(mDummyOperation != null){
 
             if(mDummyOperation.getStatus() == AsyncTask.Status.PENDING ||
                     mDummyOperation.getStatus() == AsyncTask.Status.RUNNING) {
@@ -93,28 +83,37 @@ public class FragmentSuperActivityToast extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        SuperActivityToast.onSaveState(outState);
+
+    }
+
     private void showSuperToast() {
+
+        final SuperActivityToast superActivityToast;
 
         switch (typeRadioGroup.getCheckedRadioButtonId()) {
 
             case R.id.toast_radiobutton:
 
-                mSuperActivityToast = new SuperActivityToast(getActivity(),
+                superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.STANDARD);
 
                 break;
 
             case R.id.button_radiobutton:
 
-                mSuperActivityToast = new SuperActivityToast(getActivity(),
+                superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.BUTTON);
-                mSuperActivityToast.setTouchToDismiss(true);
-                mSuperActivityToast.setIndeterminate(false);
-                mSuperActivityToast.setButtonOnClickListener(new View.OnClickListener() {
+                superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        SuperToast.cancelAllSuperToasts();
-                         SuperToast.createDarkSuperToast(v.getContext(), "On Click!", SuperToast.Duration.VERY_SHORT).show();
+                    public void onClick(View view) {
+
+                        SuperActivityToast.createDarkSuperActivityToast(view.getContext(), view.getContext().getResources()
+                                .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
 
                     }
                 });
@@ -123,31 +122,29 @@ public class FragmentSuperActivityToast extends Fragment {
 
             case R.id.progress_radiobutton:
 
-                mSuperActivityToast = new SuperActivityToast(getActivity(),
+                superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.PROGRESS);
 
                 break;
 
             case R.id.hprogress_radiobutton:
 
-                mSuperActivityToast = new SuperActivityToast(getActivity(),
+                superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
 
                 /** Since this SuperActivityToast will show actual
                  *  progress from a background ASyncTask the duration of the
                  *  SuperActivityToast must be indeterminate **/
-                mSuperActivityToast.setIndeterminate(true);
+                superActivityToast.setIndeterminate(true);
 
-                /** This dummy ASyncTask will dismiss the SuperActivityToast
-                 *  when finished **/
-                mDummyOperation = new DummyOperation(mSuperActivityToast);
+                mDummyOperation = new DummyOperation(superActivityToast);
                 mDummyOperation.execute();
 
                 break;
 
             default:
 
-                mSuperActivityToast = new SuperActivityToast(getActivity(),
+                superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.STANDARD);
 
                 break;
@@ -158,19 +155,19 @@ public class FragmentSuperActivityToast extends Fragment {
 
             case 0:
 
-                mSuperActivityToast.setDuration(SuperToast.Duration.SHORT);
+                superActivityToast.setDuration(SuperToast.Duration.SHORT);
 
                 break;
 
             case 1:
 
-                mSuperActivityToast.setDuration(SuperToast.Duration.MEDIUM);
+                superActivityToast.setDuration(SuperToast.Duration.MEDIUM);
 
                 break;
 
             case 2:
 
-                mSuperActivityToast.setDuration(SuperToast.Duration.LONG);
+                superActivityToast.setDuration(SuperToast.Duration.LONG);
 
                 break;
 
@@ -180,43 +177,43 @@ public class FragmentSuperActivityToast extends Fragment {
 
             case 0:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                mSuperActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -226,31 +223,31 @@ public class FragmentSuperActivityToast extends Fragment {
 
             case 0:
 
-                mSuperActivityToast.setTextSize(SuperToast.TextSize.SMALL);
+                superActivityToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
             case 1:
 
-                mSuperActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                superActivityToast.setTextSize(SuperToast.TextSize.SMALL);
 
                 break;
 
             case 2:
 
-                mSuperActivityToast.setTextSize(SuperToast.TextSize.LARGE);
+                superActivityToast.setTextSize(SuperToast.TextSize.LARGE);
 
                 break;
 
         }
 
-        if (mImageCheckBox.isChecked()) {
+        if(mImageCheckBox.isChecked()) {
 
-            mSuperActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
+            superActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 
         }
 
-        mSuperActivityToast.show();
+        superActivityToast.show();
 
     }
 
@@ -265,21 +262,9 @@ public class FragmentSuperActivityToast extends Fragment {
         }
 
         @Override
-        protected void onCancelled() {
-            super.onCancelled();
-
-            if(mSuperActivityToast != null) {
-
-                SuperActivityToast.cancelAllSuperActivityToasts();
-
-            }
-
-        }
-
-        @Override
         protected Void doInBackground(Void... voids) {
 
-            for (int i = 1; i <= 11; i++) {
+            for(int i = 0; i < 11 ; i++) {
 
                 try {
 
@@ -313,6 +298,13 @@ public class FragmentSuperActivityToast extends Fragment {
 
         }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            SuperActivityToast.cancelAllSuperActivityToasts();
+
+        }
     }
 
 }
