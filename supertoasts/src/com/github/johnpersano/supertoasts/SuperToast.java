@@ -31,7 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
+import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
 
 /**
  * SuperToasts are designed to replace stock Android Toasts.
@@ -69,12 +69,12 @@ public class SuperToast
     }
 
     /** Animations that can only be used in the SuperToast class. */
-    public static class Animation {
+    public enum Animations {
 
-        public static final int FADE = (android.R.style.Animation_Toast);
-        public static final int FLYIN = (android.R.style.Animation_Translucent);
-        public static final int SCALE = (android.R.style.Animation_Dialog);
-        public static final int POPUP = (android.R.style.Animation_InputMethod);
+        FADE,
+        FLYIN,
+        SCALE,
+        POPUP
 
     }
 
@@ -176,10 +176,10 @@ public class SuperToast
     private int mSdkVersion = android.os.Build.VERSION.SDK_INT;
     private int mGravity = Gravity.BOTTOM| Gravity.CENTER;
     private int mDuration = Duration.SHORT;
-    private int mAnimation = Animation.FADE;
+    private Animations mAnimation = Animations.FADE;
     private int mXOffset = 0;
     private int mYOffset = 0;
-    private OnDismissListener mOnDismissListener;
+    private OnToastDismissListener mOnToastDismissListener;
 
     /**
      * Instantiates a new SuperToast.
@@ -230,7 +230,7 @@ public class SuperToast
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         mWindowManagerParams.format = PixelFormat.TRANSLUCENT;
-        mWindowManagerParams.windowAnimations = mAnimation;
+        mWindowManagerParams.windowAnimations = getAnimation();
         mWindowManagerParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         mWindowManagerParams.gravity = mGravity;
         mWindowManagerParams.x = mXOffset;
@@ -419,7 +419,7 @@ public class SuperToast
      * <br>
      * @param animation
      */
-    public void setAnimation(int animation) {
+    public void setAnimation(Animations animation) {
 
         this.mAnimation = animation;
 
@@ -442,11 +442,11 @@ public class SuperToast
      * Sets an OnDismissListener defined in this library
      * to the SuperToast.
      * <br>
-     * @param onDismissListener
+     * @param onToastDismissListener
      */
-    public void setOnDismissListener(OnDismissListener onDismissListener) {
+    public void setOnDismissListener(OnToastDismissListener onToastDismissListener) {
 
-        this.mOnDismissListener = onDismissListener;
+        this.mOnToastDismissListener = onToastDismissListener;
 
     }
 
@@ -508,9 +508,9 @@ public class SuperToast
      * <br>
      * @return OnDismissListener <br>
      */
-    public OnDismissListener getOnDismissListener() {
+    public OnToastDismissListener getOnDismissListener() {
 
-        return mOnDismissListener;
+        return mOnToastDismissListener;
 
     }
 
@@ -537,7 +537,27 @@ public class SuperToast
     }
 
 
-    //XXX: Static methods.
+    private int getAnimation() {
+
+        if(mAnimation == Animations.FLYIN) {
+
+            return android.R.style.Animation_Translucent;
+
+        } else if(mAnimation == Animations.SCALE) {
+
+            return android.R.style.Animation_Dialog;
+
+        } else if (mAnimation == Animations.POPUP) {
+
+            return android.R.style.Animation_InputMethod;
+
+        } else {
+
+            return android.R.style.Animation_Toast;
+
+        }
+
+    }
 
 
     /**
@@ -614,7 +634,7 @@ public class SuperToast
      *
      */
     public static SuperToast createDarkSuperToast(Context context,
-                                                  CharSequence textCharSequence, int durationInteger, int animation) {
+                                                  CharSequence textCharSequence, int durationInteger, Animations animation) {
 
         SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
@@ -644,7 +664,7 @@ public class SuperToast
      *
      */
     public static SuperToast createLightSuperToast(Context context,
-                                                   CharSequence textCharSequence, int durationInteger, int animation) {
+                                                   CharSequence textCharSequence, int durationInteger, Animations animation) {
 
         SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);

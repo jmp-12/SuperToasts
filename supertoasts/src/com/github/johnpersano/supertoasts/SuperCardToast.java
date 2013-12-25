@@ -12,17 +12,11 @@
  *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *	See the License for the specific language governing permissions and
  *	limitations under the License.
- * 
+ *
  */
 
 package com.github.johnpersano.supertoasts;
 
-
-import android.os.Bundle;
-import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
-import com.github.johnpersano.supertoasts.SuperToast.Type;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
-import com.github.johnpersano.supertoasts.util.SwipeDismissListener;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -32,26 +26,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
+import android.view.animation.*;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
+import com.github.johnpersano.supertoasts.SuperToast.Type;
+import com.github.johnpersano.supertoasts.util.SwipeDismissListener;
 
 /**
  * SuperCardToasts are designed to be used inside of Activities. SuperCardToasts
@@ -60,31 +50,31 @@ import android.widget.TextView;
 
 public class SuperCardToast
 {
-	
-	private static final String TAG  = "(SuperCardToast)";
+
+    private static final String TAG  = "(SuperCardToast)";
     private static final String BUNDLE = "supercardtoast_bundle";
 
     private static final String ERROR_CONTEXTNOTACTIVITY  = "Context must be an instance of Activity";
-	private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout!";
-	private static final String ERROR_VIEWCONTAINERNULL = "Either the View or Container was null when trying to dismiss. Did you create and " +
-			"show a SuperCardToast before trying to dismiss it?";
+    private static final String ERROR_CONTAINERNULL = "You must have a LinearLayout with the id of card_container in your layout!";
+    private static final String ERROR_VIEWCONTAINERNULL = "Either the View or Container was null when trying to dismiss. Did you create and " +
+            "show a SuperCardToast before trying to dismiss it?";
     private static final String ERROR_PREHONEYCOMB  = "Swipe to dismiss was enabled but the SDK version is pre-Honeycomb";
 
     private final int mSdkVersion = android.os.Build.VERSION.SDK_INT;
 
     private Context mContext;
-	private ViewGroup mViewGroup;
-	private Handler mHandler;
-	private View mToastView;
-	private LayoutInflater mLayoutInflater;
-	private TextView mMessageTextView; 
-	private ProgressBar mProgressBar;
-	private Button mToastButton;
-	private View mDividerView;
-	private LinearLayout mRootLayout;	
-	private int mDuration = (SuperToast.Duration.LONG);
-	private boolean isIndeterminate;
-	private OnDismissListener mOnDismissListener;
+    private ViewGroup mViewGroup;
+    private Handler mHandler;
+    private View mToastView;
+    private LayoutInflater mLayoutInflater;
+    private TextView mMessageTextView;
+    private ProgressBar mProgressBar;
+    private Button mToastButton;
+    private View mDividerView;
+    private LinearLayout mRootLayout;
+    private int mDuration = (SuperToast.Duration.LONG);
+    private boolean isIndeterminate;
+    //private OnDismissListener mOnDismissListener;
 
     // Values below are used only for the call onRestoreState()
     private Drawable mIconDrawable;
@@ -105,29 +95,29 @@ public class SuperCardToast
 
 
     /**
-	 * Instantiates a new SuperCardToast.
-	 * <br>
-	 * @param context
-	 */
-	public SuperCardToast(Context context) 
-	{		
-		
-		if(context instanceof Activity) {
-								
-			this.mContext = context;
-			
-			final Activity activity = (Activity) context;
-			
-			mLayoutInflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-			if(activity.findViewById(R.id.card_container) != null) {
-				
-				mViewGroup = (LinearLayout)
-						activity.findViewById(R.id.card_container);
-				
-				mToastView = mLayoutInflater
-			    		.inflate(R.layout.supercardtoast, mViewGroup, false);
+     * Instantiates a new SuperCardToast.
+     * <br>
+     * @param context
+     */
+    public SuperCardToast(Context context)
+    {
+
+        if(context instanceof Activity) {
+
+            this.mContext = context;
+
+            final Activity activity = (Activity) context;
+
+            mLayoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            if(activity.findViewById(R.id.card_container) != null) {
+
+                mViewGroup = (LinearLayout)
+                        activity.findViewById(R.id.card_container);
+
+                mToastView = mLayoutInflater
+                        .inflate(R.layout.supercardtoast, mViewGroup, false);
 
                 mMessageTextView = (TextView)
                         mToastView.findViewById(R.id.message_textView);
@@ -137,52 +127,52 @@ public class SuperCardToast
 
             } else {
 
-				throw new IllegalArgumentException(ERROR_CONTAINERNULL);
+                throw new IllegalArgumentException(ERROR_CONTAINERNULL);
 
-			}
-							
-		} else {
+            }
 
-			throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+        } else {
 
-		}
+            throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 
-	}
-	
-	/**
-	 * Instantiates a new SuperCardToast with a Type.
-	 * <br>
-	 * @param context
-	 * @param type
-	 */
-	public SuperCardToast(Context context, Type type) 
-	{		
-		
-		if(context instanceof Activity) {
+        }
 
-			this.mContext = context;
+    }
 
-			final Activity activity = (Activity) context;
+    /**
+     * Instantiates a new SuperCardToast with a Type.
+     * <br>
+     * @param context
+     * @param type
+     */
+    public SuperCardToast(Context context, Type type)
+    {
 
-			mLayoutInflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(context instanceof Activity) {
 
-			if (activity.findViewById(R.id.card_container) != null) {
+            this.mContext = context;
 
-				mViewGroup = (LinearLayout) activity
-						.findViewById(R.id.card_container);
-				
+            final Activity activity = (Activity) context;
+
+            mLayoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            if (activity.findViewById(R.id.card_container) != null) {
+
+                mViewGroup = (LinearLayout) activity
+                        .findViewById(R.id.card_container);
+
                 if(type == Type.BUTTON) {
 
                     mType = Type.BUTTON;
 
                     mToastView = mLayoutInflater
-				    		.inflate(R.layout.supercardtoast_button, mViewGroup, false);
-					
-					mToastButton = (Button) 
-							mToastView.findViewById(R.id.button);
-					
-					mDividerView = mToastView.findViewById(R.id.divider);
+                            .inflate(R.layout.supercardtoast_button, mViewGroup, false);
+
+                    mToastButton = (Button)
+                            mToastView.findViewById(R.id.button);
+
+                    mDividerView = mToastView.findViewById(R.id.divider);
 
                     mToastButton.setOnTouchListener(mTouchDismissListener);
 
@@ -191,22 +181,22 @@ public class SuperCardToast
                     mType = Type.PROGRESS;
 
                     mToastView = mLayoutInflater
-					    	.inflate(R.layout.supercardtoast_progresscircle, mViewGroup, false);
+                            .inflate(R.layout.supercardtoast_progresscircle, mViewGroup, false);
 
-					mProgressBar = (ProgressBar)
-							mToastView.findViewById(R.id.progressBar);
+                    mProgressBar = (ProgressBar)
+                            mToastView.findViewById(R.id.progressBar);
 
-				} else if(type == Type.PROGRESS_HORIZONTAL) {
+                } else if(type == Type.PROGRESS_HORIZONTAL) {
 
                     mType = Type.PROGRESS_HORIZONTAL;
 
                     mToastView = mLayoutInflater
-				    		.inflate(R.layout.supercardtoast_progresshorizontal, mViewGroup, false);
+                            .inflate(R.layout.supercardtoast_progresshorizontal, mViewGroup, false);
 
-					mProgressBar = (ProgressBar)
-							mToastView.findViewById(R.id.progressBar);
+                    mProgressBar = (ProgressBar)
+                            mToastView.findViewById(R.id.progressBar);
 
-				} else {
+                } else {
 
                     mType = Type.STANDARD;
 
@@ -216,71 +206,71 @@ public class SuperCardToast
                 }
 
                 mMessageTextView = (TextView)
-			    		mToastView.findViewById(R.id.message_textView);
-			    
-			    mRootLayout = (LinearLayout)
-						   mToastView.findViewById(R.id.root_layout);
+                        mToastView.findViewById(R.id.message_textView);
 
-			} else {
+                mRootLayout = (LinearLayout)
+                        mToastView.findViewById(R.id.root_layout);
 
-				throw new IllegalArgumentException(ERROR_CONTAINERNULL);
+            } else {
 
-			}
+                throw new IllegalArgumentException(ERROR_CONTAINERNULL);
 
-		} else {
+            }
 
-			throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+        } else {
 
-		}
+            throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
 
-	}
+        }
+
+    }
 
 
-	/** Shows the SuperCardToast. */
-	public void show()
-	{
+    /** Shows the SuperCardToast. */
+    public void show()
+    {
 
         ManagerSuperCardToast.getInstance().add(this);
 
-		if(!isIndeterminate) {
-				
-			mHandler = new Handler();
-			mHandler.postDelayed(mHideRunnable, mDuration);
-												
-		}
-			
-		mViewGroup.addView(mToastView);
-		
-		final Animation animation = getCardAnimation();
+        if(!isIndeterminate) {
+
+            mHandler = new Handler();
+            mHandler.postDelayed(mHideRunnable, mDuration);
+
+        }
+
+        mViewGroup.addView(mToastView);
+
+        final Animation animation = getCardAnimation();
 
         animation.setAnimationListener(new AnimationListener() {
 
-			@Override
-			public void onAnimationEnd(Animation arg0) {
+            @Override
+            public void onAnimationEnd(Animation arg0) {
 
-				/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
-				Handler mHandler = new Handler();
-				mHandler.post(mInvalidateRunnable);
-				
-			}
+                /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+                Handler mHandler = new Handler();
+                mHandler.post(mInvalidateRunnable);
 
-			@Override
-			public void onAnimationRepeat(Animation arg0) {
-				// Do nothing
-				
-			}
+            }
 
-			@Override
-			public void onAnimationStart(Animation arg0) {
-				// Do nothing
-				
-			}
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+                // Do nothing
 
-		});
+            }
 
-		mToastView.startAnimation(animation);
-			
-	}
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                // Do nothing
+
+            }
+
+        });
+
+        mToastView.startAnimation(animation);
+
+    }
 
     /**
      * Returns the Type of SuperCardToast
@@ -362,16 +352,16 @@ public class SuperCardToast
 
     }
 
-	/**
-	 * Sets the duration of the SuperCardToast.
-	 * <br>
-	 * @param duration
-	 */
-	public void setDuration(int duration) {
+    /**
+     * Sets the duration of the SuperCardToast.
+     * <br>
+     * @param duration
+     */
+    public void setDuration(int duration) {
 
-		this.mDuration = duration;
+        this.mDuration = duration;
 
-	}
+    }
 
     /**
      * Returns the duration of the SuperCardToast.
@@ -382,16 +372,16 @@ public class SuperCardToast
 
     }
 
-	/**
-	 * Sets an indeterminate duration of the SuperCardToast.
-	 * <br>
-	 * @param isIndeterminate
-	 */
-	public void setIndeterminate(boolean isIndeterminate) {
+    /**
+     * Sets an indeterminate duration of the SuperCardToast.
+     * <br>
+     * @param isIndeterminate
+     */
+    public void setIndeterminate(boolean isIndeterminate) {
 
-		this.isIndeterminate = isIndeterminate;
+        this.isIndeterminate = isIndeterminate;
 
-	}
+    }
 
     /**
      * Returns true if the SuperCardToast is indeterminate.
@@ -581,15 +571,15 @@ public class SuperCardToast
     }
 
     /**
-	 * Sets the Typeface of the SuperCardToast message.
-	 * <br>
-	 * @param typeface
-	 */
-	public void setTypeface(Typeface typeface) {
+     * Sets the Typeface of the SuperCardToast message.
+     * <br>
+     * @param typeface
+     */
+    public void setTypeface(Typeface typeface) {
 
-		mMessageTextView.setTypeface(typeface);
+        mMessageTextView.setTypeface(typeface);
 
-	}
+    }
 
     /**
      * Returns the Typeface of the SuperCardToast message.
@@ -601,26 +591,26 @@ public class SuperCardToast
     }
 
     /**
-	 * Sets a private OnTouchListener to the SuperCardToast
-	 * that will dismiss the SuperCardToast when touched.
-	 * <br>
-	 * @param touchDismiss
-	 */
-	public void setTouchToDismiss(boolean touchDismiss) {
+     * Sets a private OnTouchListener to the SuperCardToast
+     * that will dismiss the SuperCardToast when touched.
+     * <br>
+     * @param touchDismiss
+     */
+    public void setTouchToDismiss(boolean touchDismiss) {
 
         this.isTouchDismissable = touchDismiss;
 
         if (touchDismiss) {
 
-			mToastView.setOnTouchListener(mTouchDismissListener);
+            mToastView.setOnTouchListener(mTouchDismissListener);
 
-		} else {
+        } else {
 
-			mToastView.setOnTouchListener(null);
+            mToastView.setOnTouchListener(null);
 
-		}
+        }
 
-	}
+    }
 
     /**
      * Returns true if the SuperCardToast is touch dismissable.
@@ -631,67 +621,67 @@ public class SuperCardToast
 
     }
 
-	/**
-	 * Sets an OnDismissListener to the SuperCardToast.
-	 * <br>
-	 * @param onDismissListener
-	 */
-	public void setOnDismissListener(OnDismissListener onDismissListener) {
+    /**
+     * Sets an OnDismissListener to the SuperCardToast.
+     * <br>
+     * @param onDismissListener
+     */
+//	public void setOnDismissListener(OnDismissListener onDismissListener) {
 
-		this.mOnDismissListener = onDismissListener;
+//		this.mOnDismissListener = onDismissListener;
 
-	}
+//	}
 
     /**
      * Returns the OnDismissListener of the SuperActivityToast.
      */
-    public OnDismissListener getOnDismissListener() {
+//    public OnDismissListener getOnDismissListener() {
 
-        return this.mOnDismissListener;
+//        return this.mOnDismissListener;
 
-    }
+//    }
 
-	/**
+    /**
      * Sets a private OnTouchListener to the SuperCardToast
      * that will dismiss the SuperCardToast when swiped.
-	 * <br>
-	 * @param swipeDismiss
-	 */
-	public void setSwipeToDismiss(boolean swipeDismiss) {
+     * <br>
+     * @param swipeDismiss
+     */
+    public void setSwipeToDismiss(boolean swipeDismiss) {
 
         this.isSwipeDismissable = swipeDismiss;
 
-		if(swipeDismiss) {
+        if(swipeDismiss) {
 
-			if (mSdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
+            if (mSdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
 
-				final SwipeDismissListener swipeDismissListener = new SwipeDismissListener(
-						mToastView, new SwipeDismissListener.OnDismissCallback() {
+                final SwipeDismissListener swipeDismissListener = new SwipeDismissListener(
+                        mToastView, new SwipeDismissListener.OnDismissCallback() {
 
-							@Override
-							public void onDismiss(View view) {
+                    @Override
+                    public void onDismiss(View view) {
 
-								dismissImmediately();
+                        dismissImmediately();
 
-							}
+                    }
 
-						});
+                });
 
-				mToastView.setOnTouchListener(swipeDismissListener);
+                mToastView.setOnTouchListener(swipeDismissListener);
 
-			} else {
+            } else {
 
                 Log.e(TAG, ERROR_PREHONEYCOMB);
 
-			}
+            }
 
-		} else {
+        } else {
 
-			mToastView.setOnTouchListener(null);
+            mToastView.setOnTouchListener(null);
 
-		}
+        }
 
-	}
+    }
 
     /**
      *   Returns true if the SuperCardToast is swipe dismissable.
@@ -701,47 +691,47 @@ public class SuperCardToast
         return isSwipeDismissable;
 
     }
-	
-	/** Dismisses the SuperCardToast with an animation. */
-	public void dismiss() {
+
+    /** Dismisses the SuperCardToast with an animation. */
+    public void dismiss() {
 
         ManagerSuperCardToast.getInstance().remove(this);
 
         dismissWithAnimation();
 
     }
-	
-	/** Dismisses the SuperCardToast without an animation. */
-	public void dismissImmediately() {
+
+    /** Dismisses the SuperCardToast without an animation. */
+    public void dismissImmediately() {
 
         ManagerSuperCardToast.getInstance().remove(this);
 
         if(mHandler != null) {
 
-			mHandler.removeCallbacks(mHideRunnable);
+            mHandler.removeCallbacks(mHideRunnable);
             mHandler.removeCallbacks(mHideWithAnimationRunnable);
             mHandler = null;
-			
-		}
 
-		if (mToastView != null && mViewGroup != null) {
+        }
 
-			mViewGroup.removeView(mToastView);
-			mToastView = null;
+        if (mToastView != null && mViewGroup != null) {
 
-		} else {
+            mViewGroup.removeView(mToastView);
+            mToastView = null;
 
-			Log.e(TAG, ERROR_VIEWCONTAINERNULL);
+        } else {
 
-		}
-		
-		if(mOnDismissListener != null) {
-			
-			mOnDismissListener.onDismiss();
-			
-		}
+            Log.e(TAG, ERROR_VIEWCONTAINERNULL);
 
-	}
+        }
+
+        //if(mOnDismissListener != null) {
+
+        //	mOnDismissListener.onDismiss();
+
+        //	}
+
+    }
 
 
     /**
@@ -1008,21 +998,21 @@ public class SuperCardToast
 
     }
 
-	/**
-	 * Sets the progress of the ProgressBar in 
-	 * a PROGRESS_HORIZONTAL Type SuperCardToast.
-	 * <br>
-	 * @param progress
-	 */
-	public void setProgress(int progress) {
+    /**
+     * Sets the progress of the ProgressBar in
+     * a PROGRESS_HORIZONTAL Type SuperCardToast.
+     * <br>
+     * @param progress
+     */
+    public void setProgress(int progress) {
 
-		if (mProgressBar != null) {
+        if (mProgressBar != null) {
 
-			mProgressBar.setProgress(progress);
+            mProgressBar.setProgress(progress);
 
-		}
+        }
 
-	}
+    }
 
     /**
      * Returns the progress of the ProgressBar in
@@ -1061,61 +1051,61 @@ public class SuperCardToast
         return this.isProgressIndeterminate;
 
     }
-	
-	/**
-	 * Returns the SuperCardToast TextView.
-	 */
-	public TextView getTextView() {
 
-		return mMessageTextView;
+    /**
+     * Returns the SuperCardToast TextView.
+     */
+    public TextView getTextView() {
 
-	}
+        return mMessageTextView;
 
-	/**
-	 * Returns the SuperCardToast View.
-	 */
-	public View getView() {
+    }
 
-		return mToastView;
+    /**
+     * Returns the SuperCardToast View.
+     */
+    public View getView() {
 
-	}
+        return mToastView;
 
-	/**
-	 * Returns true if the SuperCardToast is showing.
-	 */
-	public boolean isShowing() {
+    }
+
+    /**
+     * Returns true if the SuperCardToast is showing.
+     */
+    public boolean isShowing() {
 
         return mToastView != null && mToastView.isShown();
 
-	}
+    }
 
-	/**
-	 * Returns the calling Activity of the SuperCardToast.
-	 */
-	public Activity getActivity() {
+    /**
+     * Returns the calling Activity of the SuperCardToast.
+     */
+    public Activity getActivity() {
 
-		return (Activity) mContext;
+        return (Activity) mContext;
 
-	}
+    }
 
-	/**
-	 * Returns true if the SuperCardToast is indeterminate.
-	 */
-	public boolean getIsIndeterminate() {
+    /**
+     * Returns true if the SuperCardToast is indeterminate.
+     */
+    public boolean getIsIndeterminate() {
 
-		return isIndeterminate;
+        return isIndeterminate;
 
-	}
+    }
 
 
-	/**
-	 * Returns the ViewGroup that the SuperCardToast is attached to.
-	 */
-	public ViewGroup getViewGroup() {
+    /**
+     * Returns the ViewGroup that the SuperCardToast is attached to.
+     */
+    public ViewGroup getViewGroup() {
 
-		return mViewGroup;
+        return mViewGroup;
 
-	}
+    }
 
     /** Hide the SuperCardToast and animate the Layout. Post Honeycomb only. **/
     @SuppressLint("NewApi")
@@ -1163,36 +1153,36 @@ public class SuperCardToast
 
     }
 
-	private Animation getCardAnimation() {
+    private Animation getCardAnimation() {
 
-		AnimationSet animationSet = new AnimationSet(false);
+        AnimationSet animationSet = new AnimationSet(false);
 
-		TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f,
-				1f, 0f);
-		translateAnimation.setDuration(200);
+        TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f,
+                1f, 0f);
+        translateAnimation.setDuration(200);
 
-		animationSet.addAnimation(translateAnimation);
+        animationSet.addAnimation(translateAnimation);
 
-		AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);
-		alphaAnimation.setDuration(400);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);
+        alphaAnimation.setDuration(400);
 
-		animationSet.addAnimation(alphaAnimation);
+        animationSet.addAnimation(alphaAnimation);
 
-		RotateAnimation rotationAnimation = new RotateAnimation(15f, 0f, 0f,
-				0f);
-		rotationAnimation.setDuration(225);
+        RotateAnimation rotationAnimation = new RotateAnimation(15f, 0f, 0f,
+                0f);
+        rotationAnimation.setDuration(225);
 
-		animationSet.addAnimation(rotationAnimation);
+        animationSet.addAnimation(rotationAnimation);
 
-		return animationSet;
+        return animationSet;
 
-	}
-	
-	@SuppressLint("NewApi")
+    }
+
+    @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
     protected void dismissWithAnimation() {
-				
-		if (mSdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
+
+        if (mSdkVersion > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
 
             if(mToastView != null) {
 
@@ -1201,64 +1191,64 @@ public class SuperCardToast
                 mToastView.animate().translationX(viewWidth).alpha(0).setDuration(500)
                         .setListener(new AnimatorListenerAdapter() {
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
 
-                        /** Must use Handler to modify ViewGroup in onAnimationEnd() */
-                        Handler mHandler = new Handler();
-                        mHandler.post(mHideWithAnimationRunnable);
+                                /** Must use Handler to modify ViewGroup in onAnimationEnd() */
+                                Handler mHandler = new Handler();
+                                mHandler.post(mHideWithAnimationRunnable);
 
-                    }
+                            }
 
-                });
+                        });
 
             }
 
-		} else {
+        } else {
 
-			AnimationSet animationSet = new AnimationSet(false);
-			
-			final Activity activity = (Activity) mContext;
-			
-			Display display = activity.getWindowManager()
-					.getDefaultDisplay(); 
+            AnimationSet animationSet = new AnimationSet(false);
 
-			int width = display.getWidth(); 
-			
-			TranslateAnimation translateAnimation = new TranslateAnimation(0f, width, 0f, 0f);
-			translateAnimation.setDuration(500);
-			animationSet.addAnimation(translateAnimation);
-			
-			AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
-			alphaAnimation.setDuration(500);
-			animationSet.addAnimation(alphaAnimation);
-			
-			animationSet.setAnimationListener(new AnimationListener() {
+            final Activity activity = (Activity) mContext;
 
-				@Override
-				public void onAnimationEnd(Animation animation) {
+            Display display = activity.getWindowManager()
+                    .getDefaultDisplay();
 
-					/** Must use Handler to modify ViewGroup in onAnimationEnd() **/
-					Handler handler = new Handler();
-					handler.post(mHideImmediateRunnable);
+            int width = display.getWidth();
 
-				}
+            TranslateAnimation translateAnimation = new TranslateAnimation(0f, width, 0f, 0f);
+            translateAnimation.setDuration(500);
+            animationSet.addAnimation(translateAnimation);
 
-				@Override
-				public void onAnimationRepeat(Animation animation) {
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
+            alphaAnimation.setDuration(500);
+            animationSet.addAnimation(alphaAnimation);
 
-					// Not used
+            animationSet.setAnimationListener(new AnimationListener() {
 
-				}
+                @Override
+                public void onAnimationEnd(Animation animation) {
 
-				@Override
-				public void onAnimationStart(Animation animation) {
+                    /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+                    Handler handler = new Handler();
+                    handler.post(mHideImmediateRunnable);
 
-					// Not used
+                }
 
-				}
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-			});
+                    // Not used
+
+                }
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                    // Not used
+
+                }
+
+            });
 
             if(mToastView != null) {
 
@@ -1266,31 +1256,31 @@ public class SuperCardToast
 
             }
 
-		}
+        }
 
-	}
-	
-	private final Runnable mHideRunnable = new Runnable() {
+    }
 
-        @Override
-        public void run() {
-
-			dismiss();
-
-		}
-
-	};
-    
-	private final Runnable mHideImmediateRunnable = new Runnable() {
+    private final Runnable mHideRunnable = new Runnable() {
 
         @Override
         public void run() {
 
-			dismissImmediately();
+            dismiss();
 
-		}
+        }
 
-	};
+    };
+
+    private final Runnable mHideImmediateRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+
+            dismissImmediately();
+
+        }
+
+    };
 
 
     private final Runnable mHideWithAnimationRunnable = new Runnable() {
@@ -1303,21 +1293,21 @@ public class SuperCardToast
         }
 
     };
-    
-	private final Runnable mInvalidateRunnable = new Runnable() {
+
+    private final Runnable mInvalidateRunnable = new Runnable() {
 
         @Override
         public void run() {
 
-			if(mViewGroup != null) {
+            if(mViewGroup != null) {
 
-				mViewGroup.invalidate();
+                mViewGroup.invalidate();
 
-			}
+            }
 
-		}
+        }
 
-	};
+    };
 
     /** Dismisses and removes all showing/pending SuperCardToasts. */
     public static void cancelAllSuperCardToasts() {
@@ -1453,7 +1443,7 @@ public class SuperCardToast
 
             }
 
-            newSuperCardToast.setOnDismissListener(oldSuperCardToast.getOnDismissListener());
+            //    newSuperCardToast.setOnDismissListener(oldSuperCardToast.getOnDismissListener());
             newSuperCardToast.show();
 
         }

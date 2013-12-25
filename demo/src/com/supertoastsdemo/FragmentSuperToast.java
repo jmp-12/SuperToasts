@@ -70,25 +70,25 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setAnimation(SuperToast.Animation.FADE);
+                superToast.setAnimation(SuperToast.Animations.FADE);
 
                 break;
 
             case 1:
 
-                superToast.setAnimation(SuperToast.Animation.FLYIN);
+                superToast.setAnimation(SuperToast.Animations.FLYIN);
 
                 break;
 
             case 2:
 
-                superToast.setAnimation(SuperToast.Animation.POPUP);
+                superToast.setAnimation(SuperToast.Animations.POPUP);
 
                 break;
 
             case 3:
 
-                superToast.setAnimation(SuperToast.Animation.SCALE);
+                superToast.setAnimation(SuperToast.Animations.SCALE);
 
                 break;
 

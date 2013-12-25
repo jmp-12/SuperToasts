@@ -108,15 +108,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.BUTTON);
-                superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                        SuperActivityToast.createDarkSuperActivityToast(view.getContext(), view.getContext().getResources()
-                                .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
-
-                    }
-                });
 
                 break;
 
@@ -243,7 +235,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         if(mImageCheckBox.isChecked()) {
 
-            superActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
+            superActivityToast.setIcon(SuperToast.Icon.Dark.INFO, SuperToast.IconPosition.LEFT);
 
         }
 
