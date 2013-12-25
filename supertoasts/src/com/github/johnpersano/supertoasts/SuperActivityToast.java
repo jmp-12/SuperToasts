@@ -50,13 +50,8 @@ import java.util.List;
  * SuperActivityToasts will not linger to the next screen like standard
  * Toasts/SuperToasts.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class SuperActivityToast {
-
-    public interface OnButtonClickListener  {
-
-        void onClick(Parcelable parcelable, View view);
-
-    }
 
     private static final String TAG = "SuperActivityToast";
     private static final String BUNDLE = "superactivitytoast_bundle";
@@ -79,10 +74,10 @@ public class SuperActivityToast {
     private Animations mAnimations = Animations.FADE;
     private int mIconResouce;
     private IconPosition mIconPosition;
-    private int mBackgroundResouce;
+    private int mBackgroundResouce = SuperToast.Background.TRANSLUCENT_BLACK;
     private boolean isTouchDismissable;
-    private int mButtonResource;
-    private int mButtonDividerResource;
+    private int mButtonResource = SuperToast.Icon.Dark.UNDO;
+    private int mButtonDividerResource = (R.color.light_gray);
     private boolean isProgressIndeterminate;
     private Type mType = Type.STANDARD;
     private boolean showImmediate;
@@ -94,7 +89,7 @@ public class SuperActivityToast {
     /**
      * Instantiates a new SuperActivityToast.
      * <br>
-     * @param context
+     * @param context should be Activity
      */
     public SuperActivityToast(Context context) {
 
@@ -138,8 +133,8 @@ public class SuperActivityToast {
     /**
      * Instantiates a new SuperActivityToast with a Type.
      * <br>
-     * @param context
-     * @param type
+     * @param context should be Activity
+     * @param type choose from SuperToast.Type
      * <br>
      */
     public SuperActivityToast(Context context, Type type) {
@@ -234,7 +229,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the Type of SuperActivityToast
+     * Returns the Type of SuperActivityToast.
      */
     public Type getType() {
 
@@ -245,7 +240,7 @@ public class SuperActivityToast {
     /**
      * Sets the message text of the SuperActivityToast.
      * <br>
-     * @param text
+     * @param text The message text
      */
     public void setText(CharSequence text) {
 
@@ -265,7 +260,7 @@ public class SuperActivityToast {
     /**
      * Sets the message typeface of the SuperActivityToast.
      * <br>
-     * @param typeface
+     * @param typeface The message typeface
      */
     public void setTypeface(int typeface) {
 
@@ -287,7 +282,7 @@ public class SuperActivityToast {
     /**
      * Sets the message text color of the SuperActivityToast.
      * <br>
-     * @param textColor
+     * @param textColor The message text color
      */
     public void setTextColor(int textColor) {
 
@@ -306,10 +301,8 @@ public class SuperActivityToast {
 
     /**
      * Sets the text size of the SuperActivityToast.
-     * This method will automatically convert the integer
-     * parameter to scaled pixels.
      * <br>
-     * @param textSize
+     * @param textSize Will automaticly convert to SP
      */
     public void setTextSize(int textSize) {
 
@@ -317,12 +310,7 @@ public class SuperActivityToast {
 
     }
 
-    /**
-     * Sets the text size of the SuperActivityToast.
-     * <br>
-     * @param textSize
-     */
-    public void setTextSizeFloat(float textSize) {
+    protected void setTextSizeFloat(float textSize) {
 
         mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 
@@ -340,7 +328,7 @@ public class SuperActivityToast {
     /**
      * Sets the duration of the SuperActivityToast.
      * <br>
-     * @param duration
+     * @param duration Use SuperToast.Duration constants
      */
     public void setDuration(int duration) {
 
@@ -360,7 +348,7 @@ public class SuperActivityToast {
     /**
      * Sets an indeterminate duration of the SuperActivityToast.
      * <br>
-     * @param isIndeterminate
+     * @param isIndeterminate If true will show until dismissed
      */
     public void setIndeterminate(boolean isIndeterminate) {
 
@@ -382,8 +370,8 @@ public class SuperActivityToast {
      * Sets an icon resource to the SuperActivityToast
      * with a position.
      * <br>
-     * @param iconResource
-     * @param iconPosition
+     * @param iconResource Use SuperToast.Icon constants
+     * @param iconPosition Use SuperToast.IconPosition
      */
     public void setIcon(int iconResource, IconPosition iconPosition) {
 
@@ -427,7 +415,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the Drawable resource of the SuperActivityToast
+     * Returns the drawable resource of the SuperActivityToast
      */
     public int getIconResource() {
 
@@ -438,8 +426,7 @@ public class SuperActivityToast {
     /**
      * Sets the background resource of the SuperActivityToast.
      * <br>
-     * @param backgroundResource
-     *
+     * @param backgroundResource Use SuperToast.Background constants
      */
     public void setBackgroundResource(int backgroundResource) {
 
@@ -462,9 +449,9 @@ public class SuperActivityToast {
     /**
      * Sets the animation of the SuperActivityToast.
      * <br>
-     * @param animations
+     * @param animations Use SuperToast.Animations
      */
-    public void setAnimation(Animations animations) {
+    public void setAnimations(Animations animations) {
 
         this.mAnimations = animations;
 
@@ -494,7 +481,7 @@ public class SuperActivityToast {
      * Sets a private OnTouchListener to the SuperActivityToast
      * View that will dismiss it when touched.
      * <br>
-     * @param touchDismiss
+     * @param touchDismiss If true will dismiss when touched
      */
     public void setTouchToDismiss(boolean touchDismiss) {
 
@@ -513,7 +500,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Checks is SuperActivityToast is touch dismissable
+     * Returns if SuperActivityToast is touch dismissable
      */
     public boolean isTouchDismissable() {
 
@@ -525,11 +512,11 @@ public class SuperActivityToast {
      * Sets an OnDismissListener defined in this library
      * to the SuperActivityToast.
      * <br>
-     * @param onToastDismissListenerHolder
+     * @param onToastDismissListener Use OnToastDismissListenerHolder for orientation change support
      */
-    public void setOnToastDismissListener(OnToastDismissListenerHolder onToastDismissListenerHolder) {
+    public void setOnToastDismissListener(OnToastDismissListenerHolder onToastDismissListener) {
 
-        this.mOnDismissListener = onToastDismissListenerHolder;
+        this.mOnDismissListener = onToastDismissListener;
 
     }
 
@@ -542,7 +529,7 @@ public class SuperActivityToast {
 
     }
 
-    protected String getDismissListenerTag() {
+    private String getDismissListenerTag() {
 
         return mDismissListenerTag;
 
@@ -557,9 +544,9 @@ public class SuperActivityToast {
 
     /**
      * Sets an OnToastButtonClickListener to the button in a
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      * <br>
-     * @param onToastButtonClickListener
+     * @param onToastButtonClickListener Use OnToastButtonClickListenerHolder for orientation change support
      */
     public void setOnToastButtonClickListener(OnToastButtonClickListenerHolder onToastButtonClickListener) {
 
@@ -569,7 +556,7 @@ public class SuperActivityToast {
 
     }
 
-    protected String getClickListenerTag() {
+    private String getClickListenerTag() {
 
         return mClickListenerTag;
 
@@ -577,9 +564,9 @@ public class SuperActivityToast {
 
     /**
      * Sets the background resource of the Button in
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      * <br>
-     * @param buttonResource
+     * @param buttonResource Use SuperToast.Icon constants
      */
     public void setButtonResource(int buttonResource) {
 
@@ -596,7 +583,7 @@ public class SuperActivityToast {
 
     /**
      * Returns the background resource of the Button in
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      */
     public int getButtonResource() {
 
@@ -608,7 +595,7 @@ public class SuperActivityToast {
      * Sets the background resource of the Button divider in
      * a BUTTON Type SuperActivityToast.
      * <br>
-     * @param dividerResource
+     * @param dividerResource Use color resources to maintain design consistncy
      */
     public void setButtonDividerResource(int dividerResource) {
 
@@ -636,7 +623,7 @@ public class SuperActivityToast {
      * Sets the text of the Button in
      * a BUTTON Type SuperActivityToast.
      * <br>
-     * @param buttonText
+     * @param buttonText Should be all uppercase and about 4 characters long
      */
     public void setButtonText(CharSequence buttonText) {
 
@@ -660,9 +647,9 @@ public class SuperActivityToast {
 
     /**
      * Sets the typeface of the button in
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      * <br>
-     * @param typeface
+     * @param typeface Use Typeface consstants
      */
     public void setButtonTypeface(int typeface) {
 
@@ -674,7 +661,7 @@ public class SuperActivityToast {
 
     /**
      * Returns the typeface of the button in
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      */
     public int getButtonTypeface() {
 
@@ -684,9 +671,9 @@ public class SuperActivityToast {
 
     /**
      * Sets the text color of the Button in
-     * a BUTTON Type SuperActivityToast.
+     * a BUTTON type SuperActivityToast.
      * <br>
-     * @param buttonTextColor
+     * @param buttonTextColor Should have alpha of around 175
      */
     public void setButtonTextColor(int buttonTextColor) {
 
@@ -710,29 +697,21 @@ public class SuperActivityToast {
 
     /**
      * Sets the text size of the Button in
-     * a BUTTON Type SuperActivityToast. This
-     * method will automatically convert the integer
-     * parameter into scaled pixels.
+     * a BUTTON type SuperActivityToast.
      * <br>
-     * @param buttonTextSize
+     * @param buttonTextSize Will convert to SP
      */
     public void setButtonTextSize(int buttonTextSize) {
 
         if (mToastButton != null) {
 
-            mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
+            mMessageTextView.setTextSize(buttonTextSize);
 
         }
 
     }
 
-    /**
-     * Sets the text size of the Button in
-     * a BUTTON Type SuperActivityToast
-     * <br>
-     * @param buttonTextSize
-     */
-    public void setButtonTextSizeFloat(float buttonTextSize) {
+    private void setButtonTextSizeFloat(float buttonTextSize) {
 
         mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
 
@@ -750,9 +729,9 @@ public class SuperActivityToast {
 
     /**
      * Sets the progress of the ProgressBar in
-     * a PROGRESS_HORIZONTAL Type SuperActivityToast.
+     * a PROGRESS_HORIZONTAL type SuperActivityToast.
      * <br>
-     * @param progress
+     * @param progress Max default is 100
      */
     public void setProgress(int progress) {
 
@@ -766,7 +745,7 @@ public class SuperActivityToast {
 
     /**
      * Returns the progress of the ProgressBar in
-     * a PROGRESS_HORIZONTAL Type SuperActivityToast.
+     * a PROGRESS_HORIZONTAL type SuperActivityToast.
      */
     public int getProgress() {
 
@@ -775,10 +754,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets an indeterminate value to the ProgressBar of a PROGRESS Type
+     * Sets an indeterminate value to the ProgressBar of a PROGRESS type
      * SuperActivityToast.
      * <br>
-     * @param isIndeterminate
+     * @param isIndeterminate If true will be indeterminate
      */
     public void setProgressIndeterminate(boolean isIndeterminate) {
 
@@ -793,7 +772,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns if an indeterminate value to the ProgressBar of a PROGRESS Type
+     * Returns if an indeterminate value to the ProgressBar of a PROGRESS type
      * SuperActivityToast has been set.
      */
     public boolean getProgressIndeterminate() {
@@ -862,9 +841,9 @@ public class SuperActivityToast {
     /**
      * Returns a dark theme SuperActivityToast.
      * <br>
-     * @param context
-     * @param textCharSequence
-     * @param durationInteger
+     * @param context Should be Activity
+     * @param textCharSequence Message text
+     * @param durationInteger Should use SuperToast.Duration constants
      * @return SuperActivityToast
      */
     public static SuperActivityToast createDarkSuperActivityToast(
@@ -881,9 +860,9 @@ public class SuperActivityToast {
     /**
      * Returns a light theme SuperActivityToast.
      * <br>
-     * @param context
-     * @param textCharSequence
-     * @param durationInteger
+     * @param context Should be Activity
+     * @param textCharSequence Message text
+     * @param durationInteger Should use SuperToast.Duration constants
      * @return SuperActivityToast
      */
     public static SuperActivityToast createLightSuperActivityToast(
@@ -910,7 +889,7 @@ public class SuperActivityToast {
      * Dismisses and removes all showing/pending SuperActivityToasts
      * for a specific Activity.
      * <br>
-     * @param activity
+     * @param activity that needs to remove showing/pending SuperActivityToasts
      */
     public static void clearSuperActivityToastsForActivity(Activity activity) {
 
@@ -922,7 +901,7 @@ public class SuperActivityToast {
     /**
      * Saves pending/shown SuperActivityToasts to a bundle.
      * <br>
-     * @param bundle
+     * @param bundle Use onSaveInstanceState() bundle
      */
     public static void onSaveState(Bundle bundle) {
 
@@ -944,6 +923,12 @@ public class SuperActivityToast {
 
     }
 
+    /**
+     * Returns and shows pending/shown SuperActivityToasts from orientation change.
+     * <br>
+     * @param bundle Use onCreate() bundle
+     * @param activity The current activity
+     */
     public static void onRestoreState(Bundle bundle, Activity activity) {
 
         if(bundle == null) {
@@ -969,6 +954,14 @@ public class SuperActivityToast {
 
     }
 
+    /**
+     * Returns and shows pending/shown SuperActivityToasts from orientation change and
+     * reattaches any OnToastButtonClickListeners.
+     * <br>
+     * @param bundle Use onCreate() bundle
+     * @param activity The current activity
+     * @param onToastButtonClickListeners List of any attached OnToastButtonClickListenerHolder from previous orientation
+     */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnToastButtonClickListenerHolder> onToastButtonClickListeners) {
 
         if(bundle == null) {
@@ -994,6 +987,15 @@ public class SuperActivityToast {
 
     }
 
+    /**
+     * Returns and shows pending/shown SuperActivityToasts from orientation change and
+     * reattaches any OnToastButtonClickListeners and any OnToastDismissListeners.
+     * <br>
+     * @param bundle Use onCreate() bundle
+     * @param activity The current activity
+     * @param onToastButtonClickListeners List of any attached OnToastButtonClickListenerHolders from previous orientation
+     * @param onToastDismissListeners List of any attached OnToastDismissListenerHolders from previous orientation
+     */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnToastButtonClickListenerHolder> onToastButtonClickListeners,
                                       List<OnToastDismissListenerHolder> onToastDismissListeners) {
 
@@ -1020,8 +1022,10 @@ public class SuperActivityToast {
 
     }
 
-
-    protected SuperActivityToast(Activity activity, Style style, List<OnToastButtonClickListenerHolder> onToastButtonClickListeners,
+    /**
+     * Method used too recreate SuperActivityToasts after orientation change
+     */
+    private SuperActivityToast(Activity activity, Style style, List<OnToastButtonClickListenerHolder> onToastButtonClickListeners,
                                  List<OnToastDismissListenerHolder> onToastDismissListeners, int position) {
 
         SuperActivityToast superActivityToast;
@@ -1036,6 +1040,7 @@ public class SuperActivityToast {
             superActivityToast.setButtonDividerResource(style.mButtonDividerResource);
             superActivityToast.setButtonTypeface(style.mButtonTypeface);
 
+            /** Reattach any OnToastButtonClickListeners */
             if(onToastButtonClickListeners != null) {
 
                 for (OnToastButtonClickListenerHolder onToastButtonClickListenerHolder : onToastButtonClickListeners) {
@@ -1051,9 +1056,13 @@ public class SuperActivityToast {
 
         } else if(style.mType == Type.PROGRESS) {
 
+            /** PROGRESS style SuperActivityToasts should be managed by the developer */
+
             return;
 
         } else if(style.mType == Type.PROGRESS_HORIZONTAL) {
+
+            /** PROGRESS_HORIZONTAL style SuperActivityToasts should be managed by the developer */
 
             return;
 
@@ -1063,6 +1072,7 @@ public class SuperActivityToast {
 
         }
 
+        /** Reattach any OnToastDismissListeners */
         if(onToastDismissListeners != null) {
 
             for (OnToastDismissListenerHolder onToastDismissListenerHolder : onToastDismissListeners) {
@@ -1085,8 +1095,8 @@ public class SuperActivityToast {
         superActivityToast.setIcon(style.mIconResource, style.mIconPosition);
         superActivityToast.setBackgroundResource(style.mBackgroundResource);
         superActivityToast.setTouchToDismiss(style.isTouchDismissable);
-        // superActivityToast.setOnDismissListener(style.mOnDismissListener);
 
+        /** Do not use show animation on recreation of SuperActivityToast that was previously showing */
         if(position == 1) {
 
             superActivityToast.setShowImmediate(true);
@@ -1104,10 +1114,7 @@ public class SuperActivityToast {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
 
-            /**
-             * Hack to prevent the user from repeatedly
-             * touching the SuperProgressToast causing erratic behavior
-             */
+            /** Hack to prevent repeat touch events causing erratic behavior */
             if (timesTouched == 0) {
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1126,6 +1133,10 @@ public class SuperActivityToast {
 
     };
 
+
+    /**
+     * Parcelable class that saves all data on orientation change
+     */
     private static class Style implements Parcelable  {
 
         //STANDARD
@@ -1143,7 +1154,7 @@ public class SuperActivityToast {
         int mTypeface;
         String mDismissListenerTag;
 
-        //BUTTON
+        //BUTTON type stuff
         String mButtonText;
         float mButtonTextSize;
         int mButtonTextColor;
@@ -1294,9 +1305,5 @@ public class SuperActivityToast {
         };
 
     }
-
-
-
-
 
 }
