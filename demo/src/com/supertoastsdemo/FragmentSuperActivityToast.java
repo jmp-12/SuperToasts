@@ -1,7 +1,10 @@
 package com.supertoastsdemo;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,11 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
 import com.supertoastsdemo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
@@ -33,7 +40,11 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_superactivitytoast,
                 container, false);
 
-        SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
+        List<OnToastButtonClickListenerHolder> onToastButtonClickListenerHolderList =
+                new ArrayList<OnToastButtonClickListenerHolder>();
+        onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+
+        SuperActivityToast.onRestoreState(savedInstanceState, getActivity(), onToastButtonClickListenerHolderList);
 
         typeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -109,6 +120,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.BUTTON);
 
+                superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
 
                 break;
 
@@ -221,7 +233,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 1:
 
-                superActivityToast.setTextSize(SuperToast.TextSize.SMALL);
+                superActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 
@@ -242,6 +254,23 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         superActivityToast.show();
 
     }
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolder =
+            new OnToastButtonClickListenerHolder("toast_one", new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click!");
+            superToast.setDuration(SuperToast.Duration.SHORT);
+            superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
+
+        }
+
+    });
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 
