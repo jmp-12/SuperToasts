@@ -26,6 +26,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /** Manages the life of a SuperActivityToast. Copied from the Crouton library. */
+@SuppressWarnings("UnusedDeclaration")
 public class ManagerSuperToast extends Handler {
 
     private static final String TAG = "ManagerSuperToast";
@@ -37,17 +38,11 @@ public class ManagerSuperToast extends Handler {
         private static final int ADD_SUPERTOAST = 0x415354;
         private static final int REMOVE_SUPERTOAST = 0x525354;
 
-        private Messages() {
-
-            // Do nothing
-
-        }
-
     }
 
     private static ManagerSuperToast mManagerSuperToast;
 
-    private Queue<SuperToast> mQueue;
+    private final Queue<SuperToast> mQueue;
 
     private ManagerSuperToast() {
 
@@ -92,7 +87,9 @@ public class ManagerSuperToast extends Handler {
 
         if (!superToast.isShowing()) {
 
-            sendMessage(superToast, Messages.ADD_SUPERTOAST);
+            final Message message = obtainMessage(Messages.ADD_SUPERTOAST);
+            message.obj = superToast;
+            sendMessage(message);
 
         } else {
 
@@ -101,15 +98,6 @@ public class ManagerSuperToast extends Handler {
                     getDuration(superToast));
 
         }
-
-    }
-
-    private void sendMessage(SuperToast superToast,
-                             final int messageId) {
-
-        final Message message = obtainMessage(messageId);
-        message.obj = superToast;
-        sendMessage(message);
 
     }
 
@@ -226,22 +214,18 @@ public class ManagerSuperToast extends Handler {
 
         removeAllMessages();
 
-        if (mQueue != null) {
+        for (SuperToast superToast : mQueue) {
 
-            for (SuperToast superToast : mQueue) {
+            if (superToast.isShowing()) {
 
-                if (superToast.isShowing()) {
-
-                    superToast.getWindowManager().removeView(
-                            superToast.getView());
-
-                }
+                superToast.getWindowManager().removeView(
+                        superToast.getView());
 
             }
 
-            mQueue.clear();
-
         }
+
+        mQueue.clear();
 
     }
 
