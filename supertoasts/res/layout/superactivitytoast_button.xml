@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/superbuttontoast_divider_y_margin"
         android:layout_marginTop="@dimen/superbuttontoast_divider_y_margin"
-        android:background="@color/white" />
+        android:background="@color/light_gray" />
 
     <Button
         android:id="@+id/button"
@@ -41,8 +41,9 @@
         android:drawablePadding="@dimen/superbuttontoast_buttondrawable_padding"
         android:paddingLeft="@dimen/superbuttontoast_button_x_padding"
         android:paddingRight="@dimen/superbuttontoast_button_x_padding"
+        android:textSize="10sp"
         android:text="UNDO"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/white" />
+        android:textStyle="bold"
+        android:textColor="@color/light_gray" />
 
 </LinearLayout>
