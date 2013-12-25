@@ -54,7 +54,9 @@ import java.util.List;
 public class SuperActivityToast {
 
     private static final String TAG = "SuperActivityToast";
-    private static final String BUNDLE = "superactivitytoast_bundle";
+
+    /** Bundle tag with a hex as a string so it can't interfere with other items in bundle */
+    private static final String BUNDLE_TAG = "0x532e412e54";
 
     private static final String ERROR_CONTEXTNULL = "The Context that you passed was null! (SuperActivityToast)";
     private static final String ERROR_CONTEXTNOTACTIVITY = "The Context that you passed was not an Activity! (SuperActivityToast)";
@@ -917,7 +919,7 @@ public class SuperActivityToast {
 
         }
 
-        bundle.putParcelableArray(BUNDLE, list);
+        bundle.putParcelableArray(BUNDLE_TAG, list);
 
         SuperActivityToast.cancelAllSuperActivityToasts();
 
@@ -936,7 +938,7 @@ public class SuperActivityToast {
             return;
         }
 
-        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE);
+        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE_TAG);
 
         int i = 0;
 
@@ -969,7 +971,7 @@ public class SuperActivityToast {
             return;
         }
 
-        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE);
+        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE_TAG);
 
         int i = 0;
 
@@ -1004,7 +1006,7 @@ public class SuperActivityToast {
             return;
         }
 
-        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE);
+        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE_TAG);
 
         int i = 0;
 
