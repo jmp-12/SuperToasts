@@ -18,12 +18,16 @@
 package com.github.johnpersano.supertoasts;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,6 +44,7 @@ import com.github.johnpersano.supertoasts.SuperToast.Type;
 import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
 import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,16 +55,19 @@ import java.util.List;
  * SuperActivityToasts will not linger to the next screen like standard
  * Toasts/SuperToasts.
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "BooleanMethodIsAlwaysInverted"})
 public class SuperActivityToast {
 
     private static final String TAG = "SuperActivityToast";
 
+    private static final String ERROR_CONTEXTNULL = " - The Context that you passed was null.";
+    private static final String ERROR_CONTEXTNOTACTIVITY = " - The Context that you passed was not an Activity!";
+
     /** Bundle tag with a hex as a string so it can't interfere with other items in bundle */
     private static final String BUNDLE_TAG = "0x532e412e54";
 
-    private static final String ERROR_CONTEXTNULL = "The Context that you passed was null! (SuperActivityToast)";
-    private static final String ERROR_CONTEXTNOTACTIVITY = "The Context that you passed was not an Activity! (SuperActivityToast)";
+    public static String FRAGMENTRETAINER_ID = "0x462e522e" ;
+
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -120,13 +128,13 @@ public class SuperActivityToast {
 
             } else {
 
-                throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+                throw new IllegalArgumentException(TAG + ERROR_CONTEXTNOTACTIVITY);
 
             }
 
         } else {
 
-            throw new IllegalArgumentException(ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
 
         }
 
@@ -210,13 +218,13 @@ public class SuperActivityToast {
 
             } else {
 
-                throw new IllegalArgumentException(ERROR_CONTEXTNOTACTIVITY);
+                throw new IllegalArgumentException(TAG + ERROR_CONTEXTNOTACTIVITY);
 
             }
 
         } else {
 
-            throw new IllegalArgumentException(ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
 
         }
 
@@ -262,7 +270,7 @@ public class SuperActivityToast {
     /**
      * Sets the message typeface of the SuperActivityToast.
      * <br>
-     * @param typeface The message typeface
+     * @param typeface Use a Typeface constants
      */
     public void setTypeface(int typeface) {
 
@@ -519,13 +527,34 @@ public class SuperActivityToast {
     public void setOnToastDismissListener(OnToastDismissListenerHolder onToastDismissListener) {
 
         this.mOnDismissListener = onToastDismissListener;
+        this.mDismissListenerTag = onToastDismissListener.getTag();
+
+        /** On devices > API 11 save listener to retained Fragment */
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+            final Activity activity = (Activity) mContext;
+
+            FragmentManager fragmentManager = activity.getFragmentManager();
+
+            FragmentRetainer fragmentRetainer = (FragmentRetainer)
+                    fragmentManager.findFragmentByTag(FRAGMENTRETAINER_ID);
+
+            if (fragmentRetainer == null) {
+
+                fragmentRetainer = new FragmentRetainer();
+                fragmentManager.beginTransaction().add(fragmentRetainer, FRAGMENTRETAINER_ID).commit();
+
+            }
+
+            fragmentRetainer.addDismissListenerToList(onToastDismissListener);
+
+        }
+
 
     }
 
-    /**
-     * Returns the OnDismissListener of the SuperActivityToast
-     */
-    public OnToastDismissListenerHolder getOnDismissListener() {
+    /** Used in ManagerSuperActivityToast*/
+    protected OnToastDismissListenerHolder getOnDismissListener() {
 
         return this.mOnDismissListener;
 
@@ -548,13 +577,37 @@ public class SuperActivityToast {
      * Sets an OnToastButtonClickListener to the button in a
      * a BUTTON type SuperActivityToast.
      * <br>
+     * IMPORTANT: On Devices > API 11 any listener passed will automaticly be saved to a retained Fragment
+     * for preservation on orientation changes.
+     * <br>
      * @param onToastButtonClickListener Use OnToastButtonClickListenerHolder for orientation change support
      */
     public void setOnToastButtonClickListener(OnToastButtonClickListenerHolder onToastButtonClickListener) {
 
         mToastButton.setOnClickListener(onToastButtonClickListener);
 
-        mClickListenerTag = onToastButtonClickListener.getTag();
+        this.mClickListenerTag = onToastButtonClickListener.getTag();
+
+        /** On devices > API 11 save listener to retained Fragment */
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+            final Activity activity = (Activity) mContext;
+
+            FragmentManager fragmentManager = activity.getFragmentManager();
+
+            FragmentRetainer fragmentRetainer = (FragmentRetainer)
+                    fragmentManager.findFragmentByTag(FRAGMENTRETAINER_ID);
+
+            if (fragmentRetainer == null) {
+
+                fragmentRetainer = new FragmentRetainer();
+                fragmentManager.beginTransaction().add(fragmentRetainer, FRAGMENTRETAINER_ID).commit();
+
+            }
+
+            fragmentRetainer.addClickListenerToList(onToastButtonClickListener);
+
+        }
 
     }
 
@@ -848,12 +901,33 @@ public class SuperActivityToast {
      * @param durationInteger Should use SuperToast.Duration constants
      * @return SuperActivityToast
      */
-    public static SuperActivityToast createDarkSuperActivityToast(
+    public static SuperActivityToast createSuperActivityToast(
             Context context, CharSequence textCharSequence, int durationInteger) {
 
         SuperActivityToast superActivityToast = new SuperActivityToast(context);
         superActivityToast.setText(textCharSequence);
         superActivityToast.setDuration(durationInteger);
+
+        return superActivityToast;
+
+    }
+
+    /**
+     * Returns a dark theme SuperActivityToast with a specified animation.
+     * <br>
+     * @param context Should be Activity
+     * @param textCharSequence Message text
+     * @param durationInteger Should use SuperToast.Duration constants
+     * @param animations Should use SuperToast.Animations
+     * @return SuperActivityToast
+     */
+    public static SuperActivityToast createSuperActivityToast(
+            Context context, CharSequence textCharSequence, int durationInteger, Animations animations) {
+
+        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        superActivityToast.setText(textCharSequence);
+        superActivityToast.setDuration(durationInteger);
+        superActivityToast.setAnimations(animations);
 
         return superActivityToast;
 
@@ -875,6 +949,29 @@ public class SuperActivityToast {
         superActivityToast.setDuration(durationInteger);
         superActivityToast.setBackgroundResource(SuperToast.Background.WHITE);
         superActivityToast.setTextColor(Color.BLACK);
+
+        return superActivityToast;
+
+    }
+
+    /**
+     * Returns a light theme SuperActivityToast with a specified animation.
+     * <br>
+     * @param context Should be Activity
+     * @param textCharSequence Message text
+     * @param durationInteger Should use SuperToast.Duration constants
+     * @param animations Should use SuperToast.Animations
+     * @return SuperActivityToast
+     */
+    public static SuperActivityToast createLightSuperActivityToast(
+            Context context, CharSequence textCharSequence, int durationInteger, Animations animations) {
+
+        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        superActivityToast.setText(textCharSequence);
+        superActivityToast.setDuration(durationInteger);
+        superActivityToast.setBackgroundResource(SuperToast.Background.WHITE);
+        superActivityToast.setTextColor(Color.BLACK);
+        superActivityToast.setAnimations(animations);
 
         return superActivityToast;
 
@@ -928,6 +1025,9 @@ public class SuperActivityToast {
     /**
      * Returns and shows pending/shown SuperActivityToasts from orientation change.
      * <br>
+     * IMPORTANT: On devices > API 11 this method will automatically save any OnClickListeners and OnDismissListeners
+     * via retained Fragment.
+     * <br>
      * @param bundle Use onCreate() bundle
      * @param activity The current activity
      */
@@ -959,6 +1059,10 @@ public class SuperActivityToast {
     /**
      * Returns and shows pending/shown SuperActivityToasts from orientation change and
      * reattaches any OnToastButtonClickListeners.
+     * <br>
+     * IMPORTANT: Use this method to save OnToastButtonClickListeners on devices with
+     * API < 11. Otherwise use onRestoreState(Bundle bundle, Activity activity) as that
+     * method uses a retained fragment to save listeners.
      * <br>
      * @param bundle Use onCreate() bundle
      * @param activity The current activity
@@ -993,6 +1097,11 @@ public class SuperActivityToast {
      * Returns and shows pending/shown SuperActivityToasts from orientation change and
      * reattaches any OnToastButtonClickListeners and any OnToastDismissListeners.
      * <br>
+     * IMPORTANT: Use this method to save OnToastButtonClickListeners and
+     * OnToastDismissListenerHolder on devices with API < 11. Otherwise use
+     * onRestoreState(Bundle bundle, Activity activity) as that method uses
+     * a retained fragment to save listeners.
+     * <br>
      * @param bundle Use onCreate() bundle
      * @param activity The current activity
      * @param onToastButtonClickListeners List of any attached OnToastButtonClickListenerHolders from previous orientation
@@ -1025,7 +1134,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Method used too recreate SuperActivityToasts after orientation change
+     * Method used to recreate SuperActivityToasts after orientation change
      */
     private SuperActivityToast(Activity activity, Style style, List<OnToastButtonClickListenerHolder> onToastButtonClickListeners,
                                  List<OnToastDismissListenerHolder> onToastDismissListeners, int position) {
@@ -1042,18 +1151,42 @@ public class SuperActivityToast {
             superActivityToast.setButtonDividerResource(style.mButtonDividerResource);
             superActivityToast.setButtonTypeface(style.mButtonTypeface);
 
-            /** Reattach any OnToastButtonClickListeners */
-            if(onToastButtonClickListeners != null) {
+            /** Reattach any OnToastButtonClickListeners via retained Fragment */
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
-                for (OnToastButtonClickListenerHolder onToastButtonClickListenerHolder : onToastButtonClickListeners) {
+                FragmentRetainer fragmentRetainer = (FragmentRetainer)
+                        activity.getFragmentManager().findFragmentByTag(FRAGMENTRETAINER_ID);
 
-                    if(onToastButtonClickListenerHolder.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
+                if (fragmentRetainer != null && fragmentRetainer.getClickListeners() != null) {
 
-                        superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+                    for (OnToastButtonClickListenerHolder onToastButtonClickListenerHolder : fragmentRetainer.getClickListeners()) {
+
+                        if(onToastButtonClickListenerHolder.getTag().equals(style.mClickListenerTag)) {
+
+                            superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+
+                        }
 
                     }
 
                 }
+
+            /** Reattach any OnToastButtonClickListeners via provided List */
+            } else {
+
+                if(onToastButtonClickListeners != null) {
+
+                    for (OnToastButtonClickListenerHolder onToastButtonClickListenerHolder : onToastButtonClickListeners) {
+
+                        if(onToastButtonClickListenerHolder.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
+
+                            superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+
+                        }
+
+                    }
+                }
+
             }
 
         } else if(style.mType == Type.PROGRESS) {
@@ -1074,20 +1207,45 @@ public class SuperActivityToast {
 
         }
 
-        /** Reattach any OnToastDismissListeners */
-        if(onToastDismissListeners != null) {
+        /** Reattach any OnToastBDismissListeners via retained Fragment */
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
-            for (OnToastDismissListenerHolder onToastDismissListenerHolder : onToastDismissListeners) {
+            FragmentRetainer fragmentRetainer = (FragmentRetainer)
+                    activity.getFragmentManager().findFragmentByTag(FRAGMENTRETAINER_ID);
 
-                if(onToastDismissListenerHolder.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
+            if (fragmentRetainer != null && fragmentRetainer.getDismissListeners() != null) {
 
-                    superActivityToast.setOnToastDismissListener(onToastDismissListenerHolder);
+                for (OnToastDismissListenerHolder onToastDismissListenerHolder : fragmentRetainer.getDismissListeners()) {
+
+                    if(onToastDismissListenerHolder.getTag().equals(style.mDismissListenerTag)) {
+
+                        superActivityToast.setOnToastDismissListener(onToastDismissListenerHolder);
+
+                    }
 
                 }
 
             }
+
+        /** Reattach any OnToastBDismissListeners via provided List */
+        } else {
+
+            if(onToastDismissListeners != null) {
+
+                for (OnToastDismissListenerHolder onToastDismissListenerHolder : onToastDismissListeners) {
+
+                    if(onToastDismissListenerHolder.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
+
+                        superActivityToast.setOnToastDismissListener(onToastDismissListenerHolder);
+
+                    }
+
+                }
+            }
+
         }
 
+        superActivityToast.setAnimations(style.mAnimations);
         superActivityToast.setText(style.mText);
         superActivityToast.setTypeface(style.mTypeface);
         superActivityToast.setDuration(style.mDuration);
@@ -1305,6 +1463,102 @@ public class SuperActivityToast {
             }
 
         };
+
+    }
+
+
+    /**
+     * Fragment that saves OnClickListeners and OnDismissListeners on orientation change
+     * for devices > API 11
+     */
+    private class FragmentRetainer extends Fragment {
+
+        List<OnToastButtonClickListenerHolder> mOnToastButtonClickListenerHolderList;
+        List<OnToastDismissListenerHolder> mOnToastDismissListenerHolderList;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            setRetainInstance(true);
+
+        }
+
+        private void addClickListenerToList(OnToastButtonClickListenerHolder onToastButtonClickListenerHolder) {
+
+            if(mOnToastButtonClickListenerHolderList == null) {
+
+                mOnToastButtonClickListenerHolderList = new ArrayList<OnToastButtonClickListenerHolder>();
+
+            }
+
+            boolean alreadyContains = false;
+
+            for(OnToastButtonClickListenerHolder savedOnToastButtonClickListenerHolder : mOnToastButtonClickListenerHolderList) {
+
+                if(savedOnToastButtonClickListenerHolder.getTag().equals(onToastButtonClickListenerHolder.getTag())) {
+
+                    alreadyContains = true;
+
+                }
+
+            }
+
+            if(alreadyContains) {
+
+                return;
+
+            } else {
+
+                mOnToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+
+            }
+
+        }
+
+        private void addDismissListenerToList(OnToastDismissListenerHolder onToastDismissListenerHolder) {
+
+            if(mOnToastDismissListenerHolderList == null) {
+
+                mOnToastDismissListenerHolderList = new ArrayList<OnToastDismissListenerHolder>();
+
+            }
+
+            boolean alreadyContains = false;
+
+            for(OnToastDismissListenerHolder savedOnToastDismissListenerHolderList : mOnToastDismissListenerHolderList) {
+
+                if(savedOnToastDismissListenerHolderList.getTag().equals(onToastDismissListenerHolder.getTag())) {
+
+                    alreadyContains = true;
+
+                }
+
+            }
+
+            if(alreadyContains) {
+
+                return;
+
+            } else {
+
+                mOnToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+
+            }
+
+        }
+
+        private List<OnToastButtonClickListenerHolder> getClickListeners() {
+
+            return mOnToastButtonClickListenerHolderList;
+
+        }
+
+        private List<OnToastDismissListenerHolder> getDismissListeners() {
+
+            return mOnToastDismissListenerHolderList;
+
+        }
 
     }
 
