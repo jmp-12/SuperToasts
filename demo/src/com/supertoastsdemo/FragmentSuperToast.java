@@ -1,5 +1,6 @@
 package com.supertoastsdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,16 @@ public class FragmentSuperToast extends SherlockFragment {
 
         });
 
+        showButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                startActivity(new Intent(getActivity(), ActivityTwo.class));
+
+                return false;
+            }
+        });
+
         return view;
 
     }
@@ -70,25 +81,25 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setAnimation(SuperToast.Animations.FADE);
+                superToast.setAnimations(SuperToast.Animations.FADE);
 
                 break;
 
             case 1:
 
-                superToast.setAnimation(SuperToast.Animations.FLYIN);
+                superToast.setAnimations(SuperToast.Animations.FLYIN);
 
                 break;
 
             case 2:
 
-                superToast.setAnimation(SuperToast.Animations.POPUP);
+                superToast.setAnimations(SuperToast.Animations.POPUP);
 
                 break;
 
             case 3:
 
-                superToast.setAnimation(SuperToast.Animations.SCALE);
+                superToast.setAnimations(SuperToast.Animations.SCALE);
 
                 break;
 

@@ -1,6 +1,7 @@
 package com.supertoastsdemo;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -66,6 +67,16 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         });
 
+        showButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                 startActivity(new Intent(getActivity(), ActivityTwo.class));
+
+                return false;
+            }
+        });
+
         return view;
 
     }
@@ -118,7 +129,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
                     @Override
                     public void onClick(View view) {
 
-                        SuperActivityToast.createDarkSuperActivityToast(view.getContext(), view.getContext().getResources()
+                        SuperActivityToast.createSuperActivityToast(view.getContext(), view.getContext().getResources()
                                 .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
 
                     }
