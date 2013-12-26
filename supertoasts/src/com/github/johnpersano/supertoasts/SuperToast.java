@@ -515,12 +515,34 @@ public class SuperToast
      * @param durationInteger Should use SuperToast.Duration constants
      * @return SuperToast
      */
-    public static SuperToast createDarkSuperToast(Context context,
+    public static SuperToast createSuperToast(Context context,
                                                   CharSequence textCharSequence, int durationInteger) {
 
         SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
         superToast.setDuration(durationInteger);
+
+        return superToast;
+
+    }
+
+    /**
+     * Creates a dark theme SuperToast with a different animation. Don't forget to call
+     * show().
+     * <br>
+     * @param context Can be most contexts
+     * @param textCharSequence Message text
+     * @param durationInteger Should use SuperToast.Duration constants
+     * @param animation Should use SuperToast.Animations
+     * @return SuperToast
+     */
+    public static SuperToast createSuperToast(Context context,
+                                              CharSequence textCharSequence, int durationInteger, Animations animation) {
+
+        SuperToast superToast = new SuperToast(context);
+        superToast.setText(textCharSequence);
+        superToast.setDuration(durationInteger);
+        superToast.setAnimations(animation);
 
         return superToast;
 
@@ -547,29 +569,6 @@ public class SuperToast
         return superToast;
 
     }
-
-    /**
-     * Creates a dark theme SuperToast with a different animation. Don't forget to call
-     * show().
-     * <br>
-     * @param context Can be most contexts
-     * @param textCharSequence Message text
-     * @param durationInteger Should use SuperToast.Duration constants
-     * @param animation Should use SuperToast.Animations
-     * @return SuperToast
-     */
-    public static SuperToast createDarkSuperToast(Context context,
-                                                  CharSequence textCharSequence, int durationInteger, Animations animation) {
-
-        SuperToast superToast = new SuperToast(context);
-        superToast.setText(textCharSequence);
-        superToast.setDuration(durationInteger);
-        superToast.setAnimations(animation);
-
-        return superToast;
-
-    }
-
 
     /**
      * Creates a light theme SuperToast with a different animation. Don't forget to call

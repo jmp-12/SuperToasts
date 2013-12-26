@@ -27,7 +27,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -1504,11 +1503,7 @@ public class SuperActivityToast {
 
             }
 
-            if(alreadyContains) {
-
-                return;
-
-            } else {
+            if(!alreadyContains) {
 
                 mOnToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
 
@@ -1536,11 +1531,7 @@ public class SuperActivityToast {
 
             }
 
-            if(alreadyContains) {
-
-                return;
-
-            } else {
+            if(!alreadyContains) {
 
                 mOnToastDismissListenerHolderList.add(onToastDismissListenerHolder);
 

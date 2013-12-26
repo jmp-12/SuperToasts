@@ -202,7 +202,7 @@ public class ManagerSuperToast extends Handler {
 
             if(superToast.getOnDismissListener() != null) {
 
-                superToast.getOnDismissListener().onDismiss();
+                superToast.getOnDismissListener().onDismiss(superToast.getView());
 
             }
 
