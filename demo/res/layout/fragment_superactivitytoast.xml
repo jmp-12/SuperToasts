@@ -140,9 +140,18 @@
                     android:layout_gravity="left|center_vertical"
                     android:checked="false"/>
 
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="On dismiss listener"
+                    android:layout_margin="@dimen/layout_medium_padding"
+                    android:id="@+id/dismiss_checkbox"
+                    android:checked="false" />
+
         </LinearLayout>
 
     </ScrollView>
+
 
 
 </LinearLayout>
