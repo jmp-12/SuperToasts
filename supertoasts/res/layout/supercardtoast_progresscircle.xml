@@ -17,11 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/supertoast_drawable_padding"
-        android:gravity="center"
         android:paddingBottom="@dimen/supertoast_textview_y_padding"
         android:paddingRight="@dimen/supertoast_textview_x_padding"
         android:paddingTop="@dimen/supertoast_textview_y_padding"
         android:text="Default"
+        android:gravity="center_vertical"
         android:textColor="@color/white" />
 
 </LinearLayout>

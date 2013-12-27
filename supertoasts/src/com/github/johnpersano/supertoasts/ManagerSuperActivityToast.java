@@ -18,7 +18,6 @@
 package com.github.johnpersano.supertoasts;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -180,8 +179,6 @@ class ManagerSuperActivityToast extends Handler {
         final ViewGroup viewGroup = superActivityToast.getViewGroup();
 
         final View toastView = superActivityToast.getView();
-
-        final Activity activity = superActivityToast.getActivity();
 
         if (viewGroup != null) {
 

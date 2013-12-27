@@ -16,6 +16,7 @@
         android:paddingRight="@dimen/supertoast_textview_x_padding"
         android:paddingTop="@dimen/supertoast_textview_y_padding"
         android:text="Default"
+        android:gravity="center_vertical"
         android:textColor="@color/white" />
 
 </LinearLayout>

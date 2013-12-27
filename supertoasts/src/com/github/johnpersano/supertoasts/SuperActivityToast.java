@@ -63,9 +63,10 @@ public class SuperActivityToast {
     private static final String ERROR_CONTEXTNOTACTIVITY = " - The Context that you passed was not an Activity!";
 
     /** Bundle tag with a hex as a string so it can't interfere with other items in bundle */
-    private static final String BUNDLE_TAG = "0x532e412e54";
+    private static final String BUNDLE_TAG = "0x532e412e542e";
 
-    public static String FRAGMENTRETAINER_ID = "0x462e522e" ;
+    /** Fragment tag with a hex as a string so it can't interfere with other fragment tags */
+    public static String FRAGMENTRETAINER_ID = "0x532e412e542e462e522e" ;
 
 
     private Context mContext;
