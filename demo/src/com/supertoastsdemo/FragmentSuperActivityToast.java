@@ -19,11 +19,9 @@ package com.supertoastsdemo;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +35,12 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
 import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
 import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
-import com.supertoastsdemo.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
+    Spinner mAnimationSpinner;
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
     Spinner mTextsizeSpinner;
@@ -77,6 +74,9 @@ public class FragmentSuperActivityToast extends SherlockFragment {
             SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
 
         }
+
+        mAnimationSpinner = (Spinner)
+                view.findViewById(R.id.animationSpinner);
 
         typeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -213,6 +213,34 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.STANDARD);
+
+                break;
+
+        }
+
+        switch (mAnimationSpinner.getSelectedItemPosition()) {
+
+            case 0:
+
+                superActivityToast.setAnimations(SuperToast.Animations.FADE);
+
+                break;
+
+            case 1:
+
+                superActivityToast.setAnimations(SuperToast.Animations.FLYIN);
+
+                break;
+
+            case 2:
+
+                superActivityToast.setAnimations(SuperToast.Animations.POPUP);
+
+                break;
+
+            case 3:
+
+                superActivityToast.setAnimations(SuperToast.Animations.SCALE);
 
                 break;
 

@@ -1,7 +1,7 @@
 package com.supertoastsdemo;
 
-import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +12,15 @@ import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.supertoastsdemo.R;
+import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
+import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
+import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
 
 public class FragmentSuperCardToast extends SherlockFragment {
 
+    Spinner mAnimationSpinner;
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
     Spinner mTextsizeSpinner;
@@ -27,8 +29,11 @@ public class FragmentSuperCardToast extends SherlockFragment {
     RadioGroup mTypeRadioGroup;
 
     CheckBox mImageCheckBox;
+    CheckBox mDismissCheckBox;
 
     DummyOperation mDummyOperation;
+
+    int mCount;
 
 
     @Override
@@ -38,6 +43,9 @@ public class FragmentSuperCardToast extends SherlockFragment {
                 container, false);
 
         SuperCardToast.onRestoreState(savedInstanceState, getActivity());
+
+        mAnimationSpinner = (Spinner)
+                view.findViewById(R.id.animationSpinner);
 
         mTypeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -53,6 +61,12 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         mDismissFunctionSpinner = (Spinner)
                 view.findViewById(R.id.dismissfunction_spinner);
+
+        mImageCheckBox = (CheckBox)
+                view.findViewById(R.id.imageCheckBox);
+
+        mDismissCheckBox = (CheckBox)
+                view.findViewById(R.id.dismiss_checkbox);
 
         Button showButton = (Button)
                 view.findViewById(R.id.showButton);
@@ -117,6 +131,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.STANDARD);
+                superCardToast.setAnimations(SuperToast.Animations.POPUP);
 
                 break;
 
@@ -124,16 +139,23 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.BUTTON);
-                superCardToast.setButtonOnClickListener(new View.OnClickListener() {
+                superCardToast.setAnimations(SuperToast.Animations.SCALE);
 
-                    @Override
-                    public void onClick(View view) {
+                mCount++;
 
-                        SuperActivityToast.createSuperActivityToast(view.getContext(), view.getContext().getResources()
-                                .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
+                if(mCount == 1) {
 
-                    }
-                });
+                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+
+                } else if (mCount == 2) {
+
+                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderTwo);
+
+                } else {
+
+                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderThree);
+
+                }
 
                 break;
 
@@ -141,6 +163,8 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS);
+                superCardToast.setAnimations(SuperToast.Animations.FADE);
+
 
                 break;
 
@@ -148,6 +172,8 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                   superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
+
+                superCardToast.setAnimations(SuperToast.Animations.FLYIN);
 
                 /** Since this SuperCardToast will show actual
                  *  progress from a background ASyncTask the duration of the
@@ -163,6 +189,34 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.STANDARD);
+
+                break;
+
+        }
+
+        switch (mAnimationSpinner.getSelectedItemPosition()) {
+
+            case 0:
+
+                superCardToast.setAnimations(SuperToast.Animations.FADE);
+
+                break;
+
+            case 1:
+
+                superCardToast.setAnimations(SuperToast.Animations.FLYIN);
+
+                break;
+
+            case 2:
+
+                superCardToast.setAnimations(SuperToast.Animations.POPUP);
+
+                break;
+
+            case 3:
+
+                superCardToast.setAnimations(SuperToast.Animations.SCALE);
 
                 break;
 
@@ -282,9 +336,91 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         }
 
+
+        if(mImageCheckBox.isChecked()) {
+
+            superCardToast.setIcon(SuperToast.Icon.Dark.INFO, SuperToast.IconPosition.LEFT);
+
+        }
+
+        if(mDismissCheckBox.isChecked()) {
+
+            superCardToast.setOnToastDismissListener(onToastDismissListenerHolder);
+
+        }
+
+
         superCardToast.show();
 
     }
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolder =
+            new OnToastButtonClickListenerHolder("toast_one", new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    SuperToast superToast = new SuperToast(v.getContext());
+                    superToast.setText("On Click with first listener!");
+                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+                    superToast.setTextColor(Color.WHITE);
+                    superToast.show();
+
+                }
+
+            });
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderTwo =
+            new OnToastButtonClickListenerHolder("toast_two", new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    SuperToast superToast = new SuperToast(v.getContext());
+                    superToast.setText("On Click with second listener!");
+                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+                    superToast.setTextColor(Color.WHITE);
+                    superToast.show();
+
+                }
+
+            });
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderThree =
+            new OnToastButtonClickListenerHolder("toast_three", new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    SuperToast superToast = new SuperToast(v.getContext());
+                    superToast.setText("On Click with last listener!");
+                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                    superToast.setTextColor(Color.WHITE);
+                    superToast.show();
+
+                }
+
+            });
+
+    private OnToastDismissListenerHolder onToastDismissListenerHolder =
+            new OnToastDismissListenerHolder("toast_one", new OnToastDismissListener() {
+
+                @Override
+                public void onDismiss(View view) {
+
+                    SuperToast superToast = new SuperToast(view.getContext());
+                    superToast.setText("On dismiss!");
+                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                    superToast.setTextColor(Color.WHITE);
+                    superToast.show();
+
+                }
+            });
+
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 
