@@ -1,4 +1,4 @@
-The current version is 1.3
+The current version is 1.3.1
 ==========================
 
 
