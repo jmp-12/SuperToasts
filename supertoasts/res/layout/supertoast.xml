@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root_layout"
+              xmlns:tools="http://schemas.android.com/tools" android:id="@+id/root_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|center_horizontal"
@@ -18,6 +18,6 @@
         android:paddingRight="@dimen/supertoast_textview_x_padding"
         android:paddingTop="@dimen/supertoast_textview_y_padding"
         android:text="Default"
-        android:textColor="@color/white" />
+        android:textColor="@color/white" tools:ignore="HardcodedText"/>
 
 </LinearLayout>

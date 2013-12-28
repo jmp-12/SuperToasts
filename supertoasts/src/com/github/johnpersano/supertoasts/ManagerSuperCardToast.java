@@ -12,96 +12,77 @@
  *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *	See the License for the specific language governing permissions and
  *	limitations under the License.
- * 
+ *
  */
 
 package com.github.johnpersano.supertoasts;
 
-import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /** Manages the life of a SuperCardToast on orientation changes. */
-public class ManagerSuperCardToast {
+class ManagerSuperCardToast {
 
-	private static final String TAG = "Manager SuperCardToast";
+    private static final String TAG = "Manager SuperCardToast";
 
-	private static ManagerSuperCardToast mManagerSuperCardToast;
+    private static ManagerSuperCardToast mManagerSuperCardToast;
 
-	private LinkedList<SuperCardToast> mList;
+    private final LinkedList<SuperCardToast> mList;
 
-	private ManagerSuperCardToast() {
+    private ManagerSuperCardToast() {
 
         mList = new LinkedList<SuperCardToast>();
 
-	}
+    }
 
-	protected static synchronized ManagerSuperCardToast getInstance() {
+    static synchronized ManagerSuperCardToast getInstance() {
 
-		if (mManagerSuperCardToast != null) {
+        if (mManagerSuperCardToast != null) {
 
-			return mManagerSuperCardToast;
+            return mManagerSuperCardToast;
 
-		} else {
+        } else {
 
             mManagerSuperCardToast = new ManagerSuperCardToast();
 
-			return mManagerSuperCardToast;
-
-		}
-
-	}
-	
-
-	protected void add(SuperCardToast superCardToast) {
-
-        mList.add(superCardToast);
-
-	}
-
-    protected void remove(SuperCardToast superCardToast) {
-
-        mList.remove(superCardToast);
-
-    }
-
-    protected void clear() {
-
-        mList.clear();
-
-    }
-
-    protected void clearQueue() {
-
-        if (mList != null) {
-
-            for (SuperCardToast superCardToast : mList) {
-
-                if (superCardToast.isShowing()) {
-
-                    superCardToast.getViewGroup().removeView(
-                            superCardToast.getView());
-
-                    superCardToast.getViewGroup().invalidate();
-
-                }
-
-            }
-
-            mList.clear();
+            return mManagerSuperCardToast;
 
         }
 
     }
 
-    protected LinkedList<SuperCardToast> getList() {
+
+    void add(SuperCardToast superCardToast) {
+
+        mList.add(superCardToast);
+
+    }
+
+    void remove(SuperCardToast superCardToast) {
+
+        mList.remove(superCardToast);
+
+    }
+
+    void clearQueue() {
+
+        for (SuperCardToast superCardToast : mList) {
+
+            if (superCardToast.isShowing()) {
+
+                superCardToast.getViewGroup().removeView(
+                        superCardToast.getView());
+
+                superCardToast.getViewGroup().invalidate();
+
+            }
+
+        }
+
+        mList.clear();
+
+    }
+
+    LinkedList<SuperCardToast> getList() {
 
         return mList;
 

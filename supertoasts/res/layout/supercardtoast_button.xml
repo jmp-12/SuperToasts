@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root_layout"
+              xmlns:tools="http://schemas.android.com/tools" android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_greytranslucent"  >
@@ -16,8 +16,9 @@
         android:paddingRight="@dimen/superbuttontoast_textview_x_padding"
         android:paddingTop="@dimen/superbuttontoast_textview_y_padding"
         android:text="Default"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/white" />
+        android:textColor="@color/white" tools:ignore="HardcodedText"/>
 
     <View
         android:id="@+id/divider"
@@ -25,7 +26,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/superbuttontoast_divider_y_margin"
         android:layout_marginTop="@dimen/superbuttontoast_divider_y_margin"
-        android:background="@color/white" />
+        android:background="@color/light_gray" />
 
     <Button
         android:id="@+id/button"
@@ -36,9 +37,10 @@
         android:drawablePadding="@dimen/superbuttontoast_buttondrawable_padding"
         android:paddingLeft="@dimen/superbuttontoast_button_x_padding"
         android:paddingRight="@dimen/superbuttontoast_button_x_padding"
+        android:textSize="10sp"
         android:text="UNDO"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/white" />
+        android:textColor="@color/light_gray" tools:ignore="HardcodedText"/>
 
 
 </LinearLayout>

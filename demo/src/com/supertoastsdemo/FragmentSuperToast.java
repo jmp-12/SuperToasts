@@ -1,5 +1,6 @@
 package com.supertoastsdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.supertoastsdemo.R;
 
 
 public class FragmentSuperToast extends SherlockFragment {
@@ -56,6 +56,16 @@ public class FragmentSuperToast extends SherlockFragment {
 
         });
 
+        showButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                startActivity(new Intent(getActivity(), ActivityTwo.class));
+
+                return false;
+            }
+        });
+
         return view;
 
     }
@@ -70,25 +80,25 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setAnimation(SuperToast.Animation.FADE);
+                superToast.setAnimations(SuperToast.Animations.FADE);
 
                 break;
 
             case 1:
 
-                superToast.setAnimation(SuperToast.Animation.FLYIN);
+                superToast.setAnimations(SuperToast.Animations.FLYIN);
 
                 break;
 
             case 2:
 
-                superToast.setAnimation(SuperToast.Animation.POPUP);
+                superToast.setAnimations(SuperToast.Animations.POPUP);
 
                 break;
 
             case 3:
 
-                superToast.setAnimation(SuperToast.Animation.SCALE);
+                superToast.setAnimations(SuperToast.Animations.SCALE);
 
                 break;
 
@@ -173,7 +183,7 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 1:
 
-                superToast.setTextSize(SuperToast.TextSize.SMALL);
+                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 

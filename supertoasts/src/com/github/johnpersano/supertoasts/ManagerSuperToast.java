@@ -12,21 +12,21 @@
  *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *	See the License for the specific language governing permissions and
  *	limitations under the License.
- * 
+ *
  */
 
 package com.github.johnpersano.supertoasts;
-
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 /** Manages the life of a SuperActivityToast. Copied from the Crouton library. */
+@SuppressWarnings("UnusedDeclaration")
 public class ManagerSuperToast extends Handler {
 
     private static final String TAG = "ManagerSuperToast";
@@ -34,224 +34,207 @@ public class ManagerSuperToast extends Handler {
     private static final class Messages {
 
         /** Hexadecimal numbers that represent acronyms for the operation. **/
-		private static final int DISPLAY_SUPERTOAST = 0x445354;
-		private static final int ADD_SUPERTOAST = 0x415354;
-		private static final int REMOVE_SUPERTOAST = 0x525354;
+        private static final int DISPLAY_SUPERTOAST = 0x445354;
+        private static final int ADD_SUPERTOAST = 0x415354;
+        private static final int REMOVE_SUPERTOAST = 0x525354;
 
-		private Messages() {
+    }
 
-			// Do nothing
+    private static ManagerSuperToast mManagerSuperToast;
 
-		}
+    private final Queue<SuperToast> mQueue;
 
-	}
+    private ManagerSuperToast() {
 
-	private static ManagerSuperToast mManagerSuperToast;
+        mQueue = new LinkedBlockingQueue<SuperToast>();
 
-	private Queue<SuperToast> mQueue;
+    }
 
-	private ManagerSuperToast() {
+    protected static synchronized ManagerSuperToast getInstance() {
 
-		mQueue = new LinkedBlockingQueue<SuperToast>();
+        if (mManagerSuperToast != null) {
 
-	}
+            return mManagerSuperToast;
 
-	protected static synchronized ManagerSuperToast getInstance() {
+        } else {
 
-		if (mManagerSuperToast != null) {
+            mManagerSuperToast = new ManagerSuperToast();
 
-			return mManagerSuperToast;
+            return mManagerSuperToast;
 
-		} else {
+        }
 
-			mManagerSuperToast = new ManagerSuperToast();
+    }
 
-			return mManagerSuperToast;
 
-		}
+    protected void add(SuperToast superToast) {
 
-	}
-	
+        mQueue.add(superToast);
+        this.showNextSuperToast();
 
-	protected void add(SuperToast superToast) {
+    }
 
-		mQueue.add(superToast);
-		this.showNextSuperToast();
 
-	}
+    private void showNextSuperToast() {
 
-	
-	private void showNextSuperToast() {
+        if (mQueue.isEmpty()) {
 
-		if (mQueue.isEmpty()) {
+            return;
 
-			return;
+        }
 
-		}
+        final SuperToast superToast = mQueue.peek();
 
-		final SuperToast superToast = mQueue.peek();
+        if (!superToast.isShowing()) {
 
-		if (!superToast.isShowing()) {
+            final Message message = obtainMessage(Messages.ADD_SUPERTOAST);
+            message.obj = superToast;
+            sendMessage(message);
 
-			sendMessage(superToast, Messages.ADD_SUPERTOAST);
+        } else {
 
-		} else {
+            sendMessageDelayed(superToast,
+                    Messages.DISPLAY_SUPERTOAST,
+                    getDuration(superToast));
 
-			sendMessageDelayed(superToast,
-					Messages.DISPLAY_SUPERTOAST,
-					getDuration(superToast));
+        }
 
-		}
+    }
 
-	}
+    private void sendMessageDelayed(SuperToast superToast,
+                                    final int messageId, final long delay) {
 
-	private void sendMessage(SuperToast superToast,
-			final int messageId) {
+        Message message = obtainMessage(messageId);
+        message.obj = superToast;
+        sendMessageDelayed(message, delay);
 
-		final Message message = obtainMessage(messageId);
-		message.obj = superToast;
-		sendMessage(message);
+    }
 
-	}
+    private long getDuration(SuperToast superToast) {
 
-	private void sendMessageDelayed(SuperToast superToast,
-			final int messageId, final long delay) {
+        long duration = superToast.getDuration();
+        duration += 1000;
 
-		Message message = obtainMessage(messageId);
-		message.obj = superToast;
-		sendMessageDelayed(message, delay);
+        return duration;
 
-	}
-	
-	private long getDuration(SuperToast superToast) {
+    }
 
-		long duration = superToast.getDuration();
-		duration += 1000;
-		
-		return duration;
+    @Override
+    public void handleMessage(Message message) {
 
-	}
+        final SuperToast superToast = (SuperToast)
+                message.obj;
 
-	@Override
-	public void handleMessage(Message message) {
+        switch (message.what) {
 
-		final SuperToast superToast = (SuperToast) 
-				message.obj;
+            case Messages.DISPLAY_SUPERTOAST:
 
-		switch (message.what) {
+                showNextSuperToast();
 
-			case Messages.DISPLAY_SUPERTOAST:
-	
-				showNextSuperToast();
-	
-				break;
-	
-			case Messages.ADD_SUPERTOAST:
-	
-				displaySuperToast(superToast);
-	
-				break;
-	
-			case Messages.REMOVE_SUPERTOAST:
-	
-				removeSuperToast(superToast);
-	
-				break;
-	
-			default: {
-	
-				super.handleMessage(message);
-	
-				break;
+                break;
 
-			}
+            case Messages.ADD_SUPERTOAST:
 
-		}
+                displaySuperToast(superToast);
 
-	}
+                break;
 
-	private void displaySuperToast(SuperToast superToast) {
+            case Messages.REMOVE_SUPERTOAST:
 
-		if (superToast.isShowing()) {
+                removeSuperToast(superToast);
 
-			return;
+                break;
 
-		}
+            default: {
 
-		final WindowManager windowManager = superToast
-				.getWindowManager();
+                super.handleMessage(message);
 
-		final View toastView = superToast.getView();
-		
-		final WindowManager.LayoutParams params = superToast
-				.getWindowManagerParams();
-		
-		if(windowManager != null) {
-			
-			windowManager.addView(toastView, params);
+                break;
 
-		}
-			
-		sendMessageDelayed(superToast, Messages.REMOVE_SUPERTOAST,
-				superToast.getDuration() + 500);
-			
-	}
-	
-	protected void removeSuperToast(SuperToast superToast) {
-		
-		final WindowManager windowManager = superToast
-				.getWindowManager();
+            }
 
-		final View toastView = superToast.getView();
+        }
 
-		if (windowManager != null) {
+    }
 
-			mQueue.poll();
+    private void displaySuperToast(SuperToast superToast) {
 
-			windowManager.removeView(toastView);
+        if (superToast.isShowing()) {
 
-			sendMessageDelayed(superToast,
-					Messages.DISPLAY_SUPERTOAST, 500);
-			
-			if(superToast.getOnDismissListener() != null) {
-				
-				superToast.getOnDismissListener().onDismiss();
-				
-			}
+            return;
 
-		}
+        }
 
-	}
-	
-	protected void clearQueue() {
+        final WindowManager windowManager = superToast
+                .getWindowManager();
 
-		removeAllMessages();
+        final View toastView = superToast.getView();
 
-		if (mQueue != null) {
+        final WindowManager.LayoutParams params = superToast
+                .getWindowManagerParams();
 
-			for (SuperToast superToast : mQueue) {
+        if(windowManager != null) {
 
-				if (superToast.isShowing()) {
+            windowManager.addView(toastView, params);
 
-					superToast.getWindowManager().removeView(
-							superToast.getView());
+        }
 
-				}
+        sendMessageDelayed(superToast, Messages.REMOVE_SUPERTOAST,
+                superToast.getDuration() + 500);
 
-			}
+    }
 
-			mQueue.clear();
+    protected void removeSuperToast(SuperToast superToast) {
 
-		}
+        final WindowManager windowManager = superToast
+                .getWindowManager();
 
-	}
-	
-	private void removeAllMessages() {
+        final View toastView = superToast.getView();
 
-		removeMessages(Messages.ADD_SUPERTOAST);
-		removeMessages(Messages.DISPLAY_SUPERTOAST);
-		removeMessages(Messages.REMOVE_SUPERTOAST);
+        if (windowManager != null) {
 
-	}
+            mQueue.poll();
+
+            windowManager.removeView(toastView);
+
+            sendMessageDelayed(superToast,
+                    Messages.DISPLAY_SUPERTOAST, 500);
+
+            if(superToast.getOnDismissListener() != null) {
+
+                superToast.getOnDismissListener().onDismiss(superToast.getView());
+
+            }
+
+        }
+
+    }
+
+    protected void clearQueue() {
+
+        removeAllMessages();
+
+        for (SuperToast superToast : mQueue) {
+
+            if (superToast.isShowing()) {
+
+                superToast.getWindowManager().removeView(
+                        superToast.getView());
+
+            }
+
+        }
+
+        mQueue.clear();
+
+    }
+
+    private void removeAllMessages() {
+
+        removeMessages(Messages.ADD_SUPERTOAST);
+        removeMessages(Messages.DISPLAY_SUPERTOAST);
+        removeMessages(Messages.REMOVE_SUPERTOAST);
+
+    }
 
 }

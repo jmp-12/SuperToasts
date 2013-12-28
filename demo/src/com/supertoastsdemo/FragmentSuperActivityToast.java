@@ -1,6 +1,26 @@
+/**
+ *  Copyright 2013 John Persano
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *	you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *	Unless required by applicable law or agreed to in writing, software
+ *	distributed under the License is distributed on an "AS IS" BASIS,
+ *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	See the License for the specific language governing permissions and
+ *	limitations under the License.
+ *
+ */
+
 package com.supertoastsdemo;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +32,26 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.supertoastsdemo.R;
+import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
+import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
+import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
+    Spinner mAnimationSpinner;
     Spinner mDurationSpinner;
     Spinner mBackgroundSpinner;
     Spinner mTextsizeSpinner;
-
     RadioGroup typeRadioGroup;
-
     CheckBox mImageCheckBox;
+    CheckBox mDismissCheckBox;
+
 
     DummyOperation mDummyOperation;
+
+    int mCount;
 
 
     @Override
@@ -33,7 +60,27 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_superactivitytoast,
                 container, false);
 
-        SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
+        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+
+            List<OnToastButtonClickListenerHolder> onToastButtonClickListenerHolderList =
+                    new ArrayList<OnToastButtonClickListenerHolder>();
+            onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+
+            List<OnToastDismissListenerHolder> onToastDismissListenerHolderList =
+                    new ArrayList<OnToastDismissListenerHolder>();
+            onToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+
+            SuperActivityToast.onRestoreState(savedInstanceState, getActivity(),
+                    onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
+
+        } else {
+
+            SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
+
+        }
+
+        mAnimationSpinner = (Spinner)
+                view.findViewById(R.id.animationSpinner);
 
         typeRadioGroup = (RadioGroup)
                 view.findViewById(R.id.type_radiogroup);
@@ -50,6 +97,12 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         mImageCheckBox = (CheckBox)
                 view.findViewById(R.id.imageCheckBox);
 
+        mImageCheckBox = (CheckBox)
+                view.findViewById(R.id.imageCheckBox);
+
+        mDismissCheckBox = (CheckBox)
+                view.findViewById(R.id.dismiss_checkbox);
+
         Button showButton = (Button)
                 view.findViewById(R.id.showButton);
         showButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +114,16 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             }
 
+        });
+
+        showButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                startActivity(new Intent(getActivity(), ActivityTwo.class));
+
+                return false;
+            }
         });
 
         return view;
@@ -95,6 +158,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         final SuperActivityToast superActivityToast;
 
+
         switch (typeRadioGroup.getCheckedRadioButtonId()) {
 
             case R.id.toast_radiobutton:
@@ -108,15 +172,22 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.BUTTON);
-                superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                        SuperActivityToast.createDarkSuperActivityToast(view.getContext(), view.getContext().getResources()
-                                .getString(R.string.onclick), SuperToast.Duration.MEDIUM).show();
+                mCount++;
 
-                    }
-                });
+                if(mCount == 1) {
+
+                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+
+                } else if (mCount == 2) {
+
+                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderTwo);
+
+                } else {
+
+                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderThree);
+
+                }
 
                 break;
 
@@ -146,6 +217,34 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 superActivityToast = new SuperActivityToast(getActivity(),
                         SuperToast.Type.STANDARD);
+
+                break;
+
+        }
+
+        switch (mAnimationSpinner.getSelectedItemPosition()) {
+
+            case 0:
+
+                superActivityToast.setAnimations(SuperToast.Animations.FADE);
+
+                break;
+
+            case 1:
+
+                superActivityToast.setAnimations(SuperToast.Animations.FLYIN);
+
+                break;
+
+            case 2:
+
+                superActivityToast.setAnimations(SuperToast.Animations.POPUP);
+
+                break;
+
+            case 3:
+
+                superActivityToast.setAnimations(SuperToast.Animations.SCALE);
 
                 break;
 
@@ -229,7 +328,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 1:
 
-                superActivityToast.setTextSize(SuperToast.TextSize.SMALL);
+                superActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 
@@ -243,13 +342,86 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         if(mImageCheckBox.isChecked()) {
 
-            superActivityToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
+            superActivityToast.setIcon(SuperToast.Icon.Dark.INFO, SuperToast.IconPosition.LEFT);
+
+        }
+
+        if(mDismissCheckBox.isChecked()) {
+
+            superActivityToast.setOnToastDismissListener(onToastDismissListenerHolder);
 
         }
 
         superActivityToast.show();
 
     }
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolder =
+            new OnToastButtonClickListenerHolder("toast_one", new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with first listener!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
+
+        }
+
+    });
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderTwo =
+            new OnToastButtonClickListenerHolder("toast_two", new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+        SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with second listener!");
+        superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+        superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+        superToast.setTextColor(Color.WHITE);
+        superToast.show();
+
+        }
+
+    });
+
+    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderThree =
+            new OnToastButtonClickListenerHolder("toast_three", new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with last listener!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
+
+        }
+
+    });
+
+    private OnToastDismissListenerHolder onToastDismissListenerHolder =
+            new OnToastDismissListenerHolder("toast_one", new OnToastDismissListener() {
+
+                @Override
+                public void onDismiss(View view) {
+
+                    SuperToast superToast = new SuperToast(view.getContext());
+                    superToast.setText("On dismiss!");
+                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                    superToast.setTextColor(Color.WHITE);
+                    superToast.show();
+
+                }
+            });
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 

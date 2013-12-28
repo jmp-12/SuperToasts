@@ -58,6 +58,17 @@
                         android:layout_height="wrap_content"
                         android:text="@string/horizontal_progress_type"
                         android:layout_margin="@dimen/layout_medium_padding"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                              android:padding="@dimen/layout_medium_padding" android:orientation="horizontal"
+                              android:id="@+id/linearLayout">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceMedium"
+                              android:layout_gravity="left|center_vertical"
+                              android:padding="@dimen/textview_medium_padding" android:text="@string/animation"/>
+                    <Spinner android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:id="@+id/animationSpinner" android:layout_gravity="left|center_vertical"
+                             android:spinnerMode="dropdown" android:entries="@array/animation_list"/>
+                </LinearLayout>
 
             </RadioGroup>
 
@@ -140,9 +151,18 @@
                     android:layout_gravity="left|center_vertical"
                     android:checked="false"/>
 
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="On dismiss listener"
+                    android:layout_margin="@dimen/layout_medium_padding"
+                    android:id="@+id/dismiss_checkbox"
+                    android:checked="false" />
+
         </LinearLayout>
 
     </ScrollView>
+
 
 
 </LinearLayout>

@@ -25,20 +25,7 @@ public class UndoAction extends Activity {
         superActivityToast.setButtonText("UNDO");
         superActivityToast.setButtonResource(SuperToast.Icon.Dark.UNDO);
         superActivityToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superActivityToast.setButtonOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-
-                /**
-                 * Any Context used in this method should be view.getContext() otherwise there will be
-                 * a null pointer exception on orientation change.
-                 */
-
-                dummyTextView.setVisibility(View.VISIBLE);
-
-            }
-        });
 
         Button deleteButton = (Button)
                 findViewById(R.id.delete_button);
