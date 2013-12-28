@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.supertoastsdemo.R;
 
 
 public class FragmentSuperToast extends SherlockFragment {
@@ -184,7 +183,7 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 1:
 
-                superToast.setTextSize(SuperToast.TextSize.SMALL);
+                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
 
                 break;
 

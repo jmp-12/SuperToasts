@@ -3,6 +3,7 @@ package com.supertoastsdemo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
 import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
 import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentSuperCardToast extends SherlockFragment {
 
@@ -42,7 +46,24 @@ public class FragmentSuperCardToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_supercardtoast,
                 container, false);
 
-        SuperCardToast.onRestoreState(savedInstanceState, getActivity());
+        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+
+            List<OnToastButtonClickListenerHolder> onToastButtonClickListenerHolderList =
+                    new ArrayList<OnToastButtonClickListenerHolder>();
+            onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+
+            List<OnToastDismissListenerHolder> onToastDismissListenerHolderList =
+                    new ArrayList<OnToastDismissListenerHolder>();
+            onToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+
+            SuperCardToast.onRestoreState(savedInstanceState, getActivity(),
+                    onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
+
+        } else {
+
+            SuperCardToast.onRestoreState(savedInstanceState, getActivity());
+
+        }
 
         mAnimationSpinner = (Spinner)
                 view.findViewById(R.id.animationSpinner);

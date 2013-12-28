@@ -66,8 +66,12 @@ public class FragmentSuperActivityToast extends SherlockFragment {
                     new ArrayList<OnToastButtonClickListenerHolder>();
             onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
 
+            List<OnToastDismissListenerHolder> onToastDismissListenerHolderList =
+                    new ArrayList<OnToastDismissListenerHolder>();
+            onToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+
             SuperActivityToast.onRestoreState(savedInstanceState, getActivity(),
-                    onToastButtonClickListenerHolderList);
+                    onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
 
         } else {
 

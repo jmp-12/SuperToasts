@@ -241,38 +241,42 @@ public class SuperCardToast {
 
         mViewGroup.addView(mToastView);
 
-        final Animation animation = this.getShowAnimation();
+        if(!showImmediate) {
 
-        /** Invalidate the ViewGroup after the show animation completes **/
-        animation.setAnimationListener(new Animation.AnimationListener() {
+            final Animation animation = this.getShowAnimation();
 
-            @Override
-            public void onAnimationEnd(Animation arg0) {
+            /** Invalidate the ViewGroup after the show animation completes **/
+            animation.setAnimationListener(new Animation.AnimationListener() {
 
-                /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
-                Handler mHandler = new Handler();
-                mHandler.post(mInvalidateRunnable);
+                @Override
+                public void onAnimationEnd(Animation arg0) {
 
-            }
+                    /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+                    Handler mHandler = new Handler();
+                    mHandler.post(mInvalidateRunnable);
 
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-                
-                // Do nothing
+                }
 
-            }
+                @Override
+                public void onAnimationRepeat(Animation arg0) {
 
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                
-                // Do nothing
+                    // Do nothing
 
-            }
+                }
 
-        });
+                @Override
+                public void onAnimationStart(Animation arg0) {
 
-        mToastView.startAnimation(animation);
-        
+                    // Do nothing
+
+                }
+
+            });
+
+            mToastView.startAnimation(animation);
+
+        }
+
     }
 
     /**
@@ -705,6 +709,8 @@ public class SuperCardToast {
 
         if(mToastView != null) {
 
+            mToastView.setVisibility(View.INVISIBLE);
+
             final ViewGroup.LayoutParams layoutParams = mToastView.getLayoutParams();
             final int originalHeight = mToastView.getHeight();
 
@@ -749,55 +755,26 @@ public class SuperCardToast {
     @SuppressWarnings("deprecation")
     private void dismissWithAnimation() {
 
-        if (Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB_MR1) {
+        Animation animation = this.getDismissAnimation();
 
-            if (mToastView != null) {
-
-                int viewWidth = mToastView.getWidth();
-
-                mToastView.animate().translationX(viewWidth).alpha(0).setDuration(500)
-                        .setListener(new AnimatorListenerAdapter() {
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-
-                                /** Must use Handler to modify ViewGroup in onAnimationEnd() */
-                                Handler mHandler = new Handler();
-                                mHandler.post(mHideWithAnimationRunnable);
-
-                            }
-
-                        });
-
-            }
-
-        } else {
-
-            AnimationSet animationSet = new AnimationSet(false);
-
-            final Activity activity = (Activity) mContext;
-
-            Display display = activity.getWindowManager()
-                    .getDefaultDisplay();
-
-            int width = display.getWidth();
-
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, width, 0f, 0f);
-            translateAnimation.setDuration(500);
-            animationSet.addAnimation(translateAnimation);
-
-            AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
-            alphaAnimation.setDuration(500);
-            animationSet.addAnimation(alphaAnimation);
-
-            animationSet.setAnimationListener(new Animation.AnimationListener() {
+        animation.setAnimationListener(new Animation.AnimationListener() {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
 
-                    /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
-                    Handler handler = new Handler();
-                    handler.post(mHideImmediateRunnable);
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+                        /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+                        Handler handler = new Handler();
+                        handler.post(mHideWithAnimationRunnable);
+
+                    } else {
+
+                        /** Must use Handler to modify ViewGroup in onAnimationEnd() **/
+                        Handler handler = new Handler();
+                        handler.post(mHideImmediateRunnable);
+
+                    }
 
                 }
 
@@ -819,11 +796,9 @@ public class SuperCardToast {
 
             if (mToastView != null) {
 
-                mToastView.startAnimation(animationSet);
+                mToastView.startAnimation(animation);
 
             }
-
-        }
 
     }
 

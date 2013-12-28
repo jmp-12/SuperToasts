@@ -20,13 +20,13 @@ package com.github.johnpersano.supertoasts;
 import java.util.LinkedList;
 
 /** Manages the life of a SuperCardToast on orientation changes. */
-public class ManagerSuperCardToast {
+class ManagerSuperCardToast {
 
     private static final String TAG = "Manager SuperCardToast";
 
     private static ManagerSuperCardToast mManagerSuperCardToast;
 
-    private LinkedList<SuperCardToast> mList;
+    private final LinkedList<SuperCardToast> mList;
 
     private ManagerSuperCardToast() {
 
@@ -34,7 +34,7 @@ public class ManagerSuperCardToast {
 
     }
 
-    protected static synchronized ManagerSuperCardToast getInstance() {
+    static synchronized ManagerSuperCardToast getInstance() {
 
         if (mManagerSuperCardToast != null) {
 
@@ -51,48 +51,38 @@ public class ManagerSuperCardToast {
     }
 
 
-    protected void add(SuperCardToast superCardToast) {
+    void add(SuperCardToast superCardToast) {
 
         mList.add(superCardToast);
 
     }
 
-    protected void remove(SuperCardToast superCardToast) {
+    void remove(SuperCardToast superCardToast) {
 
         mList.remove(superCardToast);
 
     }
 
-    protected void clear() {
+    void clearQueue() {
+
+        for (SuperCardToast superCardToast : mList) {
+
+            if (superCardToast.isShowing()) {
+
+                superCardToast.getViewGroup().removeView(
+                        superCardToast.getView());
+
+                superCardToast.getViewGroup().invalidate();
+
+            }
+
+        }
 
         mList.clear();
 
     }
 
-    protected void clearQueue() {
-
-        if (mList != null) {
-
-            for (SuperCardToast superCardToast : mList) {
-
-                if (superCardToast.isShowing()) {
-
-                    superCardToast.getViewGroup().removeView(
-                            superCardToast.getView());
-
-                    superCardToast.getViewGroup().invalidate();
-
-                }
-
-            }
-
-            mList.clear();
-
-        }
-
-    }
-
-    protected LinkedList<SuperCardToast> getList() {
+    LinkedList<SuperCardToast> getList() {
 
         return mList;
 

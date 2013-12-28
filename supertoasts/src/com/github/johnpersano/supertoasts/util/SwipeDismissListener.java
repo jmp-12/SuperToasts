@@ -48,6 +48,7 @@ public class SwipeDismissListener implements View.OnTouchListener {
     private float mTranslationX;
 
 
+    @SuppressWarnings("UnusedParameters")
     public interface OnDismissCallback {
 
         void onDismiss(View view);
