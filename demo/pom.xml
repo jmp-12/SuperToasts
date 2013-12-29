@@ -6,7 +6,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>demo</artifactId>
     <packaging>apk</packaging>
-    <version>1.3.1</version>
+    <version>1.3.1-SNAPSHOT</version>
 
     <name>Demo</name>
     <description>Demo app for the SuperToasts library</description>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.github.johnpersano</groupId>
             <artifactId>supertoasts</artifactId>
-            <version>1.3.1</version>
+            <version>${supertoasts.version}</version>
             <type>apklib</type>
         </dependency>
 
