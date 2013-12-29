@@ -49,7 +49,7 @@
         <java.version>1.6</java.version>
         <supertoasts.version>${project.version}</supertoasts.version>
         <android.version>4.1.1.4</android.version>
-        <android.platform>16</android.platform>
+        <android.platform>17</android.platform>
     </properties>
 
     <dependencies>
