@@ -734,8 +734,12 @@ public class SuperCardToast {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
-                    layoutParams.height = (Integer) valueAnimator.getAnimatedValue();
-                    mToastView.setLayoutParams(layoutParams);
+                    if(mToastView != null) {
+
+                        layoutParams.height = (Integer) valueAnimator.getAnimatedValue();
+                        mToastView.setLayoutParams(layoutParams);
+
+                    }
 
                 }
 
