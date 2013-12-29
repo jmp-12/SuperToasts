@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.github.johnpersano</groupId>
             <artifactId>supertoasts</artifactId>
-            <version>${supertoasts.version}</version>
+            <version>1.2</version>
             <type>apklib</type>
         </dependency>
 
