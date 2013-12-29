@@ -7,7 +7,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>supertoasts</artifactId>
     <packaging>apklib</packaging>
-    <version>1.3.1-SNAPSHOT</version>
+    <version>1.3.1</version>
 
     <name>SuperToasts Library</name>
     <description>Better Toasts for Android</description>
