@@ -194,9 +194,9 @@ class ManagerSuperActivityToast extends Handler {
                 @Override
                 public void onAnimationEnd(Animation animation) {
 
-                    if(superActivityToast.getOnDismissListener() != null){
+                    if(superActivityToast.getOnDismissListenerWrapper() != null){
 
-                        superActivityToast.getOnDismissListener().onDismiss(superActivityToast.getView());
+                        superActivityToast.getOnDismissListenerWrapper().onDismiss(superActivityToast.getView());
 
                     }
 
@@ -283,7 +283,7 @@ class ManagerSuperActivityToast extends Handler {
 
     private Animation getShowAnimation(SuperActivityToast superActivityToast) {
 
-        if (superActivityToast.getAnimation() == SuperToast.Animations.FLYIN) {
+        if (superActivityToast.getAnimations() == SuperToast.Animations.FLYIN) {
 
             TranslateAnimation translateAnimation = new TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 0.75f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -299,7 +299,7 @@ class ManagerSuperActivityToast extends Handler {
 
             return animationSet;
 
-        } else if (superActivityToast.getAnimation() == SuperToast.Animations.SCALE) {
+        } else if (superActivityToast.getAnimations() == SuperToast.Animations.SCALE) {
 
             ScaleAnimation scaleAnimation = new ScaleAnimation(0.9f, 1.0f, 0.9f, 1.0f,
                     Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -314,7 +314,7 @@ class ManagerSuperActivityToast extends Handler {
 
             return animationSet;
 
-        } else if (superActivityToast.getAnimation() == SuperToast.Animations.POPUP) {
+        } else if (superActivityToast.getAnimations() == SuperToast.Animations.POPUP) {
 
             TranslateAnimation translateAnimation = new TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -340,12 +340,11 @@ class ManagerSuperActivityToast extends Handler {
 
         }
 
-
     }
 
     private Animation getDismissAnimation(SuperActivityToast superActivityToast) {
 
-        if (superActivityToast.getAnimation() == SuperToast.Animations.FLYIN) {
+        if (superActivityToast.getAnimations() == SuperToast.Animations.FLYIN) {
 
             TranslateAnimation translateAnimation = new TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, .75f,
@@ -361,7 +360,7 @@ class ManagerSuperActivityToast extends Handler {
 
             return animationSet;
 
-        } else if (superActivityToast.getAnimation() == SuperToast.Animations.SCALE) {
+        } else if (superActivityToast.getAnimations() == SuperToast.Animations.SCALE) {
 
             ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 0.9f, 1.0f, 0.9f,
                     Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -376,7 +375,7 @@ class ManagerSuperActivityToast extends Handler {
 
             return animationSet;
 
-        } else if (superActivityToast.getAnimation() == SuperToast.Animations.POPUP) {
+        } else if (superActivityToast.getAnimations() == SuperToast.Animations.POPUP) {
 
             TranslateAnimation translateAnimation = new TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,

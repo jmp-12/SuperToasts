@@ -18,17 +18,26 @@
 package com.github.johnpersano.supertoasts.util;
 
 import android.view.View;
-import android.view.View.OnClickListener;
 
-public class OnToastButtonClickListenerHolder implements OnClickListener {
+/**
+ *  Class that holds a reference to OnDismissListeners set to button type SuperActivityToasts/SuperCardToasts.
+ *  This is used for restoring listeners on orientation changes.
+ */
+public class OnDismissListenerWrapper implements OnDismissListener {
+
+    public interface OnDismissListener {
+
+        public void onDismiss(View view);
+
+    }
 
     private final String mTag;
-    private final OnClickListener mOnClickListener;
+    private final OnDismissListener mOnDismissListener;
 
-    public OnToastButtonClickListenerHolder(String tag, OnClickListener onClickListener) {
+    public OnDismissListenerWrapper(String tag, OnDismissListener onDismissListener) {
 
         this.mTag = tag;
-        this.mOnClickListener = onClickListener;
+        this.mOnDismissListener = onDismissListener;
 
     }
 
@@ -38,11 +47,10 @@ public class OnToastButtonClickListenerHolder implements OnClickListener {
 
     }
 
-
     @Override
-    public void onClick(View view) {
+    public void onDismiss(View view) {
 
-        mOnClickListener.onClick(view);
+        mOnDismissListener.onDismiss(view);
 
     }
 

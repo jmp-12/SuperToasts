@@ -19,29 +19,8 @@ package com.github.johnpersano.supertoasts.util;
 
 import android.view.View;
 
-public class OnToastDismissListenerHolder implements OnToastDismissListener {
+public interface OnDismissListener {
 
-    private final String mTag;
-    private final OnToastDismissListener mOnToastDismissListener;
-
-    public OnToastDismissListenerHolder(String tag, OnToastDismissListener onToastDismissListener) {
-
-        this.mTag = tag;
-        this.mOnToastDismissListener = onToastDismissListener;
-
-    }
-
-    public String getTag() {
-
-        return mTag;
-
-    }
-
-    @Override
-    public void onDismiss(View view) {
-
-        mOnToastDismissListener.onDismiss(view);
-
-    }
+    public void onDismiss(View view);
 
 }
