@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
+import com.github.johnpersano.supertoasts.util.OnDismissListener;
 
 /**
  * SuperToasts are designed to replace stock Android Toasts.
@@ -177,7 +177,7 @@ public class SuperToast
     private Animations mAnimations = Animations.FADE;
     private int mXOffset = 0;
     private int mYOffset = 0;
-    private OnToastDismissListener mOnToastDismissListener;
+    private OnDismissListener mOnDismissListener;
 
     /**
      * Instantiates a new SuperToast.
@@ -385,9 +385,9 @@ public class SuperToast
      * <br>
      * @param onToastDismissListener No need to use OnToastDismissListenerHolder
      */
-    public void setOnDismissListener(OnToastDismissListener onToastDismissListener) {
+    public void setOnDismissListener(OnDismissListener onToastDismissListener) {
 
-        this.mOnToastDismissListener = onToastDismissListener;
+        this.mOnDismissListener = onToastDismissListener;
 
     }
 
@@ -452,9 +452,9 @@ public class SuperToast
      * @return OnDismissListener
      * <br>
      */
-    public OnToastDismissListener getOnDismissListener() {
+    public OnDismissListener getOnDismissListener() {
 
-        return mOnToastDismissListener;
+        return mOnDismissListener;
 
     }
 
