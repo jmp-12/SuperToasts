@@ -1,0 +1,60 @@
+buildscript{
+	repositories{
+		mavenCentral()
+	}
+	dependencies{
+		classpath 'com.android.tools.build:gradle:0.7.+'
+	}
+}
+
+apply plugin: 'android'
+
+dependencies{
+	
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+	compile project(':supertoasts')
+	compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+	compile 'com.android.support:support-v4:13.0.+'
+}
+
+android {
+	 lintOptions {  
+	      abortOnError false  
+	}
+	compileSdkVersion 17
+	buildToolsVersion "17.0.0"
+
+	defaultConfig {
+		minSdkVersion 8
+		targetSdkVersion 17
+	}
+
+	sourceSets {
+		main{
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = ['src']
+			resources.srcDirs = ['src']
+			aidl.srcDirs = ['src']
+			renderscript.srcDirs = ['src']
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
+		}
+		 instrumentTest.setRoot('tests')
+		 debug.setRoot('build-types/debug')
+		 release.setRoot('build-types/release')
+	}
+
+	packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
