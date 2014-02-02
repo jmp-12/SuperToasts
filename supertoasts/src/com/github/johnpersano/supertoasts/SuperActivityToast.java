@@ -48,158 +48,142 @@ import java.util.List;
 /**
  * SuperActivityToasts are designed to be used inside of Activities. When the
  * Activity is destroyed the SuperActivityToast is destroyed along with it.
- * SuperActivityToasts will not linger to the next screen like standard
- * Toasts/SuperToasts.
  */
 @SuppressWarnings({"UnusedDeclaration", "BooleanMethodIsAlwaysInverted"})
 public class SuperActivityToast {
 
     private static final String TAG = "SuperActivityToast";
+    private static final String MANAGER_TAG = "SuperActivityToast Manager";
 
     private static final String ERROR_CONTEXTNULL = " - The Context that you passed was null.";
-    private static final String ERROR_CONTEXTNOTACTIVITY = " - The Context that you passed was not an Activity!";
-    private static final String ERROR_NOTBUTTONTYPE = " - The method setOnClickListener() is only compatible with BUTTON type SuperActivityToasts.";
+    private static final String ERROR_NOTBUTTONTYPE = " - is only compatible with BUTTON type SuperActivityToasts.";
+    private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " - is only compatible with PROGRESS_HORIZONTAL type SuperActivityToasts.";
+    private static final String ERROR_NOTEITHERPROGRESSTYPE = " - is only compatible with PROGRESS_HORIZONTAL or PROGRESS type SuperActivityToasts.";
 
-    //Bundle tag with a hex as a string so it can't interfere with other tags in the bundle
+    /** Bundle tag with a hex as a string so it can't interfere with other tags in the bundle */
     private static final String BUNDLE_TAG = "0x532e412e542e";
 
-    private Context mContext;
+    private Activity mActivity;
+    private Animations mAnimations = Animations.FADE;
+    private boolean mIsIndeterminate;
+    private boolean mIsTouchDismissible;
+    private boolean isProgressIndeterminate;
+    private boolean showImmediate;
+    private Button mButton;
+    private IconPosition mIconPosition;
+    private int mDuration = SuperToast.Duration.SHORT;
+    private int mBackground = SuperToast.Background.TRANSLUCENT_BLACK;
+    private int mButtonIcon = SuperToast.Icon.Dark.UNDO;
+    private int mDivider = (R.color.light_gray);
+    private int mIcon;
+    private int mTypefaceStyle = Typeface.NORMAL;
+    private int mButtonTypefaceStyle = Typeface.BOLD;
     private LayoutInflater mLayoutInflater;
+    private LinearLayout mRootLayout;
+    private OnDismissListenerWrapper mOnDismissListenerWrapper;
+    private ProgressBar mProgressBar;
+    private String mClickListenerTag;
+    private String mDismissListenerTag;
+    private TextView mMessageTextView;
+    private Type mType = Type.STANDARD;
+    private View mDividerView;
     private ViewGroup mViewGroup;
     private View mToastView;
-    private View mDividerView;
-    private TextView mMessageTextView;
-    private Button mToastButton;
-    private LinearLayout mRootLayout;
-    private ProgressBar mProgressBar;
-    private int mDuration = SuperToast.Duration.SHORT;
-    private boolean mIsIndeterminate;
-    private OnDismissListenerWrapper mOnDismissListenerWrapper;
-    private Animations mAnimations = Animations.FADE;
-    private int mIconResouce;
-    private IconPosition mIconPosition;
-    private int mBackgroundResouce = SuperToast.Background.TRANSLUCENT_BLACK;
-    private boolean isTouchDismissable;
-    private int mButtonResource = SuperToast.Icon.Dark.UNDO;
-    private int mButtonDividerResource = (R.color.light_gray);
-    private boolean isProgressIndeterminate;
-    private Type mType = Type.STANDARD;
-    private boolean showImmediate;
-    private String mClickListenerTag;
-    private int mTypeface = Typeface.NORMAL;
-    private int mButtonTypeface = Typeface.BOLD;
-    private String mDismissListenerTag;
 
     /**
-     * Instantiates a new SuperActivityToast.
+     * Instantiates a new {@value #TAG}.
      *
-     * @param context should be Activity
+     * @param activity {@link android.app.Activity}
      */
-    public SuperActivityToast(Context context) {
+    public SuperActivityToast(Activity activity) {
 
-        if (context != null) {
+        if (activity != null) {
 
-            if (context instanceof Activity) {
+            this.mActivity = activity;
 
-                this.mContext = context;
+            mLayoutInflater = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                mLayoutInflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mViewGroup = (ViewGroup) activity
+                    .findViewById(android.R.id.content);
 
-                mViewGroup = (ViewGroup) ((Activity) context)
-                        .findViewById(android.R.id.content);
+            mToastView = mLayoutInflater.inflate(R.layout.supertoast,
+                    mViewGroup, false);
 
-                mToastView = mLayoutInflater.inflate(R.layout.supertoast,
+            mMessageTextView = (TextView) mToastView
+                    .findViewById(R.id.message_textView);
+
+            mRootLayout = (LinearLayout) mToastView
+                    .findViewById(R.id.root_layout);
+
+        } else {
+
+            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+
+        }
+
+    }
+
+    /**
+     * Instantiates a new {@value #TAG} with a type.
+     *
+     * @param activity {@link android.app.Activity}
+     * @param type     {@link com.github.johnpersano.supertoasts.SuperToast.Type}
+     */
+    public SuperActivityToast(Activity activity, Type type) {
+
+        if (activity != null) {
+
+            this.mActivity = activity;
+            this.mType = type;
+
+            mLayoutInflater = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            mViewGroup = (ViewGroup) activity
+                    .findViewById(android.R.id.content);
+
+            if (type == Type.STANDARD) {
+
+                mToastView = mLayoutInflater.inflate(
+                        R.layout.superactivitytoast, mViewGroup, false);
+
+            } else if (type == Type.BUTTON) {
+
+                mToastView = mLayoutInflater.inflate(
+                        R.layout.superactivitytoast_button, mViewGroup, false);
+
+                mButton = (Button) mToastView
+                        .findViewById(R.id.button);
+
+                mDividerView = mToastView
+                        .findViewById(R.id.divider);
+
+                mButton.setOnTouchListener(mTouchDismissListener);
+
+            } else if (type == Type.PROGRESS) {
+
+                mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
                         mViewGroup, false);
 
-                mMessageTextView = (TextView) mToastView
-                        .findViewById(R.id.message_textView);
+                mProgressBar = (ProgressBar) mToastView
+                        .findViewById(R.id.progressBar);
 
-                mRootLayout = (LinearLayout) mToastView
-                        .findViewById(R.id.root_layout);
+            } else if (type == Type.PROGRESS_HORIZONTAL) {
 
-            } else {
+                mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
+                        mViewGroup, false);
 
-                throw new IllegalArgumentException(TAG + ERROR_CONTEXTNOTACTIVITY);
-
-            }
-
-        } else {
-
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
-
-        }
-
-    }
-
-    /**
-     * Instantiates a new SuperActivityToast with a type.
-     *
-     * @param context should be Activity
-     * @param type    choose from SuperToast.Type
-     */
-    public SuperActivityToast(Context context, Type type) {
-
-        if (context != null) {
-
-            if (context instanceof Activity) {
-
-                this.mContext = context;
-                this.mType = type;
-
-                mLayoutInflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                mViewGroup = (ViewGroup) ((Activity) context)
-                        .findViewById(android.R.id.content);
-
-                if (type == Type.STANDARD) {
-
-                    mToastView = mLayoutInflater.inflate(
-                            R.layout.superactivitytoast, mViewGroup, false);
-
-                } else if (type == Type.BUTTON) {
-
-                    mToastView = mLayoutInflater.inflate(
-                            R.layout.superactivitytoast_button, mViewGroup, false);
-
-                    mToastButton = (Button) mToastView
-                            .findViewById(R.id.button);
-
-                    mDividerView = mToastView
-                            .findViewById(R.id.divider);
-
-                    mToastButton.setOnTouchListener(mTouchDismissListener);
-
-                } else if (type == Type.PROGRESS) {
-
-                    mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
-                            mViewGroup, false);
-
-                    mProgressBar = (ProgressBar) mToastView
-                            .findViewById(R.id.progressBar);
-
-                } else if (type == Type.PROGRESS_HORIZONTAL) {
-
-                    mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
-                            mViewGroup, false);
-
-                    mProgressBar = (ProgressBar) mToastView
-                            .findViewById(R.id.progressBar);
-
-                }
-
-                mMessageTextView = (TextView) mToastView
-                        .findViewById(R.id.message_textView);
-
-                mRootLayout = (LinearLayout) mToastView
-                        .findViewById(R.id.root_layout);
-
-            } else {
-
-                throw new IllegalArgumentException(TAG + ERROR_CONTEXTNOTACTIVITY);
+                mProgressBar = (ProgressBar) mToastView
+                        .findViewById(R.id.progressBar);
 
             }
+
+            mMessageTextView = (TextView) mToastView
+                    .findViewById(R.id.message_textView);
+
+            mRootLayout = (LinearLayout) mToastView
+                    .findViewById(R.id.root_layout);
 
         } else {
 
@@ -211,7 +195,9 @@ public class SuperActivityToast {
 
 
     /**
-     * Shows the SuperActivityToast.
+     * Shows the {@value #TAG}. If another {@value #TAG} is showing than
+     * this one will be added to a queue and shown when the previous {@value #TAG}
+     * is dismissed.
      */
     public void show() {
 
@@ -220,7 +206,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the Type of SuperActivityToast.
+     * Returns the type of the {@value #TAG}.
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperToast.Type}
      */
     public Type getType() {
 
@@ -229,9 +217,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets the message text of the SuperActivityToast.
+     * Sets the message text of the {@value #TAG}.
      *
-     * @param text The message text
+     * @param text {@link java.lang.CharSequence}
      */
     public void setText(CharSequence text) {
 
@@ -240,7 +228,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the message text of the SuperActivityToast.
+     * Returns the message text of the {@value #TAG}.
+     *
+     * @return {@link java.lang.CharSequence}
      */
     public CharSequence getText() {
 
@@ -249,31 +239,33 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets the message typeface of the SuperActivityToast.
+     * Sets the message typeface style of the {@value #TAG}.
      *
-     * @param typeface Use Typeface constants
+     * @param typeface {@link android.graphics.Typeface} int
      */
-    public void setTypeface(int typeface) {
+    public void setTypefaceStyle(int typeface) {
 
-        mTypeface = typeface;
+        mButtonTypefaceStyle = typeface;
 
         mMessageTextView.setTypeface(mMessageTextView.getTypeface(), typeface);
 
     }
 
     /**
-     * Returns the message typeface of the SuperActivityToast.
+     * Returns the message typeface style of the {@value #TAG}.
+     *
+     * @return {@link android.graphics.Typeface} int
      */
-    public int getTypeface() {
+    public int getTypefaceStyle() {
 
-        return mTypeface;
+        return mButtonTypefaceStyle;
 
     }
 
     /**
-     * Sets the message text color of the SuperActivityToast.
+     * Sets the message text color of the {@value #TAG}.
      *
-     * @param textColor Use Color constants or color resources
+     * @param textColor {@link android.graphics.Color}
      */
     public void setTextColor(int textColor) {
 
@@ -282,7 +274,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the message text color of the SuperActivityToast.
+     * Returns the message text color of the {@value #TAG}.
+     *
+     * @return int
      */
     public int getTextColor() {
 
@@ -291,9 +285,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets the text size of the SuperActivityToast.
+     * Sets the text size of the {@value #TAG} message.
      *
-     * @param textSize Desired text size
+     * @param textSize int
      */
     public void setTextSize(int textSize) {
 
@@ -301,9 +295,7 @@ public class SuperActivityToast {
 
     }
 
-    /**
-     * Used by orientation change recreation
-     */
+    /** Used by orientation change recreation */
     private void setTextSizeFloat(float textSize) {
 
         mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -311,7 +303,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the text size of the SuperActivityToast.
+     * Returns the text size of the {@value #TAG} message in pixels.
+     *
+     * @return float
      */
     public float getTextSize() {
 
@@ -320,9 +314,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets the duration of the SuperActivityToast.
+     * Sets the duration that the {@value #TAG} will show.
      *
-     * @param duration Use SuperToast.Duration constants
+     * @param duration {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      */
     public void setDuration(int duration) {
 
@@ -331,7 +325,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the duration of the SuperActivityToast.
+     * Returns the duration of the {@value #TAG}.
+     *
+     * @return int
      */
     public int getDuration() {
 
@@ -340,9 +336,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * If true will show the SuperActivityToast for an indeterminate time period.
+     * If true will show the {@value #TAG} for an indeterminate time period and ignore any set duration.
      *
-     * @param isIndeterminate If true will show until dismissed in code or host activity is destroyed
+     * @param isIndeterminate boolean
      */
     public void setIndeterminate(boolean isIndeterminate) {
 
@@ -351,7 +347,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns true if the SuperActivityToast is indeterminate.
+     * Returns true if the {@value #TAG} is indeterminate.
+     *
+     * @return boolean
      */
     public boolean isIndeterminate() {
 
@@ -359,45 +357,45 @@ public class SuperActivityToast {
 
     }
 
-
     /**
-     * Sets an icon resource to the SuperActivityToast
-     * with a position.
+     * Sets an icon resource to the {@value #TAG} with a specified position.
      *
-     * @param iconResource Use SuperToast.Icon constants
-     * @param iconPosition Use SuperToast.IconPosition
+     * @param iconResource {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
+     * @param iconPosition {@link com.github.johnpersano.supertoasts.SuperToast.IconPosition}
      */
     public void setIcon(int iconResource, IconPosition iconPosition) {
 
-        this.mIconResouce = iconResource;
+        this.mIcon = iconResource;
         this.mIconPosition = iconPosition;
 
         if (iconPosition == IconPosition.BOTTOM) {
 
             mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                    null, mContext.getResources().getDrawable(iconResource));
+                    null, mActivity.getResources().getDrawable(iconResource));
 
         } else if (iconPosition == IconPosition.LEFT) {
 
-            mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
+            mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(mActivity.getResources()
                     .getDrawable(iconResource), null, null, null);
 
         } else if (iconPosition == IconPosition.RIGHT) {
 
             mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                    mContext.getResources().getDrawable(iconResource), null);
+                    mActivity.getResources().getDrawable(iconResource), null);
 
         } else if (iconPosition == IconPosition.TOP) {
 
             mMessageTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-                    mContext.getResources().getDrawable(iconResource), null, null);
+                    mActivity.getResources().getDrawable(iconResource), null, null);
 
         }
 
     }
 
     /**
-     * Returns the icon position of the SuperActivityToast.
+     * Returns the icon position of the {@value #TAG}.
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperToast.IconPosition}
      */
     public IconPosition getIconPosition() {
 
@@ -406,41 +404,44 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the icon resource of the SuperActivityToast.
+     * Returns the icon resource of the {@value #TAG}.
+     *
+     * @return int
      */
     public int getIconResource() {
 
-        return this.mIconResouce;
+        return this.mIcon;
 
     }
 
     /**
-     * Sets the background resource of the SuperActivityToast.
+     * Sets the background resource of the {@value #TAG}.
      *
-     * @param backgroundResource Use SuperToast.Background constants
+     * @param background {@link com.github.johnpersano.supertoasts.SuperToast.Background}
      */
-    public void setBackgroundResource(int backgroundResource) {
+    public void setBackground(int background) {
 
-        this.mBackgroundResouce = backgroundResource;
+        this.mBackground = background;
 
-        mRootLayout.setBackgroundResource(backgroundResource);
+        mRootLayout.setBackgroundResource(background);
 
     }
 
     /**
-     * Returns the background resource of the SuperActivityToast
-     */
-    public int getBackgroundResource() {
-
-        return this.mBackgroundResouce;
-
-    }
-
-
-    /**
-     * Sets the show/hide animations of the SuperActivityToast.
+     * Returns the background resource of the {@value #TAG}.
      *
-     * @param animations Use SuperToast.Animations
+     * @return int
+     */
+    public int getBackground() {
+
+        return this.mBackground;
+
+    }
+
+    /**
+     * Sets the show/hide animations of the {@value #TAG}.
+     *
+     * @param animations {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
      */
     public void setAnimations(Animations animations) {
 
@@ -449,7 +450,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the show/hide animations of the SuperActivityToast.
+     * Returns the show/hide animations of the {@value #TAG}.
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
      */
     public Animations getAnimations() {
 
@@ -458,9 +461,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * If true will show the SuperActivityToast without animation.
+     * If true will show the {@value #TAG} without animation.
      *
-     * @param showImmediate If true show animation will not be shown
+     * @param showImmediate boolean
      */
     public void setShowImmediate(boolean showImmediate) {
 
@@ -468,7 +471,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns true if the SuperActivityToast is set to show without animation.
+     * Returns true if the {@value #TAG} is set to show without animation.
+     *
+     * @return boolean
      */
     public boolean getShowImmediate() {
 
@@ -477,13 +482,13 @@ public class SuperActivityToast {
     }
 
     /**
-     * If true will dismiss the SuperActivityToast if the user touches it.
+     * If true will dismiss the {@value #TAG} if the user touches it.
      *
-     * @param touchDismiss If true will dismiss when touched
+     * @param touchDismiss boolean
      */
     public void setTouchToDismiss(boolean touchDismiss) {
 
-        this.isTouchDismissable = touchDismiss;
+        this.mIsTouchDismissible = touchDismiss;
 
         if (touchDismiss) {
 
@@ -498,21 +503,21 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns true if the SuperActivityToast is touch dismissible.
+     * Returns true if the {@value #TAG} is touch dismissible.
      */
-    public boolean isTouchDismissable() {
+    public boolean isTouchDismissible() {
 
-        return this.isTouchDismissable;
+        return this.mIsTouchDismissible;
 
     }
 
     /**
-     * Sets an OnDismissListener defined in this library
-     * to the SuperActivityToast.
+     * Sets an OnDismissListenerWrapper defined in this library
+     * to the {@value #TAG}.
      *
-     * @param onDismissListenerWrapper Use OnDismissListenerWrapper
+     * @param onDismissListenerWrapper {@link com.github.johnpersano.supertoasts.util.OnDismissListenerWrapper}
      */
-    public void setOnDismissListener(OnDismissListenerWrapper onDismissListenerWrapper) {
+    public void setOnDismissListenerWrapper(OnDismissListenerWrapper onDismissListenerWrapper) {
 
         this.mOnDismissListenerWrapper = onDismissListenerWrapper;
         this.mDismissListenerTag = onDismissListenerWrapper.getTag();
@@ -520,7 +525,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Used in ManagerSuperActivityToast
+     * Used in {@value #MANAGER_TAG}.
      */
     protected OnDismissListenerWrapper getOnDismissListenerWrapper() {
 
@@ -538,7 +543,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Dismisses the SuperActivityToast.
+     * Dismisses the {@value #TAG}.
      */
     public void dismiss() {
 
@@ -547,28 +552,26 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets an OnClickListenerWrapper to the button in a
-     * a BUTTON type SuperActivityToast.
+     * Sets an OnClickListenerWrapper to the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param onClickListenerWrapper Use OnClickListenerWrapper
+     * @param onClickListenerWrapper {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
      */
-    public void setOnClickListener(OnClickListenerWrapper onClickListenerWrapper) {
+    public void setOnClickListenerWrapper(OnClickListenerWrapper onClickListenerWrapper) {
 
         if (mType != Type.BUTTON) {
 
-            Log.e(TAG, ERROR_NOTBUTTONTYPE);
+            Log.e(TAG, "setOnClickListenerWrapper()" + ERROR_NOTBUTTONTYPE);
 
         }
 
-        mToastButton.setOnClickListener(onClickListenerWrapper);
+        mButton.setOnClickListener(onClickListenerWrapper);
 
         this.mClickListenerTag = onClickListenerWrapper.getTag();
 
     }
 
-    /**
-     * Used in orientation change recreation.
-     */
+    /** Used in orientation change recreation. */
     private String getClickListenerTag() {
 
         return mClickListenerTag;
@@ -576,43 +579,57 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets the background resource of the Button in
-     * a BUTTON type SuperActivityToast.
+     * Sets the icon resource of the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param buttonResource Use SuperToast.Icon constants
+     * @param buttonIcon {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
      */
-    public void setButtonResource(int buttonResource) {
+    public void setButtonIcon(int buttonIcon) {
 
-        this.mButtonResource = buttonResource;
+        if (mType != Type.BUTTON) {
 
-        if (mToastButton != null) {
+            Log.e(TAG, "setButtonIcon()" + ERROR_NOTBUTTONTYPE);
 
-            mToastButton.setCompoundDrawablesWithIntrinsicBounds(mContext
-                    .getResources().getDrawable(buttonResource), null, null, null);
+        }
+
+        this.mButtonIcon = buttonIcon;
+
+        if (mButton != null) {
+
+            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
+                    .getResources().getDrawable(buttonIcon), null, null, null);
 
         }
 
     }
 
     /**
-     * Returns the background resource of the Button in
-     * a BUTTON type SuperActivityToast.
+     * Returns the icon resource of the button in
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return int
      */
-    public int getButtonResource() {
+    public int getButtonIcon() {
 
-        return this.mButtonResource;
+        return this.mButtonIcon;
 
     }
 
     /**
-     * Sets the background resource of the Button divider in
-     * a BUTTON Type SuperActivityToast.
+     * Sets the divider resource of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param dividerResource Use color resources to maintain design consistency
+     * @param dividerResource int
      */
-    public void setButtonDividerResource(int dividerResource) {
+    public void setDivider(int dividerResource) {
 
-        this.mButtonDividerResource = dividerResource;
+        if (mType != Type.BUTTON) {
+
+            Log.e(TAG, "setDivider()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        this.mDivider = dividerResource;
 
         if (mDividerView != null) {
 
@@ -623,100 +640,132 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the background resource of the Button divider in
-     * a BUTTON Type SuperActivityToast.
+     * Returns the divider resource of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return int
      */
-    public int getButtonDividerResource() {
+    public int getDivider() {
 
-        return this.mButtonDividerResource;
+        return this.mDivider;
 
     }
 
     /**
-     * Sets the text of the Button in
-     * a BUTTON Type SuperActivityToast.
+     * Sets the button text of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param buttonText Should be all uppercase and about 4 characters long
+     * @param buttonText {@link CharSequence}
      */
     public void setButtonText(CharSequence buttonText) {
 
-        if (mToastButton != null) {
+        if (mType != Type.BUTTON) {
 
-            mToastButton.setText(buttonText);
+            Log.e(TAG, "setButtonText()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        if (mButton != null) {
+
+            mButton.setText(buttonText);
 
         }
 
     }
 
     /**
-     * Returns the text of the Button in
-     * a BUTTON Type SuperActivityToast.
+     * Returns the button text of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return {@link CharSequence}
      */
     public CharSequence getButtonText() {
 
-        return mToastButton.getText();
+        return mButton.getText();
 
     }
 
     /**
-     * Sets the typeface of the button in
-     * a BUTTON type SuperActivityToast.
+     * Sets the typeface style of the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param typeface Use Typeface constants
+     * @param typefaceStyle {@link android.graphics.Typeface}
      */
-    public void setButtonTypeface(int typeface) {
+    public void setButtonTypefaceStyle(int typefaceStyle) {
 
-        mButtonTypeface = typeface;
+        if (mType != Type.BUTTON) {
 
-        mToastButton.setTypeface(mToastButton.getTypeface(), typeface);
+            Log.e(TAG, "setButtonTypefaceStyle()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        mButtonTypefaceStyle = typefaceStyle;
+
+        mButton.setTypeface(mButton.getTypeface(), typefaceStyle);
 
     }
 
     /**
-     * Returns the typeface of the button in
-     * a BUTTON type SuperActivityToast.
-     */
-    public int getButtonTypeface() {
-
-        return mButtonTypeface;
-
-    }
-
-    /**
-     * Sets the text color of the Button in
-     * a BUTTON type SuperActivityToast.
+     * Returns the typeface style of the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param buttonTextColor Should have alpha of around 175
+     * @return int
+     */
+    public int getButtonTypefaceStyle() {
+
+        return mButtonTypefaceStyle;
+
+    }
+
+    /**
+     * Sets the button text color of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @param buttonTextColor {@link android.graphics.Color}
      */
     public void setButtonTextColor(int buttonTextColor) {
 
-        if (mToastButton != null) {
+        if (mType != Type.BUTTON) {
 
-            mToastButton.setTextColor(buttonTextColor);
+            Log.e(TAG, "setButtonTextColor()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        if (mButton != null) {
+
+            mButton.setTextColor(buttonTextColor);
 
         }
 
     }
 
     /**
-     * Returns the text color of the button in
-     * a BUTTON Type SuperActivityToast.
+     * Returns the button text color of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return int
      */
     public int getButtonTextColor() {
 
-        return mToastButton.getCurrentTextColor();
+        return mButton.getCurrentTextColor();
 
     }
 
     /**
-     * Sets the text size of the button in
-     * a BUTTON type SuperActivityToast.
+     * Sets the button text size of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param buttonTextSize Desired text size
+     * @param buttonTextSize int
      */
     public void setButtonTextSize(int buttonTextSize) {
 
-        if (mToastButton != null) {
+        if (mType != Type.BUTTON) {
+
+            Log.e(TAG, "setButtonTextSize()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        if (mButton != null) {
 
             mMessageTextView.setTextSize(buttonTextSize);
 
@@ -725,7 +774,7 @@ public class SuperActivityToast {
     }
 
     /**
-     *  Used in orientation change recreation.
+     * Used by orientation change recreation
      */
     private void setButtonTextSizeFloat(float buttonTextSize) {
 
@@ -734,22 +783,30 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the text size of the button in
-     * a BUTTON type SuperActivityToast.
+     * Returns the button text size of a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return float
      */
     public float getButtonTextSize() {
 
-        return mToastButton.getTextSize();
+        return mButton.getTextSize();
 
     }
 
     /**
-     * Sets the progress of the progressbar in
-     * a PROGRESS_HORIZONTAL type SuperActivityToast.
+     * Sets the progress of the progressbar in a PROGRESS_HORIZONTAL
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param progress Progress in int
+     * @param progress int
      */
     public void setProgress(int progress) {
+
+        if (mType != Type.PROGRESS_HORIZONTAL) {
+
+            Log.e(TAG, "setProgress()" + ERROR_NOTPROGRESSHORIZONTALTYPE);
+
+        }
 
         if (mProgressBar != null) {
 
@@ -760,8 +817,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the progress of the progressbar in
-     * a PROGRESS_HORIZONTAL type SuperActivityToast.
+     * Returns the progress of the progressbar in a PROGRESS_HORIZONTAL
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return int
      */
     public int getProgress() {
 
@@ -769,14 +828,19 @@ public class SuperActivityToast {
 
     }
 
-
     /**
-     * Sets the progress maximum of the progressbar in
-     * a PROGRESS_HORIZONTAL type SuperActivityToast.
+     * Sets the maximum value of the progressbar in a PROGRESS_HORIZONTAL
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param maxProgress Maximum progress in int
+     * @param maxProgress int
      */
     public void setMaxProgress(int maxProgress) {
+
+        if (mType != Type.PROGRESS_HORIZONTAL) {
+
+            Log.e(TAG, "setMaxProgress()" + ERROR_NOTPROGRESSHORIZONTALTYPE);
+
+        }
 
         if (mProgressBar != null) {
 
@@ -787,8 +851,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the progress maximum of the progressbar in
-     * a PROGRESS_HORIZONTAL type SuperActivityToast.
+     * Returns the maximum value of the progressbar in a PROGRESS_HORIZONTAL
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return int
      */
     public int getMaxProgress() {
 
@@ -796,17 +862,24 @@ public class SuperActivityToast {
 
     }
 
+
     /**
-     * Sets an indeterminate value to the progressbar of a PROGRESS type
-     * SuperActivityToast.
+     * Sets an indeterminate value to the progressbar of a PROGRESS
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param isIndeterminate If true will be indeterminate
+     * @param isIndeterminate boolean
      */
     public void setProgressIndeterminate(boolean isIndeterminate) {
 
+        if (mType != Type.PROGRESS_HORIZONTAL && mType != Type.PROGRESS) {
+
+            Log.e(TAG, "setProgressIndeterminate()" + ERROR_NOTEITHERPROGRESSTYPE);
+
+        }
+
         this.isProgressIndeterminate = isIndeterminate;
 
-        if (mProgressBar != null) {
+        if(mProgressBar != null) {
 
             mProgressBar.setIndeterminate(isIndeterminate);
 
@@ -815,8 +888,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns true if an indeterminate value to the progressbar of a PROGRESS type
-     * SuperActivityToast has been set.
+     * Returns an indeterminate value to the progressbar of a PROGRESS
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @return boolean
      */
     public boolean getProgressIndeterminate() {
 
@@ -826,9 +901,9 @@ public class SuperActivityToast {
 
 
     /**
-     * Returns the SuperActivityToast message TextView.
+     * Returns the {@value #TAG} message textview.
      *
-     * @return TextView <br>
+     * @return {@link android.widget.TextView}
      */
     public TextView getTextView() {
 
@@ -837,9 +912,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the SuperActivityToast View.
+     * Returns the {@value #TAG} view.
      *
-     * @return View <br>
+     * @return {@link android.view.View}
      */
     public View getView() {
 
@@ -848,9 +923,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns true if the SuperActivityToast is showing.
+     * Returns true if the {@value #TAG} is showing.
      *
-     * @return boolean <br>
+     * @return boolean
      */
     public boolean isShowing() {
 
@@ -859,20 +934,20 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns the calling Activity of the SuperActivityToast.
+     * Returns the calling activity of the {@value #TAG}.
      *
-     * @return Activity <br>
+     * @return {@link android.app.Activity}
      */
     public Activity getActivity() {
 
-        return (Activity) mContext;
+        return mActivity;
 
     }
 
     /**
-     * Returns the ViewGroup that the SuperActivityToast is attached to.
+     * Returns the viewgroup that the {@value #TAG} is attached to.
      *
-     * @return ViewGroup <br>
+     * @return {@link android.view.ViewGroup}
      */
     public ViewGroup getViewGroup() {
 
@@ -880,19 +955,19 @@ public class SuperActivityToast {
 
     }
 
-
     /**
-     * Returns a dark theme SuperActivityToast.
+     * Returns a dark themed {@value #TAG}.
      *
-     * @param context          Should be Activity
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @return SuperActivityToast
+     * @param activity         {@link android.app.Activity}
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createSuperActivityToast(
-            Context context, CharSequence textCharSequence, int durationInteger) {
+            Activity activity, CharSequence textCharSequence, int durationInteger) {
 
-        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
         superActivityToast.setDuration(durationInteger);
 
@@ -901,18 +976,19 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns a dark theme SuperActivityToast with a specified animation.
+     * Returns a dark themed {@value #TAG} with specified animations.
      *
-     * @param context          Should be Activity
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @param animations       Should use SuperToast.Animations
-     * @return SuperActivityToast
+     * @param activity         {@link android.app.Activity}
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createSuperActivityToast(
-            Context context, CharSequence textCharSequence, int durationInteger, Animations animations) {
+            Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
 
-        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
         superActivityToast.setDuration(durationInteger);
         superActivityToast.setAnimations(animations);
@@ -922,20 +998,21 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns a light theme SuperActivityToast.
+     * Returns a light themed {@value #TAG}.
      *
-     * @param context          Should be Activity
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @return SuperActivityToast
+     * @param activity         {@link android.app.Activity}
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createLightSuperActivityToast(
-            Context context, CharSequence textCharSequence, int durationInteger) {
+            Activity activity, CharSequence textCharSequence, int durationInteger) {
 
-        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
         superActivityToast.setDuration(durationInteger);
-        superActivityToast.setBackgroundResource(SuperToast.Background.WHITE);
+        superActivityToast.setBackground(SuperToast.Background.WHITE);
         superActivityToast.setTextColor(Color.BLACK);
 
         return superActivityToast;
@@ -943,21 +1020,22 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns a light theme SuperActivityToast with a specified animation.
+     * Returns a light themed {@value #TAG} with specified animations.
      *
-     * @param context          Should be Activity
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @param animations       Should use SuperToast.Animations
-     * @return SuperActivityToast
+     * @param activity         {@link android.app.Activity}
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
+     *
+     * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createLightSuperActivityToast(
-            Context context, CharSequence textCharSequence, int durationInteger, Animations animations) {
+            Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
 
-        SuperActivityToast superActivityToast = new SuperActivityToast(context);
+        final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
         superActivityToast.setDuration(durationInteger);
-        superActivityToast.setBackgroundResource(SuperToast.Background.WHITE);
+        superActivityToast.setBackground(SuperToast.Background.WHITE);
         superActivityToast.setTextColor(Color.BLACK);
         superActivityToast.setAnimations(animations);
 
@@ -966,7 +1044,7 @@ public class SuperActivityToast {
     }
 
     /**
-     * Dismisses and removes all showing/pending SuperActivityToasts.
+     * Dismisses and removes all pending/showing {@value #TAG}.
      */
     public static void cancelAllSuperActivityToasts() {
 
@@ -975,10 +1053,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Dismisses and removes all showing/pending SuperActivityToasts
-     * for a specific Activity.
+     * Dismisses and removes all pending/showing {@value #TAG}
+     * for a specific activity.
      *
-     * @param activity that needs to remove showing/pending SuperActivityToasts
+     * @param activity {@link android.app.Activity}
      */
     public static void clearSuperActivityToastsForActivity(Activity activity) {
 
@@ -988,9 +1066,9 @@ public class SuperActivityToast {
     }
 
     /**
-     * Saves pending/shown SuperActivityToasts to a bundle.
+     * Saves pending/showing {@value #TAG} to a bundle.
      *
-     * @param bundle Use onSaveInstanceState() bundle
+     * @param bundle {@link android.os.Bundle}
      */
     public static void onSaveState(Bundle bundle) {
 
@@ -1013,10 +1091,10 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns and shows pending/shown SuperActivityToasts from orientation change.
+     * Recreates pending/showing {@value #TAG} from orientation change.
      *
-     * @param bundle   Use onCreate() bundle
-     * @param activity The current activity
+     * @param bundle   {@link android.os.Bundle}
+     * @param activity {@link android.app.Activity}
      */
     public static void onRestoreState(Bundle bundle, Activity activity) {
 
@@ -1044,12 +1122,12 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns and shows pending/shown SuperActivityToasts from orientation change and
+     * Recreates pending/showing {@value #TAG} from orientation change and
      * reattaches any OnClickListenerWrappers.
      *
-     * @param bundle                 Use onCreate() bundle
-     * @param activity               The current activity
-     * @param onClickListenerWrappers List of any attached onClickListenerWrappers from previous orientation
+     * @param bundle   {@link android.os.Bundle}
+     * @param activity {@link android.app.Activity}
+     * @param onClickListenerWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
      */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickListenerWrapper> onClickListenerWrappers) {
 
@@ -1077,13 +1155,13 @@ public class SuperActivityToast {
     }
 
     /**
-     * Returns and shows pending/shown SuperActivityToasts from orientation change and
-     * reattaches any OnClickListenerWrappers and any OnDismissListenerWrappers.
+     * Recreates pending/showing {@value #TAG} from orientation change and
+     * reattaches any OnClickListenerWrappers and OnDismissListenerWrappers.
      *
-     * @param bundle                      Use onCreate() bundle
-     * @param activity                    The current activity
-     * @param onClickListenerWrappers List of any attached onClickListenerWrappers from previous orientation
-     * @param onDismissListenerWrappers     List of any attached onDismissListenerWrappers from previous orientation
+     * @param bundle                    {@link android.os.Bundle}
+     * @param activity                  {@link android.app.Activity}
+     * @param onClickListenerWrappers   {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
+     * @param onDismissListenerWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnDismissListenerWrapper}
      */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickListenerWrapper> onClickListenerWrappers,
                                       List<OnDismissListenerWrapper> onDismissListenerWrappers) {
@@ -1111,9 +1189,7 @@ public class SuperActivityToast {
 
     }
 
-    /**
-     * Method used to recreate SuperActivityToasts after orientation change
-     */
+    /** Method used to recreate {@value #TAG} after orientation change */
     private SuperActivityToast(Activity activity, Style style, List<OnClickListenerWrapper> onClickListenerWrappers,
                                List<OnDismissListenerWrapper> onDismissListenerWrappers, int position) {
 
@@ -1125,20 +1201,18 @@ public class SuperActivityToast {
             superActivityToast.setButtonText(style.mButtonText);
             superActivityToast.setButtonTextSizeFloat(style.mButtonTextSize);
             superActivityToast.setButtonTextColor(style.mButtonTextColor);
-            superActivityToast.setButtonResource(style.mButtonResource);
-            superActivityToast.setButtonDividerResource(style.mButtonDividerResource);
-            superActivityToast.setButtonTypeface(style.mButtonTypeface);
+            superActivityToast.setButtonIcon(style.mButtonIcon);
+            superActivityToast.setDivider(style.mDivider);
+            superActivityToast.setButtonTypefaceStyle(style.mButtonTypefaceStyle);
 
-            /**
-             * Reattach any OnClickListeners by matching tags sent through parcel
-             */
+            /** Reattach any OnClickListenerWrappers by matching tags sent through parcel */
             if (onClickListenerWrappers != null) {
 
                 for (OnClickListenerWrapper onClickListenerWrapper : onClickListenerWrappers) {
 
                     if (onClickListenerWrapper.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
 
-                        superActivityToast.setOnClickListener(onClickListenerWrapper);
+                        superActivityToast.setOnClickListenerWrapper(onClickListenerWrapper);
 
                     }
 
@@ -1147,13 +1221,13 @@ public class SuperActivityToast {
 
         } else if (style.mType == Type.PROGRESS) {
 
-            /** PROGRESS style SuperActivityToasts should be managed by the developer */
+            /** PROGRESS style {@value #TAG} should be managed by the developer */
 
             return;
 
         } else if (style.mType == Type.PROGRESS_HORIZONTAL) {
 
-            /** PROGRESS_HORIZONTAL style SuperActivityToasts should be managed by the developer */
+            /** PROGRESS_HORIZONTAL style {@value #TAG} should be managed by the developer */
 
             return;
 
@@ -1163,16 +1237,14 @@ public class SuperActivityToast {
 
         }
 
-        /**
-         * Reattach any OnDismissListeners by matching tags sent through parcel
-         */
+        /** Reattach any OnDismissListenerWrappers by matching tags sent through parcel */
         if (onDismissListenerWrappers != null) {
 
             for (OnDismissListenerWrapper onDismissListenerWrapper : onDismissListenerWrappers) {
 
                 if (onDismissListenerWrapper.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
 
-                    superActivityToast.setOnDismissListener(onDismissListenerWrapper);
+                    superActivityToast.setOnDismissListenerWrapper(onDismissListenerWrapper);
 
                 }
 
@@ -1181,16 +1253,16 @@ public class SuperActivityToast {
 
         superActivityToast.setAnimations(style.mAnimations);
         superActivityToast.setText(style.mText);
-        superActivityToast.setTypeface(style.mTypeface);
+        superActivityToast.setTypefaceStyle(style.mTypefaceStyle);
         superActivityToast.setDuration(style.mDuration);
         superActivityToast.setTextColor(style.mTextColor);
         superActivityToast.setTextSizeFloat(style.mTextSize);
-        superActivityToast.setIndeterminate(style.isIndeterminate);
-        superActivityToast.setIcon(style.mIconResource, style.mIconPosition);
-        superActivityToast.setBackgroundResource(style.mBackgroundResource);
-        superActivityToast.setTouchToDismiss(style.isTouchDismissable);
+        superActivityToast.setIndeterminate(style.mIsIndeterminate);
+        superActivityToast.setIcon(style.mIcon, style.mIconPosition);
+        superActivityToast.setBackground(style.mBackground);
+        superActivityToast.setTouchToDismiss(style.mIsTouchDismissible);
 
-        /** Do not use show animation on recreation of SuperActivityToast that was previously showing */
+        /** Do not use show animation on recreation of {@value #TAG} that was previously showing */
         if (position == 1) {
 
             superActivityToast.setShowImmediate(true);
@@ -1228,35 +1300,29 @@ public class SuperActivityToast {
     };
 
 
-    /**
-     * Parcelable class that saves all data on orientation change
-     */
+    /** Parcelable class that saves all data on orientation change */
     private static class Style implements Parcelable {
 
-        //STANDARD
-        Type mType;
-        String mText;
+        Animations mAnimations;
+        boolean mIsIndeterminate;
+        boolean mIsTouchDismissible;
+        float mTextSize;
+        float mButtonTextSize;
+        IconPosition mIconPosition;
         int mDuration;
         int mTextColor;
-        float mTextSize;
-        boolean isIndeterminate;
-        IconPosition mIconPosition;
-        int mIconResource;
-        int mBackgroundResource;
-        boolean isTouchDismissable;
-        Animations mAnimations;
-        int mTypeface;
-        String mDismissListenerTag;
-
-        //BUTTON type stuff
-        String mButtonText;
-        float mButtonTextSize;
+        int mIcon;
+        int mBackground;
+        int mTypefaceStyle;
         int mButtonTextColor;
-        int mButtonResource;
-        int mButtonDividerResource;
+        int mButtonIcon;
+        int mDivider;
+        int mButtonTypefaceStyle;
+        String mText;
+        String mButtonText;
         String mClickListenerTag;
-        int mButtonTypeface;
-
+        String mDismissListenerTag;
+        Type mType;
 
         public Style(SuperActivityToast superActivityToast) {
 
@@ -1267,16 +1333,16 @@ public class SuperActivityToast {
                 mButtonText = superActivityToast.getButtonText().toString();
                 mButtonTextSize = superActivityToast.getButtonTextSize();
                 mButtonTextColor = superActivityToast.getButtonTextColor();
-                mButtonResource = superActivityToast.getButtonResource();
-                mButtonDividerResource = superActivityToast.getButtonDividerResource();
+                mButtonIcon = superActivityToast.getButtonIcon();
+                mDivider = superActivityToast.getDivider();
                 mClickListenerTag = superActivityToast.getClickListenerTag();
-                mButtonTypeface = superActivityToast.getButtonTypeface();
+                mButtonTypefaceStyle = superActivityToast.getButtonTypefaceStyle();
 
             }
 
             if (superActivityToast.getIconResource() != 0 && superActivityToast.getIconPosition() != null) {
 
-                mIconResource = superActivityToast.getIconResource();
+                mIcon = superActivityToast.getIconResource();
                 mIconPosition = superActivityToast.getIconPosition();
 
             }
@@ -1284,13 +1350,13 @@ public class SuperActivityToast {
             mDismissListenerTag = superActivityToast.getDismissListenerTag();
             mAnimations = superActivityToast.getAnimations();
             mText = superActivityToast.getText().toString();
-            mTypeface = superActivityToast.getTypeface();
+            mTypefaceStyle = superActivityToast.getTypefaceStyle();
             mDuration = superActivityToast.getDuration();
             mTextColor = superActivityToast.getTextColor();
             mTextSize = superActivityToast.getTextSize();
-            isIndeterminate = superActivityToast.isIndeterminate();
-            mBackgroundResource = superActivityToast.getBackgroundResource();
-            isTouchDismissable = superActivityToast.isTouchDismissable();
+            mIsIndeterminate = superActivityToast.isIndeterminate();
+            mBackground = superActivityToast.getBackground();
+            mIsTouchDismissible = superActivityToast.isTouchDismissible();
 
         }
 
@@ -1303,9 +1369,9 @@ public class SuperActivityToast {
                 mButtonText = parcel.readString();
                 mButtonTextSize = parcel.readFloat();
                 mButtonTextColor = parcel.readInt();
-                mButtonResource = parcel.readInt();
-                mButtonDividerResource = parcel.readInt();
-                mButtonTypeface = parcel.readInt();
+                mButtonIcon = parcel.readInt();
+                mDivider = parcel.readInt();
+                mButtonTypefaceStyle = parcel.readInt();
                 mClickListenerTag = parcel.readString();
 
             }
@@ -1314,7 +1380,7 @@ public class SuperActivityToast {
 
             if (hasIcon) {
 
-                mIconResource = parcel.readInt();
+                mIcon = parcel.readInt();
                 mIconPosition = IconPosition.values()[parcel.readInt()];
 
             }
@@ -1322,13 +1388,13 @@ public class SuperActivityToast {
             mDismissListenerTag = parcel.readString();
             mAnimations = Animations.values()[parcel.readInt()];
             mText = parcel.readString();
-            mTypeface = parcel.readInt();
+            mTypefaceStyle = parcel.readInt();
             mDuration = parcel.readInt();
             mTextColor = parcel.readInt();
             mTextSize = parcel.readFloat();
-            isIndeterminate = parcel.readByte() != 0;
-            mBackgroundResource = parcel.readInt();
-            isTouchDismissable = parcel.readByte() != 0;
+            mIsIndeterminate = parcel.readByte() != 0;
+            mBackground = parcel.readInt();
+            mIsTouchDismissible = parcel.readByte() != 0;
 
         }
 
@@ -1343,18 +1409,18 @@ public class SuperActivityToast {
                 parcel.writeString(mButtonText);
                 parcel.writeFloat(mButtonTextSize);
                 parcel.writeInt(mButtonTextColor);
-                parcel.writeInt(mButtonResource);
-                parcel.writeInt(mButtonDividerResource);
-                parcel.writeInt(mButtonTypeface);
+                parcel.writeInt(mButtonIcon);
+                parcel.writeInt(mDivider);
+                parcel.writeInt(mButtonTypefaceStyle);
                 parcel.writeString(mClickListenerTag);
 
             }
 
-            if (mIconResource != 0 && mIconPosition != null) {
+            if (mIcon != 0 && mIconPosition != null) {
 
                 parcel.writeByte((byte) 1);
 
-                parcel.writeInt(mIconResource);
+                parcel.writeInt(mIcon);
                 parcel.writeInt(mIconPosition.ordinal());
 
             } else {
@@ -1366,13 +1432,13 @@ public class SuperActivityToast {
             parcel.writeString(mDismissListenerTag);
             parcel.writeInt(mAnimations.ordinal());
             parcel.writeString(mText);
-            parcel.writeInt(mTypeface);
+            parcel.writeInt(mTypefaceStyle);
             parcel.writeInt(mDuration);
             parcel.writeInt(mTextColor);
             parcel.writeFloat(mTextSize);
-            parcel.writeByte((byte) (isIndeterminate ? 1 : 0));
-            parcel.writeInt(mBackgroundResource);
-            parcel.writeByte((byte) (isTouchDismissable ? 1 : 0));
+            parcel.writeByte((byte) (mIsIndeterminate ? 1 : 0));
+            parcel.writeInt(mBackground);
+            parcel.writeByte((byte) (mIsTouchDismissible ? 1 : 0));
 
         }
 
