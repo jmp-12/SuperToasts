@@ -60,7 +60,9 @@ public class SuperActivityToast {
     private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " - is only compatible with PROGRESS_HORIZONTAL type SuperActivityToasts.";
     private static final String ERROR_NOTEITHERPROGRESSTYPE = " - is only compatible with PROGRESS_HORIZONTAL or PROGRESS type SuperActivityToasts.";
 
-    /** Bundle tag with a hex as a string so it can't interfere with other tags in the bundle */
+    /**
+     * Bundle tag with a hex as a string so it can't interfere with other tags in the bundle
+     */
     private static final String BUNDLE_TAG = "0x532e412e542e";
 
     private Activity mActivity;
@@ -295,7 +297,9 @@ public class SuperActivityToast {
 
     }
 
-    /** Used by orientation change recreation */
+    /**
+     * Used by orientation change recreation
+     */
     private void setTextSizeFloat(float textSize) {
 
         mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -571,7 +575,9 @@ public class SuperActivityToast {
 
     }
 
-    /** Used in orientation change recreation. */
+    /**
+     * Used in orientation change recreation.
+     */
     private String getClickListenerTag() {
 
         return mClickListenerTag;
@@ -879,7 +885,7 @@ public class SuperActivityToast {
 
         this.isProgressIndeterminate = isIndeterminate;
 
-        if(mProgressBar != null) {
+        if (mProgressBar != null) {
 
             mProgressBar.setIndeterminate(isIndeterminate);
 
@@ -961,7 +967,6 @@ public class SuperActivityToast {
      * @param activity         {@link android.app.Activity}
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
-     *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createSuperActivityToast(
@@ -982,7 +987,6 @@ public class SuperActivityToast {
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
-     *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createSuperActivityToast(
@@ -1003,7 +1007,6 @@ public class SuperActivityToast {
      * @param activity         {@link android.app.Activity}
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
-     *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createLightSuperActivityToast(
@@ -1026,7 +1029,6 @@ public class SuperActivityToast {
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
-     *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
     public static SuperActivityToast createLightSuperActivityToast(
@@ -1125,8 +1127,8 @@ public class SuperActivityToast {
      * Recreates pending/showing {@value #TAG} from orientation change and
      * reattaches any OnClickListenerWrappers.
      *
-     * @param bundle   {@link android.os.Bundle}
-     * @param activity {@link android.app.Activity}
+     * @param bundle                  {@link android.os.Bundle}
+     * @param activity                {@link android.app.Activity}
      * @param onClickListenerWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
      */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickListenerWrapper> onClickListenerWrappers) {
@@ -1189,7 +1191,9 @@ public class SuperActivityToast {
 
     }
 
-    /** Method used to recreate {@value #TAG} after orientation change */
+    /**
+     * Method used to recreate {@value #TAG} after orientation change
+     */
     private SuperActivityToast(Activity activity, Style style, List<OnClickListenerWrapper> onClickListenerWrappers,
                                List<OnDismissListenerWrapper> onDismissListenerWrappers, int position) {
 
@@ -1300,7 +1304,9 @@ public class SuperActivityToast {
     };
 
 
-    /** Parcelable class that saves all data on orientation change */
+    /**
+     * Parcelable class that saves all data on orientation change
+     */
     private static class Style implements Parcelable {
 
         Animations mAnimations;
