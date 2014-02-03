@@ -38,8 +38,8 @@ import android.widget.TextView;
 import com.github.johnpersano.supertoasts.SuperToast.Animations;
 import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
 import com.github.johnpersano.supertoasts.SuperToast.Type;
-import com.github.johnpersano.supertoasts.util.OnClickListenerWrapper;
-import com.github.johnpersano.supertoasts.util.OnDismissListenerWrapper;
+import com.github.johnpersano.supertoasts.util.OnClickWrapper;
+import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -82,10 +82,10 @@ public class SuperActivityToast {
     private int mButtonTypefaceStyle = Typeface.BOLD;
     private LayoutInflater mLayoutInflater;
     private LinearLayout mRootLayout;
-    private OnDismissListenerWrapper mOnDismissListenerWrapper;
+    private OnDismissWrapper mOnDismissWrapper;
     private ProgressBar mProgressBar;
-    private String mClickListenerTag;
-    private String mDismissListenerTag;
+    private String mOnClickWrapperTag;
+    private String mOnDismissWrapperTag;
     private TextView mMessageTextView;
     private Type mType = Type.STANDARD;
     private View mDividerView;
@@ -516,33 +516,33 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets an OnDismissListenerWrapper defined in this library
+     * Sets an OnDismissWrapper defined in this library
      * to the {@value #TAG}.
      *
-     * @param onDismissListenerWrapper {@link com.github.johnpersano.supertoasts.util.OnDismissListenerWrapper}
+     * @param onDismissWrapper {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper}
      */
-    public void setOnDismissListenerWrapper(OnDismissListenerWrapper onDismissListenerWrapper) {
+    public void setOnDismissWrapper(OnDismissWrapper onDismissWrapper) {
 
-        this.mOnDismissListenerWrapper = onDismissListenerWrapper;
-        this.mDismissListenerTag = onDismissListenerWrapper.getTag();
+        this.mOnDismissWrapper = onDismissWrapper;
+        this.mOnDismissWrapperTag = onDismissWrapper.getTag();
 
     }
 
     /**
      * Used in {@value #MANAGER_TAG}.
      */
-    protected OnDismissListenerWrapper getOnDismissListenerWrapper() {
+    protected OnDismissWrapper getOnDismissWrapper() {
 
-        return this.mOnDismissListenerWrapper;
+        return this.mOnDismissWrapper;
 
     }
 
     /**
      * Used in orientation change recreation.
      */
-    private String getDismissListenerTag() {
+    private String getOnDismissWrapperTag() {
 
-        return mDismissListenerTag;
+        return mOnDismissWrapperTag;
 
     }
 
@@ -556,12 +556,12 @@ public class SuperActivityToast {
     }
 
     /**
-     * Sets an OnClickListenerWrapper to the button in a BUTTON
+     * Sets an OnClickWrapper to the button in a BUTTON
      * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param onClickListenerWrapper {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
+     * @param onClickWrapper {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
      */
-    public void setOnClickListenerWrapper(OnClickListenerWrapper onClickListenerWrapper) {
+    public void setOnClickWrapper(OnClickWrapper onClickWrapper) {
 
         if (mType != Type.BUTTON) {
 
@@ -569,18 +569,18 @@ public class SuperActivityToast {
 
         }
 
-        mButton.setOnClickListener(onClickListenerWrapper);
+        mButton.setOnClickListener(onClickWrapper);
 
-        this.mClickListenerTag = onClickListenerWrapper.getTag();
+        this.mOnClickWrapperTag = onClickWrapper.getTag();
 
     }
 
     /**
      * Used in orientation change recreation.
      */
-    private String getClickListenerTag() {
+    private String getOnClickWrapperTag() {
 
-        return mClickListenerTag;
+        return mOnClickWrapperTag;
 
     }
 
@@ -1129,9 +1129,9 @@ public class SuperActivityToast {
      *
      * @param bundle                  {@link android.os.Bundle}
      * @param activity                {@link android.app.Activity}
-     * @param onClickListenerWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
+     * @param onClickWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
      */
-    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickListenerWrapper> onClickListenerWrappers) {
+    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickWrapper> onClickWrappers) {
 
         if (bundle == null) {
 
@@ -1148,7 +1148,7 @@ public class SuperActivityToast {
 
                 i++;
 
-                new SuperActivityToast(activity, (Style) parcelable, onClickListenerWrappers, null, i);
+                new SuperActivityToast(activity, (Style) parcelable, onClickWrappers, null, i);
 
             }
 
@@ -1160,13 +1160,13 @@ public class SuperActivityToast {
      * Recreates pending/showing {@value #TAG} from orientation change and
      * reattaches any OnClickListenerWrappers and OnDismissListenerWrappers.
      *
-     * @param bundle                    {@link android.os.Bundle}
-     * @param activity                  {@link android.app.Activity}
-     * @param onClickListenerWrappers   {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickListenerWrapper}
-     * @param onDismissListenerWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnDismissListenerWrapper}
+     * @param bundle            {@link android.os.Bundle}
+     * @param activity          {@link android.app.Activity}
+     * @param onClickWrappers   {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     * @param onDismissWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper}
      */
-    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickListenerWrapper> onClickListenerWrappers,
-                                      List<OnDismissListenerWrapper> onDismissListenerWrappers) {
+    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickWrapper> onClickWrappers,
+                                      List<OnDismissWrapper> onDismissWrappers) {
 
         if (bundle == null) {
 
@@ -1183,7 +1183,7 @@ public class SuperActivityToast {
 
                 i++;
 
-                new SuperActivityToast(activity, (Style) parcelable, onClickListenerWrappers, onDismissListenerWrappers, i);
+                new SuperActivityToast(activity, (Style) parcelable, onClickWrappers, onDismissWrappers, i);
 
             }
 
@@ -1194,8 +1194,8 @@ public class SuperActivityToast {
     /**
      * Method used to recreate {@value #TAG} after orientation change
      */
-    private SuperActivityToast(Activity activity, Style style, List<OnClickListenerWrapper> onClickListenerWrappers,
-                               List<OnDismissListenerWrapper> onDismissListenerWrappers, int position) {
+    private SuperActivityToast(Activity activity, Style style, List<OnClickWrapper> onClickWrappers,
+                               List<OnDismissWrapper> onDismissWrappers, int position) {
 
         SuperActivityToast superActivityToast;
 
@@ -1210,13 +1210,13 @@ public class SuperActivityToast {
             superActivityToast.setButtonTypefaceStyle(style.mButtonTypefaceStyle);
 
             /** Reattach any OnClickListenerWrappers by matching tags sent through parcel */
-            if (onClickListenerWrappers != null) {
+            if (onClickWrappers != null) {
 
-                for (OnClickListenerWrapper onClickListenerWrapper : onClickListenerWrappers) {
+                for (OnClickWrapper onClickWrapper : onClickWrappers) {
 
-                    if (onClickListenerWrapper.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
+                    if (onClickWrapper.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
 
-                        superActivityToast.setOnClickListenerWrapper(onClickListenerWrapper);
+                        superActivityToast.setOnClickWrapper(onClickWrapper);
 
                     }
 
@@ -1242,13 +1242,13 @@ public class SuperActivityToast {
         }
 
         /** Reattach any OnDismissListenerWrappers by matching tags sent through parcel */
-        if (onDismissListenerWrappers != null) {
+        if (onDismissWrappers != null) {
 
-            for (OnDismissListenerWrapper onDismissListenerWrapper : onDismissListenerWrappers) {
+            for (OnDismissWrapper onDismissWrapper : onDismissWrappers) {
 
-                if (onDismissListenerWrapper.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
+                if (onDismissWrapper.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
 
-                    superActivityToast.setOnDismissListenerWrapper(onDismissListenerWrapper);
+                    superActivityToast.setOnDismissWrapper(onDismissWrapper);
 
                 }
 
@@ -1341,7 +1341,7 @@ public class SuperActivityToast {
                 mButtonTextColor = superActivityToast.getButtonTextColor();
                 mButtonIcon = superActivityToast.getButtonIcon();
                 mDivider = superActivityToast.getDivider();
-                mClickListenerTag = superActivityToast.getClickListenerTag();
+                mClickListenerTag = superActivityToast.getOnClickWrapperTag();
                 mButtonTypefaceStyle = superActivityToast.getButtonTypefaceStyle();
 
             }
@@ -1353,7 +1353,7 @@ public class SuperActivityToast {
 
             }
 
-            mDismissListenerTag = superActivityToast.getDismissListenerTag();
+            mDismissListenerTag = superActivityToast.getOnDismissWrapperTag();
             mAnimations = superActivityToast.getAnimations();
             mText = superActivityToast.getText().toString();
             mTypefaceStyle = superActivityToast.getTypefaceStyle();
