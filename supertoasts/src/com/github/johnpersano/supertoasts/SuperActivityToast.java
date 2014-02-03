@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.github.johnpersano.supertoasts.SuperToast.Animations;
 import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
 import com.github.johnpersano.supertoasts.SuperToast.Type;
+import com.github.johnpersano.supertoasts.util.DefaultStyle;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
 import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
 
@@ -55,7 +56,7 @@ public class SuperActivityToast {
     private static final String TAG = "SuperActivityToast";
     private static final String MANAGER_TAG = "SuperActivityToast Manager";
 
-    private static final String ERROR_CONTEXTNULL = " - The Context that you passed was null.";
+    private static final String ERROR_ACTIVITYNULL = " - You cannot pass a null Activity as a parameter.";
     private static final String ERROR_NOTBUTTONTYPE = " - is only compatible with BUTTON type SuperActivityToasts.";
     private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " - is only compatible with PROGRESS_HORIZONTAL type SuperActivityToasts.";
     private static final String ERROR_NOTEITHERPROGRESSTYPE = " - is only compatible with PROGRESS_HORIZONTAL or PROGRESS type SuperActivityToasts.";
@@ -99,30 +100,63 @@ public class SuperActivityToast {
      */
     public SuperActivityToast(Activity activity) {
 
-        if (activity != null) {
+        if (activity == null) {
 
-            this.mActivity = activity;
-
-            mLayoutInflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            mViewGroup = (ViewGroup) activity
-                    .findViewById(android.R.id.content);
-
-            mToastView = mLayoutInflater.inflate(R.layout.supertoast,
-                    mViewGroup, false);
-
-            mMessageTextView = (TextView) mToastView
-                    .findViewById(R.id.message_textView);
-
-            mRootLayout = (LinearLayout) mToastView
-                    .findViewById(R.id.root_layout);
-
-        } else {
-
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
+
+        this.mActivity = activity;
+
+        mLayoutInflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mViewGroup = (ViewGroup) activity
+                .findViewById(android.R.id.content);
+
+        mToastView = mLayoutInflater.inflate(R.layout.supertoast,
+                mViewGroup, false);
+
+        mMessageTextView = (TextView) mToastView
+                .findViewById(R.id.message_textView);
+
+        mRootLayout = (LinearLayout) mToastView
+                .findViewById(R.id.root_layout);
+
+    }
+
+    /**
+     * Instantiates a new {@value #TAG} with a specified default style.
+     *
+     * @param activity     {@link android.app.Activity}
+     * @param defaultStyle {@link com.github.johnpersano.supertoasts.util.DefaultStyle}
+     */
+    public SuperActivityToast(Activity activity, DefaultStyle defaultStyle) {
+
+        if (activity == null) {
+
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
+
+        }
+
+        this.mActivity = activity;
+
+        mLayoutInflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mViewGroup = (ViewGroup) activity
+                .findViewById(android.R.id.content);
+
+        mToastView = mLayoutInflater.inflate(R.layout.supertoast,
+                mViewGroup, false);
+
+        mMessageTextView = (TextView) mToastView
+                .findViewById(R.id.message_textView);
+
+        mRootLayout = (LinearLayout) mToastView
+                .findViewById(R.id.root_layout);
+
+        this.setDefaultStyle(defaultStyle);
 
     }
 
@@ -134,64 +168,133 @@ public class SuperActivityToast {
      */
     public SuperActivityToast(Activity activity, Type type) {
 
-        if (activity != null) {
+        if (activity == null) {
 
-            this.mActivity = activity;
-            this.mType = type;
-
-            mLayoutInflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            mViewGroup = (ViewGroup) activity
-                    .findViewById(android.R.id.content);
-
-            if (type == Type.STANDARD) {
-
-                mToastView = mLayoutInflater.inflate(
-                        R.layout.superactivitytoast, mViewGroup, false);
-
-            } else if (type == Type.BUTTON) {
-
-                mToastView = mLayoutInflater.inflate(
-                        R.layout.superactivitytoast_button, mViewGroup, false);
-
-                mButton = (Button) mToastView
-                        .findViewById(R.id.button);
-
-                mDividerView = mToastView
-                        .findViewById(R.id.divider);
-
-                mButton.setOnTouchListener(mTouchDismissListener);
-
-            } else if (type == Type.PROGRESS) {
-
-                mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
-                        mViewGroup, false);
-
-                mProgressBar = (ProgressBar) mToastView
-                        .findViewById(R.id.progressBar);
-
-            } else if (type == Type.PROGRESS_HORIZONTAL) {
-
-                mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
-                        mViewGroup, false);
-
-                mProgressBar = (ProgressBar) mToastView
-                        .findViewById(R.id.progressBar);
-
-            }
-
-            mMessageTextView = (TextView) mToastView
-                    .findViewById(R.id.message_textView);
-
-            mRootLayout = (LinearLayout) mToastView
-                    .findViewById(R.id.root_layout);
-
-        } else {
-
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
+
+        this.mActivity = activity;
+        this.mType = type;
+
+        mLayoutInflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mViewGroup = (ViewGroup) activity
+                .findViewById(android.R.id.content);
+
+        if (type == Type.STANDARD) {
+
+            mToastView = mLayoutInflater.inflate(
+                    R.layout.superactivitytoast, mViewGroup, false);
+
+        } else if (type == Type.BUTTON) {
+
+            mToastView = mLayoutInflater.inflate(
+                    R.layout.superactivitytoast_button, mViewGroup, false);
+
+            mButton = (Button) mToastView
+                    .findViewById(R.id.button);
+
+            mDividerView = mToastView
+                    .findViewById(R.id.divider);
+
+            mButton.setOnTouchListener(mTouchDismissListener);
+
+        } else if (type == Type.PROGRESS) {
+
+            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
+                    mViewGroup, false);
+
+            mProgressBar = (ProgressBar) mToastView
+                    .findViewById(R.id.progressBar);
+
+        } else if (type == Type.PROGRESS_HORIZONTAL) {
+
+            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
+                    mViewGroup, false);
+
+            mProgressBar = (ProgressBar) mToastView
+                    .findViewById(R.id.progressBar);
+
+        }
+
+        mMessageTextView = (TextView) mToastView
+                .findViewById(R.id.message_textView);
+
+        mRootLayout = (LinearLayout) mToastView
+                .findViewById(R.id.root_layout);
+
+
+    }
+
+    /**
+     * Instantiates a new {@value #TAG} with a type and a specified default style.
+     *
+     * @param activity     {@link android.app.Activity}
+     * @param type         {@link com.github.johnpersano.supertoasts.SuperToast.Type}
+     * @param defaultStyle {@link com.github.johnpersano.supertoasts.util.DefaultStyle}
+     */
+    public SuperActivityToast(Activity activity, Type type, DefaultStyle defaultStyle) {
+
+        if (activity == null) {
+
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
+
+        }
+
+        this.mActivity = activity;
+        this.mType = type;
+
+        mLayoutInflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mViewGroup = (ViewGroup) activity
+                .findViewById(android.R.id.content);
+
+        if (type == Type.STANDARD) {
+
+            mToastView = mLayoutInflater.inflate(
+                    R.layout.superactivitytoast, mViewGroup, false);
+
+        } else if (type == Type.BUTTON) {
+
+            mToastView = mLayoutInflater.inflate(
+                    R.layout.superactivitytoast_button, mViewGroup, false);
+
+            mButton = (Button) mToastView
+                    .findViewById(R.id.button);
+
+            mDividerView = mToastView
+                    .findViewById(R.id.divider);
+
+            mButton.setOnTouchListener(mTouchDismissListener);
+
+        } else if (type == Type.PROGRESS) {
+
+            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
+                    mViewGroup, false);
+
+            mProgressBar = (ProgressBar) mToastView
+                    .findViewById(R.id.progressBar);
+
+        } else if (type == Type.PROGRESS_HORIZONTAL) {
+
+            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
+                    mViewGroup, false);
+
+            mProgressBar = (ProgressBar) mToastView
+                    .findViewById(R.id.progressBar);
+
+        }
+
+        mMessageTextView = (TextView) mToastView
+                .findViewById(R.id.message_textView);
+
+        mRootLayout = (LinearLayout) mToastView
+                .findViewById(R.id.root_layout);
+
+        this.setDefaultStyle(defaultStyle);
 
     }
 
@@ -962,6 +1065,43 @@ public class SuperActivityToast {
     }
 
     /**
+     * Private method used to set a default style to the {@value #TAG}
+     */
+    private void setDefaultStyle(DefaultStyle defaultStyle) {
+
+        if (defaultStyle.animations != null) {
+
+            this.setAnimations(defaultStyle.animations);
+
+        }
+
+        if (defaultStyle.duration > 0) {
+
+            this.setDuration(defaultStyle.duration);
+
+        }
+
+        if (defaultStyle.background > 0) {
+
+            this.setBackground(defaultStyle.background);
+
+        }
+
+        if (defaultStyle.typefaceStyle > 0) {
+
+            this.setTypefaceStyle(defaultStyle.typefaceStyle);
+
+        }
+
+        if (defaultStyle.textColor > 0) {
+
+            this.setTextColor(defaultStyle.textColor);
+
+        }
+
+    }
+
+    /**
      * Returns a dark themed {@value #TAG}.
      *
      * @param activity         {@link android.app.Activity}
@@ -1127,8 +1267,8 @@ public class SuperActivityToast {
      * Recreates pending/showing {@value #TAG} from orientation change and
      * reattaches any OnClickListenerWrappers.
      *
-     * @param bundle                  {@link android.os.Bundle}
-     * @param activity                {@link android.app.Activity}
+     * @param bundle          {@link android.os.Bundle}
+     * @param activity        {@link android.app.Activity}
      * @param onClickWrappers {@link java.util.List} {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
      */
     public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickWrapper> onClickWrappers) {
