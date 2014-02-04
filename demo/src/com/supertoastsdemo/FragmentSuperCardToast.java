@@ -15,9 +15,9 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
-import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
-import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
+import com.github.johnpersano.supertoasts.util.OnClickWrapper;
+import com.github.johnpersano.supertoasts.util.OnDismissListener;
+import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,18 +46,16 @@ public class FragmentSuperCardToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_supercardtoast,
                 container, false);
 
-        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 
-            List<OnToastButtonClickListenerHolder> onToastButtonClickListenerHolderList =
-                    new ArrayList<OnToastButtonClickListenerHolder>();
-            onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+            List<OnClickWrapper> onClickWrappers = new ArrayList<OnClickWrapper>();
+            onClickWrappers.add(onClickWrapper);
 
-            List<OnToastDismissListenerHolder> onToastDismissListenerHolderList =
-                    new ArrayList<OnToastDismissListenerHolder>();
-            onToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+            List<OnDismissWrapper> onDismissWrappers = new ArrayList<OnDismissWrapper>();
+            onDismissWrappers.add(onDismissWrapper);
 
             SuperCardToast.onRestoreState(savedInstanceState, getActivity(),
-                    onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
+                    onClickWrappers, onDismissWrappers);
 
         } else {
 
@@ -106,7 +104,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
             @Override
             public boolean onLongClick(View v) {
 
-                 startActivity(new Intent(getActivity(), ActivityTwo.class));
+                startActivity(new Intent(getActivity(), ActivityTwo.class));
 
                 return false;
             }
@@ -121,9 +119,9 @@ public class FragmentSuperCardToast extends SherlockFragment {
     public void onPause() {
         super.onPause();
 
-        if(mDummyOperation != null){
+        if (mDummyOperation != null) {
 
-            if(mDummyOperation.getStatus() == AsyncTask.Status.PENDING ||
+            if (mDummyOperation.getStatus() == AsyncTask.Status.PENDING ||
                     mDummyOperation.getStatus() == AsyncTask.Status.RUNNING) {
 
                 mDummyOperation.cancel(true);
@@ -164,17 +162,17 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
                 mCount++;
 
-                if(mCount == 1) {
+                if (mCount == 1) {
 
-                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+                    superCardToast.setOnClickWrapper(onClickWrapper);
 
                 } else if (mCount == 2) {
 
-                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderTwo);
+                    superCardToast.setOnClickWrapper(onClickWrapperTwo);
 
                 } else {
 
-                    superCardToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderThree);
+                    superCardToast.setOnClickWrapper(onClickWrapperThree);
 
                 }
 
@@ -191,7 +189,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case R.id.hprogress_radiobutton:
 
-                  superCardToast = new SuperCardToast(getActivity(),
+                superCardToast = new SuperCardToast(getActivity(),
                         SuperToast.Type.PROGRESS_HORIZONTAL);
 
                 superCardToast.setAnimations(SuperToast.Animations.FLYIN);
@@ -269,43 +267,43 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
             case 0:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superCardToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+                superCardToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -358,15 +356,15 @@ public class FragmentSuperCardToast extends SherlockFragment {
         }
 
 
-        if(mImageCheckBox.isChecked()) {
+        if (mImageCheckBox.isChecked()) {
 
             superCardToast.setIcon(SuperToast.Icon.Dark.INFO, SuperToast.IconPosition.LEFT);
 
         }
 
-        if(mDismissCheckBox.isChecked()) {
+        if (mDismissCheckBox.isChecked()) {
 
-            superCardToast.setOnToastDismissListener(onToastDismissListenerHolder);
+            superCardToast.setOnDismissWrapper(onDismissWrapper);
 
         }
 
@@ -375,78 +373,76 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
     }
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolder =
-            new OnToastButtonClickListenerHolder("toast_one", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapper = new OnClickWrapper("toast_one", new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
 
-                    SuperToast superToast = new SuperToast(v.getContext());
-                    superToast.setText("On Click with first listener!");
-                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
-                    superToast.setTextColor(Color.WHITE);
-                    superToast.show();
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with first listener!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
 
-                }
+        }
 
-            });
+    });
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderTwo =
-            new OnToastButtonClickListenerHolder("toast_two", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperTwo = new OnClickWrapper("toast_two", new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
 
-                    SuperToast superToast = new SuperToast(v.getContext());
-                    superToast.setText("On Click with second listener!");
-                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
-                    superToast.setTextColor(Color.WHITE);
-                    superToast.show();
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with second listener!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
 
-                }
+        }
 
-            });
+    });
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderThree =
-            new OnToastButtonClickListenerHolder("toast_three", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperThree = new OnClickWrapper("toast_three", new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
 
-                    SuperToast superToast = new SuperToast(v.getContext());
-                    superToast.setText("On Click with last listener!");
-                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
-                    superToast.setTextColor(Color.WHITE);
-                    superToast.show();
+            SuperToast superToast = new SuperToast(v.getContext());
+            superToast.setText("On Click with last listener!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
 
-                }
+        }
 
-            });
+    });
 
-    private OnToastDismissListenerHolder onToastDismissListenerHolder =
-            new OnToastDismissListenerHolder("toast_one", new OnToastDismissListener() {
+    private OnDismissWrapper onDismissWrapper = new OnDismissWrapper("toast_one", new OnDismissListener() {
 
-                @Override
-                public void onDismiss(View view) {
+        @Override
+        public void onDismiss(View view) {
 
-                    SuperToast superToast = new SuperToast(view.getContext());
-                    superToast.setText("On dismiss!");
-                    superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
-                    superToast.setTextColor(Color.WHITE);
-                    superToast.show();
+            SuperToast superToast = new SuperToast(view.getContext());
+            superToast.setText("On dismiss!");
+            superToast.setDuration(SuperToast.Duration.VERY_SHORT);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
+            superToast.setTextColor(Color.WHITE);
+            superToast.show();
 
-                }
-            });
+        }
+    });
 
 
     private class DummyOperation extends AsyncTask<Void, Integer, Void> {
 
-        /** This setup is a little hacky due to the customization in the demo.
-         *  Check the examples package in the demo for a proper example */
+        /**
+         * This setup is a little hacky due to the customization in the demo.
+         * Check the examples package in the demo for a proper example
+         */
 
         SuperCardToast mSuperCardToast;
 
@@ -459,7 +455,7 @@ public class FragmentSuperCardToast extends SherlockFragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            for(int i = 0; i < 11 ; i++) {
+            for (int i = 0; i < 11; i++) {
 
                 try {
 
@@ -480,24 +476,24 @@ public class FragmentSuperCardToast extends SherlockFragment {
 
         @Override
         protected void onPostExecute(Void voids) {
-        	
-        	if(mSuperCardToast != null) {
-        		
+
+            if (mSuperCardToast != null) {
+
                 mSuperCardToast.dismiss();
 
-        	} 
+            }
 
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            
-        	if(mSuperCardToast != null) {
 
-            mSuperCardToast.setProgress(progress[0]);
-            
-        	}
+            if (mSuperCardToast != null) {
+
+                mSuperCardToast.setProgress(progress[0]);
+
+            }
 
         }
 

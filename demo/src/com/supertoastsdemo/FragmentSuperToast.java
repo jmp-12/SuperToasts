@@ -130,43 +130,43 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+                superToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -197,7 +197,7 @@ public class FragmentSuperToast extends SherlockFragment {
 
         if(mImageCheckBox.isChecked()) {
 
-            superToast.setIconResource(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
+            superToast.setIcon(R.drawable.icon_message, SuperToast.IconPosition.LEFT);
 
         }
 

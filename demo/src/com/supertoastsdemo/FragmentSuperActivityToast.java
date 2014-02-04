@@ -32,9 +32,10 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.OnToastButtonClickListenerHolder;
-import com.github.johnpersano.supertoasts.util.OnToastDismissListener;
-import com.github.johnpersano.supertoasts.util.OnToastDismissListenerHolder;
+import com.github.johnpersano.supertoasts.util.OnClickWrapper;
+import com.github.johnpersano.supertoasts.util.OnDismissListener;
+import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,13 +63,13 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 
-            List<OnToastButtonClickListenerHolder> onToastButtonClickListenerHolderList =
-                    new ArrayList<OnToastButtonClickListenerHolder>();
-            onToastButtonClickListenerHolderList.add(onToastButtonClickListenerHolder);
+            List<OnClickWrapper> onToastButtonClickListenerHolderList =
+                    new ArrayList<OnClickWrapper>();
+            onToastButtonClickListenerHolderList.add(onClickWrapper);
 
-            List<OnToastDismissListenerHolder> onToastDismissListenerHolderList =
-                    new ArrayList<OnToastDismissListenerHolder>();
-            onToastDismissListenerHolderList.add(onToastDismissListenerHolder);
+            List<OnDismissWrapper> onToastDismissListenerHolderList =
+                    new ArrayList<OnDismissWrapper>();
+            onToastDismissListenerHolderList.add(onDismissWrapper);
 
             SuperActivityToast.onRestoreState(savedInstanceState, getActivity(),
                     onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
@@ -177,15 +178,15 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
                 if(mCount == 1) {
 
-                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolder);
+                    superActivityToast.setOnClickWrapper(onClickWrapper);
 
                 } else if (mCount == 2) {
 
-                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderTwo);
+                    superActivityToast.setOnClickWrapper(onClickWrapperTwo);
 
                 } else {
 
-                    superActivityToast.setOnToastButtonClickListener(onToastButtonClickListenerHolderThree);
+                    superActivityToast.setOnClickWrapper(onClickWrapperThree);
 
                 }
 
@@ -276,43 +277,43 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
             case 0:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLACK);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_BLACK);
 
                 break;
 
             case 1:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GRAY);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_GRAY);
 
                 break;
 
             case 2:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
 
                 break;
 
             case 3:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
 
                 break;
 
             case 4:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_RED);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_RED);
 
                 break;
 
             case 5:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_PURPLE);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_PURPLE);
 
                 break;
 
             case 6:
 
-                superActivityToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+                superActivityToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
 
                 break;
 
@@ -348,7 +349,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         if(mDismissCheckBox.isChecked()) {
 
-            superActivityToast.setOnToastDismissListener(onToastDismissListenerHolder);
+            superActivityToast.setOnDismissWrapper(onDismissWrapper);
 
         }
 
@@ -356,8 +357,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     }
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolder =
-            new OnToastButtonClickListenerHolder("toast_one", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapper = new OnClickWrapper("toast_one", new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -365,7 +365,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
             SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with first listener!");
             superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-            superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_BLUE);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
             superToast.setTextColor(Color.WHITE);
             superToast.show();
 
@@ -373,8 +373,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderTwo =
-            new OnToastButtonClickListenerHolder("toast_two", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperTwo = new OnClickWrapper("toast_two", new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -382,7 +381,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with second listener!");
         superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-        superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_ORANGE);
+        superToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
         superToast.setTextColor(Color.WHITE);
         superToast.show();
 
@@ -390,8 +389,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnToastButtonClickListenerHolder onToastButtonClickListenerHolderThree =
-            new OnToastButtonClickListenerHolder("toast_three", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperThree = new OnClickWrapper("toast_three", new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -399,7 +397,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
             SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with last listener!");
             superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-            superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+            superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
             superToast.setTextColor(Color.WHITE);
             superToast.show();
 
@@ -407,8 +405,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnToastDismissListenerHolder onToastDismissListenerHolder =
-            new OnToastDismissListenerHolder("toast_one", new OnToastDismissListener() {
+    private OnDismissWrapper onDismissWrapper = new OnDismissWrapper("toast_one", new OnDismissListener() {
 
                 @Override
                 public void onDismiss(View view) {
@@ -416,7 +413,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
                     SuperToast superToast = new SuperToast(view.getContext());
                     superToast.setText("On dismiss!");
                     superToast.setDuration(SuperToast.Duration.VERY_SHORT);
-                    superToast.setBackgroundResource(SuperToast.Background.TRANSLUCENT_GREEN);
+                    superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
                     superToast.setTextColor(Color.WHITE);
                     superToast.show();
 
