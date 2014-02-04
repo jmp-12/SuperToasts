@@ -24,12 +24,12 @@ import android.view.View.OnClickListener;
  *  Class that holds a reference to OnClickListeners set to button type SuperActivityToasts/SuperCardToasts.
  *  This is used for restoring listeners on orientation changes.
  */
-public class OnClickListenerWrapper implements OnClickListener {
+public class OnClickWrapper implements OnClickListener {
 
     private final String mTag;
     private final OnClickListener mOnClickListener;
 
-    public OnClickListenerWrapper(String tag, OnClickListener onClickListener) {
+    public OnClickWrapper(String tag, OnClickListener onClickListener) {
 
         this.mTag = tag;
         this.mOnClickListener = onClickListener;
