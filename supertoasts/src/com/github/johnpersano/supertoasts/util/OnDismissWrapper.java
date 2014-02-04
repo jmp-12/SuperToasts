@@ -1,5 +1,5 @@
 /**
- *  Copyright 2013 John Persano
+ *  Copyright 2014 John Persano
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *	you may not use this file except in compliance with the License.
@@ -23,18 +23,12 @@ import android.view.View;
  *  Class that holds a reference to OnDismissListeners set to button type SuperActivityToasts/SuperCardToasts.
  *  This is used for restoring listeners on orientation changes.
  */
-public class OnDismissListenerWrapper implements OnDismissListener {
-
-    public interface OnDismissListener {
-
-        public void onDismiss(View view);
-
-    }
+public class OnDismissWrapper implements OnDismissListener {
 
     private final String mTag;
     private final OnDismissListener mOnDismissListener;
 
-    public OnDismissListenerWrapper(String tag, OnDismissListener onDismissListener) {
+    public OnDismissWrapper(String tag, OnDismissListener onDismissListener) {
 
         this.mTag = tag;
         this.mOnDismissListener = onDismissListener;
