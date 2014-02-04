@@ -1,5 +1,5 @@
 /**
- *  Copyright 2013 John Persano
+ *  Copyright 2014 John Persano
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *	you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.github.johnpersano.supertoasts.util;
 
 import android.view.View;
 
+/** Custom OnDismissListener to be used with any type of SuperToasts. Note that
+ *  SuperActivityToasts/SuperCardToasts must use this with an {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper} */
 public interface OnDismissListener {
 
     public void onDismiss(View view);
