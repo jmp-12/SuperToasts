@@ -19,7 +19,6 @@ package com.github.johnpersano.supertoasts;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,8 +27,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.johnpersano.supertoasts.util.DefaultStyle;
 import com.github.johnpersano.supertoasts.util.OnDismissListener;
+import com.github.johnpersano.supertoasts.util.Style;
 
 /**
  * SuperToasts are designed to replace stock Android Toasts.
@@ -42,8 +41,8 @@ public class SuperToast {
     private static final String TAG = "SuperToast";
 
     private static final String ERROR_CONTEXTNULL = " - You cannot use a null context.";
-
-    private static final String WARNING_DURATIONTOOLONG = " - You should NEVER specify a duration greater than seven seconds.";
+    private static final String ERROR_DURATIONTOOLONG = " - You should NEVER specify a duration greater than " +
+            "four and a half seconds for a SuperToast.";
 
     /**
      * Backgrounds for all types of SuperToasts.
@@ -214,7 +213,6 @@ public class SuperToast {
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowManagerParams;
 
-
     /**
      * Instantiates a new {@value #TAG}.
      *
@@ -250,12 +248,12 @@ public class SuperToast {
     }
 
     /**
-     * Instantiates a new {@value #TAG} with a specified default style.
+     * Instantiates a new {@value #TAG} with a specified style.
      *
-     * @param context      {@link android.content.Context}
-     * @param defaultStyle {@link com.github.johnpersano.supertoasts.util.DefaultStyle}
+     * @param context {@link android.content.Context}
+     * @param style   {@link com.github.johnpersano.supertoasts.util.Style}
      */
-    public SuperToast(Context context, DefaultStyle defaultStyle) {
+    public SuperToast(Context context, Style style) {
 
         if (context == null) {
 
@@ -282,7 +280,7 @@ public class SuperToast {
         mMessageTextView = (TextView)
                 mToastView.findViewById(R.id.message_textView);
 
-        this.setDefaultStyle(defaultStyle);
+        this.setStyle(style);
 
     }
 
@@ -379,7 +377,6 @@ public class SuperToast {
 
     }
 
-
     /**
      * Sets the text size of the {@value #TAG} message.
      *
@@ -409,9 +406,9 @@ public class SuperToast {
      */
     public void setDuration(int duration) {
 
-        if(duration > 7000) {
+        if(duration > Duration.EXTRA_LONG) {
 
-            Log.w(TAG, TAG + WARNING_DURATIONTOOLONG);
+            Log.e(TAG, TAG + ERROR_DURATIONTOOLONG);
 
             this.mDuration = Duration.EXTRA_LONG;
 
@@ -491,13 +488,17 @@ public class SuperToast {
     }
 
     /**
-     * Sets the gravity of the {@value #TAG}.
+     * Sets the gravity of the {@value #TAG} along with x and y offsets.
      *
-     * @param gravity U{@link android.view.Gravity} int
+     * @param gravity {@link android.view.Gravity} int
+     * @param xOffset int
+     * @param yOffset int
      */
-    public void setGravity(int gravity) {
+    public void setGravity(int gravity, int xOffset, int yOffset) {
 
         this.mGravity = gravity;
+        this.mXOffset = xOffset;
+        this.mYOffset = yOffset;
 
     }
 
@@ -520,20 +521,6 @@ public class SuperToast {
     public Animations getAnimations() {
 
         return this.mAnimations;
-
-    }
-
-    /**
-     * Sets the X and Y offsets of the {@value #TAG}.
-     * <br>
-     *
-     * @param xOffset int
-     * @param yOffset int
-     */
-    public void setXYCoordinates(int xOffset, int yOffset) {
-
-        this.mXOffset = xOffset;
-        this.mYOffset = yOffset;
 
     }
 
@@ -652,47 +639,22 @@ public class SuperToast {
     /**
      * Private method used to set a default style to the {@value #TAG}
      */
-    private void setDefaultStyle(DefaultStyle defaultStyle) {
+    private void setStyle(Style style) {
 
-        if (defaultStyle.animations != null) {
-
-            this.setAnimations(defaultStyle.animations);
-
-        }
-
-        if (defaultStyle.duration > 0) {
-
-            this.setDuration(defaultStyle.duration);
-
-        }
-
-        if (defaultStyle.background > 0) {
-
-            this.setBackground(defaultStyle.background);
-
-        }
-
-        if (defaultStyle.typefaceStyle > 0) {
-
-            this.setTypefaceStyle(defaultStyle.typefaceStyle);
-
-        }
-
-        if (defaultStyle.textColor > 0) {
-
-            this.setTextColor(defaultStyle.textColor);
-
-        }
+        this.setAnimations(style.animations);
+        this.setTypefaceStyle(style.typefaceStyle);
+        this.setTextColor(style.textColor);
+        this.setBackground(style.background);
 
     }
 
-
     /**
-     * Returns a dark themed {@value #TAG}.
+     * Returns a standard {@value #TAG}.
      *
      * @param context          {@link android.content.Context}
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     *
      * @return {@link com.github.johnpersano.supertoasts.SuperToast}
      */
     public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
@@ -707,18 +669,19 @@ public class SuperToast {
     }
 
     /**
-     * Returns a dark themed {@value #TAG} with specified animations.
+     * Returns a standard {@value #TAG} with specified animations.
      *
      * @param context          {@link android.content.Context}
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
+     *
      * @return {@link com.github.johnpersano.supertoasts.SuperToast}
      */
     public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
                                               int durationInteger, Animations animations) {
 
-        SuperToast superToast = new SuperToast(context);
+        final SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
         superToast.setDuration(durationInteger);
         superToast.setAnimations(animations);
@@ -728,44 +691,22 @@ public class SuperToast {
     }
 
     /**
-     * Returns a light themed {@value #TAG}.
+     * Returns a {@value #TAG} with a specified style.
      *
      * @param context          {@link android.content.Context}
      * @param textCharSequence {@link java.lang.CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
-     * @return {@link com.github.johnpersano.supertoasts.SuperToast}
-     */
-    public static SuperToast createLightSuperToast(Context context,
-                                                   CharSequence textCharSequence, int durationInteger) {
-
-        SuperToast superToast = new SuperToast(context);
-        superToast.setText(textCharSequence);
-        superToast.setDuration(durationInteger);
-        superToast.setBackground(Background.WHITE);
-        superToast.setTextColor(Color.BLACK);
-
-        return superToast;
-
-    }
-
-    /**
-     * Returns a light themed {@value #TAG} with specified animations.
+     * @param style            {@link com.github.johnpersano.supertoasts.util.Style}
      *
-     * @param context          {@link android.content.Context}
-     * @param textCharSequence {@link java.lang.CharSequence}
-     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
-     * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
-     * @return {@link com.github.johnpersano.supertoasts.SuperToast}
+     * @return SuperCardToast
      */
-    public static SuperToast createLightSuperToast(Context context, CharSequence textCharSequence,
-                                                   int durationInteger, Animations animations) {
+    public static SuperToast createSuperToast(
+            Context context, CharSequence textCharSequence, int durationInteger, Style style) {
 
-        SuperToast superToast = new SuperToast(context);
+        final SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
         superToast.setDuration(durationInteger);
-        superToast.setBackground(Background.WHITE);
-        superToast.setTextColor(Color.BLACK);
-        superToast.setAnimations(animations);
+        superToast.setStyle(style);
 
         return superToast;
 
