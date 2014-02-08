@@ -60,6 +60,8 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
         Wrappers wrappers = new Wrappers();
         wrappers.add(onClickWrapper);
+        wrappers.add(onClickWrapperTwo);
+        wrappers.add(onClickWrapperThree);
         wrappers.add(onDismissWrapper);
 
         SuperActivityToast.onRestoreState(savedInstanceState, getActivity(), wrappers);
