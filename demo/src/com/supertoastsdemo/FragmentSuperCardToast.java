@@ -3,7 +3,6 @@ package com.supertoastsdemo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
 import com.github.johnpersano.supertoasts.util.OnDismissListener;
 import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.johnpersano.supertoasts.util.Wrappers;
 
 public class FragmentSuperCardToast extends SherlockFragment {
 
@@ -46,22 +43,14 @@ public class FragmentSuperCardToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_supercardtoast,
                 container, false);
 
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        final Wrappers wrappers = new Wrappers();
+        wrappers.add(onClickWrapper);
+        wrappers.add(onClickWrapperTwo);
+        wrappers.add(onClickWrapperThree);
+        wrappers.add(onDismissWrapper);
 
-            List<OnClickWrapper> onClickWrappers = new ArrayList<OnClickWrapper>();
-            onClickWrappers.add(onClickWrapper);
-
-            List<OnDismissWrapper> onDismissWrappers = new ArrayList<OnDismissWrapper>();
-            onDismissWrappers.add(onDismissWrapper);
-
-            SuperCardToast.onRestoreState(savedInstanceState, getActivity(),
-                    onClickWrappers, onDismissWrappers);
-
-        } else {
-
-            SuperCardToast.onRestoreState(savedInstanceState, getActivity());
-
-        }
+        SuperCardToast.onRestoreState(savedInstanceState, getActivity(),
+                wrappers);
 
         mAnimationSpinner = (Spinner)
                 view.findViewById(R.id.animationSpinner);
