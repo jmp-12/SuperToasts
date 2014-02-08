@@ -38,13 +38,9 @@ import android.widget.TextView;
 import com.github.johnpersano.supertoasts.SuperToast.Animations;
 import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
 import com.github.johnpersano.supertoasts.SuperToast.Type;
-import com.github.johnpersano.supertoasts.util.DefaultStyle;
-import com.github.johnpersano.supertoasts.util.OnClickWrapper;
-import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
-import com.github.johnpersano.supertoasts.util.SwipeDismissListener;
+import com.github.johnpersano.supertoasts.util.*;
 
 import java.util.LinkedList;
-import java.util.List;
 
 
 /**
@@ -57,11 +53,11 @@ public class SuperCardToast {
     private static final String TAG = "SuperCardToast";
     private static final String MANAGER_TAG = "SuperCardToast Manager";
 
-    private static final String ERROR_CONTEXTNULL = " - You cannot pass a null Activity as a parameter.";
+    private static final String ERROR_ACTIVITYNULL = " - You cannot pass a null Activity as a parameter.";
     private static final String ERROR_CONTAINERNULL = " - You must have a LinearLayout with the id of card_container in your layout!";
     private static final String ERROR_VIEWCONTAINERNULL = " - Either the View or Container was null when trying to dismiss.";
-    private static final String ERROR_NOTBUTTONTYPE = " - is only compatible with BUTTON type SuperCardToasts.";
-    private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " - is only compatible with PROGRESS_HORIZONTAL type SuperCardToasts.";
+    private static final String ERROR_NOTBUTTONTYPE = " is only compatible with BUTTON type SuperCardToasts.";
+    private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " is only compatible with PROGRESS_HORIZONTAL type SuperCardToasts.";
 
     private static final String WARNING_PREHONEYCOMB = "Swipe to dismiss was enabled but the SDK version is pre-Honeycomb";
 
@@ -77,7 +73,7 @@ public class SuperCardToast {
     private boolean mIsSwipeDismissible;
     private boolean isProgressIndeterminate;
     private boolean showImmediate;
-    private Button mToastButton;
+    private Button mButton;
     private Handler mHandler;
     private IconPosition mIconPosition;
     private int mDuration = SuperToast.Duration.SHORT;
@@ -86,10 +82,11 @@ public class SuperCardToast {
     private int mTypeface = Typeface.NORMAL;
     private int mButtonTypefaceStyle = Typeface.BOLD;
     private int mButtonIcon = SuperToast.Icon.Dark.UNDO;
-    private int mButtonDividerResource = (R.color.light_gray);
+    private int mButtonDividerColor = Color.DKGRAY;
     private LayoutInflater mLayoutInflater;
     private LinearLayout mRootLayout;
     private OnDismissWrapper mOnDismissWrapper;
+    private OnClickWrapper mOnClickWrapper;
     private ProgressBar mProgressBar;
     private String mOnClickWrapperTag;
     private String mOnDismissWrapperTag;
@@ -109,7 +106,7 @@ public class SuperCardToast {
 
         if (activity == null) {
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
 
@@ -143,13 +140,13 @@ public class SuperCardToast {
      * Instantiates a new {@value #TAG} with a specified default style.
      *
      * @param activity     {@link android.app.Activity}
-     * @param defaultStyle {@link com.github.johnpersano.supertoasts.util.DefaultStyle}
+     * @param style {@link com.github.johnpersano.supertoasts.util.Style}
      */
-    public SuperCardToast(Activity activity, DefaultStyle defaultStyle) {
+    public SuperCardToast(Activity activity, Style style) {
 
         if (activity == null) {
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
 
@@ -177,7 +174,7 @@ public class SuperCardToast {
         mRootLayout = (LinearLayout)
                 mToastView.findViewById(R.id.root_layout);
 
-        this.setDefaultStyle(defaultStyle);
+        this.setStyle(style);
 
     }
 
@@ -191,7 +188,7 @@ public class SuperCardToast {
 
         if (activity == null) {
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
 
@@ -215,12 +212,12 @@ public class SuperCardToast {
             mToastView = mLayoutInflater
                     .inflate(R.layout.supercardtoast_button, mViewGroup, false);
 
-            mToastButton = (Button)
+            mButton = (Button)
                     mToastView.findViewById(R.id.button);
 
             mDividerView = mToastView.findViewById(R.id.divider);
 
-            mToastButton.setOnTouchListener(mTouchDismissListener);
+            mButton.setOnTouchListener(mButtonListener);
 
         } else if (type == Type.PROGRESS) {
 
@@ -254,17 +251,17 @@ public class SuperCardToast {
     }
 
     /**
-     * Instantiates a new {@value #TAG} with a type and a specified default style.
+     * Instantiates a new {@value #TAG} with a type and a specified style.
      *
      * @param activity     {@link android.app.Activity}
      * @param type         {@link com.github.johnpersano.supertoasts.SuperToast.Type}
-     * @param defaultStyle {@link com.github.johnpersano.supertoasts.util.DefaultStyle}
+     * @param style {@link com.github.johnpersano.supertoasts.util.Style}
      */
-    public SuperCardToast(Activity activity, Type type, DefaultStyle defaultStyle) {
+    public SuperCardToast(Activity activity, Type type, Style style) {
 
         if (activity == null) {
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTEXTNULL);
+            throw new IllegalArgumentException(TAG + ERROR_ACTIVITYNULL);
 
         }
 
@@ -288,12 +285,12 @@ public class SuperCardToast {
             mToastView = mLayoutInflater
                     .inflate(R.layout.supercardtoast_button, mViewGroup, false);
 
-            mToastButton = (Button)
+            mButton = (Button)
                     mToastView.findViewById(R.id.button);
 
             mDividerView = mToastView.findViewById(R.id.divider);
 
-            mToastButton.setOnTouchListener(mTouchDismissListener);
+            mButton.setOnTouchListener(mButtonListener);
 
         } else if (type == Type.PROGRESS) {
 
@@ -324,7 +321,7 @@ public class SuperCardToast {
         mRootLayout = (LinearLayout)
                 mToastView.findViewById(R.id.root_layout);
 
-        this.setDefaultStyle(defaultStyle);
+        this.setStyle(style);
 
     }
 
@@ -599,7 +596,7 @@ public class SuperCardToast {
      *
      * @param background {@link com.github.johnpersano.supertoasts.SuperToast.Background}
      */
-    public void setBackgroundResource(int background) {
+    public void setBackground(int background) {
 
         this.mBackground = background;
 
@@ -934,8 +931,7 @@ public class SuperCardToast {
 
         }
 
-        mToastButton.setOnClickListener(onClickWrapper);
-
+        this.mOnClickWrapper = onClickWrapper;
         this.mOnClickWrapperTag = onClickWrapper.getTag();
 
     }
@@ -965,10 +961,38 @@ public class SuperCardToast {
 
         this.mButtonIcon = buttonIcon;
 
-        if (mToastButton != null) {
+        if (mButton != null) {
 
-            mToastButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
+            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
                     .getResources().getDrawable(buttonIcon), null, null, null);
+
+        }
+
+    }
+
+    /**
+     * Sets the icon resource and text of the button in
+     * a BUTTON {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @param buttonIcon {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
+     * @param buttonText {@link java.lang.CharSequence}
+     */
+    public void setButtonIcon(int buttonIcon, CharSequence buttonText) {
+
+        if (mType != Type.BUTTON) {
+
+            Log.w(TAG, "setButtonIcon()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        this.mButtonIcon = buttonIcon;
+
+        if (mButton != null) {
+
+            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
+                    .getResources().getDrawable(buttonIcon), null, null, null);
+
+            mButton.setText(buttonText);
 
         }
 
@@ -987,12 +1011,12 @@ public class SuperCardToast {
     }
 
     /**
-     * Sets the divider resource of a BUTTON
+     * Sets the divider color of a BUTTON
      * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
-     * @param dividerResource int
+     * @param dividerColor int
      */
-    public void setDivider(int dividerResource) {
+    public void setDividerColor(int dividerColor) {
 
         if (mType != Type.BUTTON) {
 
@@ -1000,25 +1024,25 @@ public class SuperCardToast {
 
         }
 
-        this.mButtonDividerResource = dividerResource;
+        this.mButtonDividerColor = dividerColor;
 
         if (mDividerView != null) {
 
-            mDividerView.setBackgroundResource(dividerResource);
+            mDividerView.setBackgroundColor(dividerColor);
 
         }
 
     }
 
     /**
-     * Returns the divider resource of a BUTTON
+     * Returns the divider color of a BUTTON
      * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
      * @return int
      */
-    public int getDivider() {
+    public int getDividerColor() {
 
-        return this.mButtonDividerResource;
+        return this.mButtonDividerColor;
 
     }
 
@@ -1036,9 +1060,9 @@ public class SuperCardToast {
 
         }
 
-        if (mToastButton != null) {
+        if (mButton != null) {
 
-            mToastButton.setText(buttonText);
+            mButton.setText(buttonText);
 
         }
 
@@ -1052,7 +1076,7 @@ public class SuperCardToast {
      */
     public CharSequence getButtonText() {
 
-        return mToastButton.getText();
+        return mButton.getText();
 
     }
 
@@ -1072,7 +1096,7 @@ public class SuperCardToast {
 
         mButtonTypefaceStyle = typefaceStyle;
 
-        mToastButton.setTypeface(mToastButton.getTypeface(), typefaceStyle);
+        mButton.setTypeface(mButton.getTypeface(), typefaceStyle);
 
     }
 
@@ -1102,9 +1126,9 @@ public class SuperCardToast {
 
         }
 
-        if (mToastButton != null) {
+        if (mButton != null) {
 
-            mToastButton.setTextColor(buttonTextColor);
+            mButton.setTextColor(buttonTextColor);
 
         }
 
@@ -1118,7 +1142,7 @@ public class SuperCardToast {
      */
     public int getButtonTextColor() {
 
-        return mToastButton.getCurrentTextColor();
+        return mButton.getCurrentTextColor();
 
     }
 
@@ -1136,7 +1160,7 @@ public class SuperCardToast {
 
         }
 
-        if (mToastButton != null) {
+        if (mButton != null) {
 
             mMessageTextView.setTextSize(buttonTextSize);
 
@@ -1161,7 +1185,7 @@ public class SuperCardToast {
      */
     public float getButtonTextSize() {
 
-        return mToastButton.getTextSize();
+        return mButton.getTextSize();
 
     }
 
@@ -1327,35 +1351,18 @@ public class SuperCardToast {
     /**
      * Private method used to set a default style to the {@value #TAG}
      */
-    private void setDefaultStyle(DefaultStyle defaultStyle) {
+    private void setStyle(Style style) {
 
-        if (defaultStyle.animations != null) {
+        this.setAnimations(style.animations);
+        this.setTypefaceStyle(style.typefaceStyle);
+        this.setTextColor(style.textColor);
+        this.setBackground(style.background);
 
-            this.setAnimations(defaultStyle.animations);
+        if(this.mType == Type.BUTTON) {
 
-        }
-
-        if (defaultStyle.duration > 0) {
-
-            this.setDuration(defaultStyle.duration);
-
-        }
-
-        if (defaultStyle.background > 0) {
-
-            this.setBackgroundResource(defaultStyle.background);
-
-        }
-
-        if (defaultStyle.typefaceStyle > 0) {
-
-            this.setTypefaceStyle(defaultStyle.typefaceStyle);
-
-        }
-
-        if (defaultStyle.textColor > 0) {
-
-            this.setTextColor(defaultStyle.textColor);
+            this.setDividerColor(style.dividerColor);
+            this.setButtonTextColor(style.buttonTextColor);
+            this.setButtonTypefaceStyle(style.buttonTypefaceStyle);
 
         }
 
@@ -1545,15 +1552,16 @@ public class SuperCardToast {
     }
 
     /**
-     * Returns a dark theme SuperCardToast.
+     * Returns a standard {@value #TAG}.
      * <br>
      * IMPORTANT: Activity layout should contain a linear layout
      * with the id card_container
      * <br>
      *
      * @param activity         {@link android.app.Activity}
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     *
      * @return SuperCardToast
      */
     public static SuperCardToast createSuperCardToast(
@@ -1568,16 +1576,17 @@ public class SuperCardToast {
     }
 
     /**
-     * Returns a dark theme SuperCardToast with a supplied animation.
+     * Returns a standard {@value #TAG} with specified animations.
      * <br>
      * IMPORTANT: Activity layout should contain a linear layout
      * with the id card_container
      * <br>
      *
      * @param activity         {@link android.app.Activity}
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @param animations       Should use SuperToast.Animations
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
+     *
      * @return SuperCardToast
      */
     public static SuperCardToast createSuperCardToast(
@@ -1593,56 +1602,32 @@ public class SuperCardToast {
     }
 
     /**
-     * Returns a light theme SuperCardToast.
+     * Returns a {@value #TAG} with a specified style.
      * <br>
      * IMPORTANT: Activity layout should contain a linear layout
      * with the id card_container
      * <br>
      *
      * @param activity         {@link android.app.Activity}
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @return SuperCardToast
-     */
-    public static SuperCardToast createLightSuperCardToast(
-            Activity activity, CharSequence textCharSequence, int durationInteger) {
-
-        SuperCardToast SuperCardToast = new SuperCardToast(activity);
-        SuperCardToast.setText(textCharSequence);
-        SuperCardToast.setDuration(durationInteger);
-        SuperCardToast.setBackgroundResource(SuperToast.Background.WHITE);
-        SuperCardToast.setTextColor(Color.BLACK);
-
-        return SuperCardToast;
-
-    }
-
-    /**
-     * Returns a light theme SuperCardToast with a supplied animation.
-     * <br>
-     * IMPORTANT: Activity layout should contain a linear layout
-     * with the id card_container
-     * <br>
+     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
+     * @param style            {@link com.github.johnpersano.supertoasts.util.Style}
      *
-     * @param activity         {@link android.app.Activity}
-     * @param textCharSequence Message text
-     * @param durationInteger  Should use SuperToast.Duration constants
-     * @param animations       Should use SuperToast.Animations
      * @return SuperCardToast
      */
-    public static SuperCardToast createLightSuperCardToast(
-            Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
+    public static SuperCardToast createSuperCardToast(
+            Activity activity, CharSequence textCharSequence, int durationInteger, Style style) {
 
-        SuperCardToast SuperCardToast = new SuperCardToast(activity);
-        SuperCardToast.setText(textCharSequence);
-        SuperCardToast.setDuration(durationInteger);
-        SuperCardToast.setBackgroundResource(SuperToast.Background.WHITE);
-        SuperCardToast.setTextColor(Color.BLACK);
-        SuperCardToast.setAnimations(animations);
+        SuperCardToast superCardToast = new SuperCardToast(activity);
+        superCardToast.setText(textCharSequence);
+        superCardToast.setDuration(durationInteger);
+        superCardToast.setStyle(style);
 
-        return SuperCardToast;
+        return superCardToast;
 
     }
+
+
 
     /**
      * Dismisses and removes all showing/pending SuperCardToasts.
@@ -1660,7 +1645,7 @@ public class SuperCardToast {
      */
     public static void onSaveState(Bundle bundle) {
 
-        Style[] list = new Style[ManagerSuperCardToast
+        ReferenceHolder[] list = new ReferenceHolder[ManagerSuperCardToast
                 .getInstance().getList().size()];
 
         LinkedList<SuperCardToast> lister = ManagerSuperCardToast
@@ -1668,7 +1653,7 @@ public class SuperCardToast {
 
         for (int i = 0; i < list.length; i++) {
 
-            list[i] = new Style(lister.get(i));
+            list[i] = new ReferenceHolder(lister.get(i));
 
         }
 
@@ -1701,7 +1686,7 @@ public class SuperCardToast {
 
                 i++;
 
-                new SuperCardToast(activity, (Style) parcelable, null, null, i);
+                new SuperCardToast(activity, (ReferenceHolder) parcelable, null, i);
 
             }
 
@@ -1710,14 +1695,14 @@ public class SuperCardToast {
     }
 
     /**
-     * Returns and shows pending/shown SuperCardToasts from orientation change and
-     * reattaches any OnToastButtonClickListeners.
+     * Returns and shows pending/shown {@value #TAG} from orientation change and
+     * reattaches any OnClickWrappers/OnDismissWrappers.
      *
      * @param bundle          Use onCreate() bundle
      * @param activity        The current activity
-     * @param onClickWrappers List of any attached OnClickListenerWrappers from previous orientation
+     * @param wrappers        {@link com.github.johnpersano.supertoasts.util.Wrappers}
      */
-    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickWrapper> onClickWrappers) {
+    public static void onRestoreState(Bundle bundle, Activity activity, Wrappers wrappers) {
 
         if (bundle == null) {
 
@@ -1734,7 +1719,7 @@ public class SuperCardToast {
 
                 i++;
 
-                new SuperCardToast(activity, (Style) parcelable, onClickWrappers, null, i);
+                new SuperCardToast(activity, (ReferenceHolder) parcelable, wrappers, i);
 
             }
 
@@ -1743,63 +1728,27 @@ public class SuperCardToast {
     }
 
     /**
-     * Returns and shows pending/shown SuperCardToasts from orientation change and
-     * reattaches any OnToastButtonClickListeners and any OnToastDismissListeners.
-     *
-     * @param bundle            Use onCreate() bundle
-     * @param activity          The current activity
-     * @param onClickWrappers   List of any attached OnClickListenerWrappers from previous orientation
-     * @param onDismissWrappers List of any attached OnDismissListenerWrappers from previous orientation
+     * Method used to recreate {@value #TAG} after orientation change
      */
-    public static void onRestoreState(Bundle bundle, Activity activity, List<OnClickWrapper> onClickWrappers,
-                                      List<OnDismissWrapper> onDismissWrappers) {
-
-        if (bundle == null) {
-
-            return;
-        }
-
-        Parcelable[] savedArray = bundle.getParcelableArray(BUNDLE_TAG);
-
-        int i = 0;
-
-        if (savedArray != null) {
-
-            for (Parcelable parcelable : savedArray) {
-
-                i++;
-
-                new SuperCardToast(activity, (Style) parcelable, onClickWrappers, onDismissWrappers, i);
-
-            }
-
-        }
-
-    }
-
-    /**
-     * Method used to recreate SuperCardToasts after orientation change
-     */
-    private SuperCardToast(Activity activity, Style style, List<OnClickWrapper> onClickWrappers,
-                           List<OnDismissWrapper> onDismissWrappers, int position) {
+    private SuperCardToast(Activity activity, ReferenceHolder referenceHolder, Wrappers wrappers, int position) {
 
         SuperCardToast superCardToast;
 
-        if (style.mType == Type.BUTTON) {
+        if(referenceHolder.mType == Type.BUTTON) {
 
             superCardToast = new SuperCardToast(activity, Type.BUTTON);
-            superCardToast.setButtonText(style.mButtonText);
-            superCardToast.setButtonTextSizeFloat(style.mButtonTextSize);
-            superCardToast.setButtonTextColor(style.mButtonTextColor);
-            superCardToast.setButtonIcon(style.mButtonIcon);
-            superCardToast.setDivider(style.mButtonDividerResource);
-            superCardToast.setButtonTypefaceStyle(style.mButtonTypeface);
+            superCardToast.setButtonText(referenceHolder.mButtonText);
+            superCardToast.setButtonTextSizeFloat(referenceHolder.mButtonTextSize);
+            superCardToast.setButtonTextColor(referenceHolder.mButtonTextColor);
+            superCardToast.setButtonIcon(referenceHolder.mButtonIcon);
+            superCardToast.setDividerColor(referenceHolder.mButtonDividerResource);
+            superCardToast.setButtonTypefaceStyle(referenceHolder.mButtonTypeface);
 
-            if (onClickWrappers != null) {
+            if(wrappers != null) {
 
-                for (OnClickWrapper onClickWrapper : onClickWrappers) {
+                for (OnClickWrapper onClickWrapper : wrappers.getOnClickWrappers()) {
 
-                    if (onClickWrapper.getTag().equalsIgnoreCase(style.mClickListenerTag)) {
+                    if (onClickWrapper.getTag().equalsIgnoreCase(referenceHolder.mClickListenerTag)) {
 
                         superCardToast.setOnClickWrapper(onClickWrapper);
 
@@ -1808,13 +1757,13 @@ public class SuperCardToast {
                 }
             }
 
-        } else if (style.mType == Type.PROGRESS) {
+        } else if (referenceHolder.mType == Type.PROGRESS) {
 
             /** PROGRESS style SuperCardToasts should be managed by the developer */
 
             return;
 
-        } else if (style.mType == Type.PROGRESS_HORIZONTAL) {
+        } else if (referenceHolder.mType == Type.PROGRESS_HORIZONTAL) {
 
             /** PROGRESS_HORIZONTAL style SuperCardToasts should be managed by the developer */
 
@@ -1826,11 +1775,11 @@ public class SuperCardToast {
 
         }
 
-        if (onDismissWrappers != null) {
+        if (wrappers != null) {
 
-            for (OnDismissWrapper onDismissListenerWrapper : onDismissWrappers) {
+            for (OnDismissWrapper onDismissListenerWrapper : wrappers.getOnDismissWrappers()) {
 
-                if (onDismissListenerWrapper.getTag().equalsIgnoreCase(style.mDismissListenerTag)) {
+                if (onDismissListenerWrapper.getTag().equalsIgnoreCase(referenceHolder.mDismissListenerTag)) {
 
                     superCardToast.setOnDismissWrapper(onDismissListenerWrapper);
 
@@ -1839,22 +1788,22 @@ public class SuperCardToast {
             }
         }
 
-        superCardToast.setAnimations(style.mAnimations);
-        superCardToast.setText(style.mText);
-        superCardToast.setTypefaceStyle(style.mTypeface);
-        superCardToast.setDuration(style.mDuration);
-        superCardToast.setTextColor(style.mTextColor);
-        superCardToast.setTextSizeFloat(style.mTextSize);
-        superCardToast.setIndeterminate(style.isIndeterminate);
-        superCardToast.setIcon(style.mIconResource, style.mIconPosition);
-        superCardToast.setBackgroundResource(style.mBackgroundResource);
+        superCardToast.setAnimations(referenceHolder.mAnimations);
+        superCardToast.setText(referenceHolder.mText);
+        superCardToast.setTypefaceStyle(referenceHolder.mTypeface);
+        superCardToast.setDuration(referenceHolder.mDuration);
+        superCardToast.setTextColor(referenceHolder.mTextColor);
+        superCardToast.setTextSizeFloat(referenceHolder.mTextSize);
+        superCardToast.setIndeterminate(referenceHolder.isIndeterminate);
+        superCardToast.setIcon(referenceHolder.mIconResource, referenceHolder.mIconPosition);
+        superCardToast.setBackground(referenceHolder.mBackgroundResource);
 
         /** Must use if else statements here to prevent erratic behavior */
-        if (style.isTouchDismissable) {
+        if (referenceHolder.isTouchDismissable) {
 
             superCardToast.setTouchToDismiss(true);
 
-        } else if (style.isSwipeDismissable) {
+        } else if (referenceHolder.isSwipeDismissable) {
 
             superCardToast.setSwipeToDismiss(true);
 
@@ -1891,11 +1840,43 @@ public class SuperCardToast {
 
     };
 
+    private OnTouchListener mButtonListener = new OnTouchListener() {
+
+        int timesTouched;
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+
+            /** Hack to prevent repeat touch events causing erratic behavior */
+            if (timesTouched == 0) {
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    if(mOnClickWrapper != null) {
+
+                        mOnClickWrapper.onClick(view);
+
+                    }
+
+                    dismiss();
+
+                }
+
+            }
+
+            timesTouched++;
+
+            return false;
+
+        }
+
+    };
+
 
     /**
      * Parcelable class that saves all data on orientation change
      */
-    private static class Style implements Parcelable {
+    private static class ReferenceHolder implements Parcelable {
 
         //STANDARD
         Type mType;
@@ -1923,7 +1904,7 @@ public class SuperCardToast {
         int mButtonTypeface;
 
 
-        public Style(SuperCardToast superCardToast) {
+        public ReferenceHolder(SuperCardToast superCardToast) {
 
             mType = superCardToast.getType();
 
@@ -1933,7 +1914,7 @@ public class SuperCardToast {
                 mButtonTextSize = superCardToast.getButtonTextSize();
                 mButtonTextColor = superCardToast.getButtonTextColor();
                 mButtonIcon = superCardToast.getButtonIcon();
-                mButtonDividerResource = superCardToast.getDivider();
+                mButtonDividerResource = superCardToast.getDividerColor();
                 mClickListenerTag = superCardToast.getOnClickWrapperTag();
                 mButtonTypeface = superCardToast.getButtonTypefaceStyle();
 
@@ -1960,7 +1941,7 @@ public class SuperCardToast {
 
         }
 
-        public Style(Parcel parcel) {
+        public ReferenceHolder(Parcel parcel) {
 
             mType = Type.values()[parcel.readInt()];
 
@@ -2046,21 +2027,22 @@ public class SuperCardToast {
 
         @Override
         public int describeContents() {
+
             return 0;
 
         }
 
         public final Creator CREATOR = new Creator() {
 
-            public Style createFromParcel(Parcel parcel) {
+            public ReferenceHolder createFromParcel(Parcel parcel) {
 
-                return new Style(parcel);
+                return new ReferenceHolder(parcel);
 
             }
 
-            public Style[] newArray(int size) {
+            public ReferenceHolder[] newArray(int size) {
 
-                return new Style[size];
+                return new ReferenceHolder[size];
 
             }
 
