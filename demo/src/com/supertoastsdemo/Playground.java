@@ -6,7 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.*;
+import com.github.johnpersano.supertoasts.util.OnDismissListener;
+import com.github.johnpersano.supertoasts.util.Style;
 
 
 /** Use this class to play around with the library. Simply run this activity
