@@ -1,5 +1,5 @@
 /**
- *  Copyright 2013 John Persano
+ *  Copyright 2014 John Persano
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *	you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package com.supertoastsdemo;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +34,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
 import com.github.johnpersano.supertoasts.util.OnDismissListener;
 import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.johnpersano.supertoasts.util.Wrappers;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
@@ -61,24 +58,11 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         final View view = inflater.inflate(R.layout.fragment_superactivitytoast,
                 container, false);
 
-        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        Wrappers wrappers = new Wrappers();
+        wrappers.add(onClickWrapper);
+        wrappers.add(onDismissWrapper);
 
-            List<OnClickWrapper> onToastButtonClickListenerHolderList =
-                    new ArrayList<OnClickWrapper>();
-            onToastButtonClickListenerHolderList.add(onClickWrapper);
-
-            List<OnDismissWrapper> onToastDismissListenerHolderList =
-                    new ArrayList<OnDismissWrapper>();
-            onToastDismissListenerHolderList.add(onDismissWrapper);
-
-            SuperActivityToast.onRestoreState(savedInstanceState, getActivity(),
-                    onToastButtonClickListenerHolderList, onToastDismissListenerHolderList);
-
-        } else {
-
-            SuperActivityToast.onRestoreState(savedInstanceState, getActivity());
-
-        }
+        SuperActivityToast.onRestoreState(savedInstanceState, getActivity(), wrappers);
 
         mAnimationSpinner = (Spinner)
                 view.findViewById(R.id.animationSpinner);
