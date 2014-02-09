@@ -34,7 +34,7 @@ Add this to your projects POM file (not tested yet!)
 <dependency>
   <groupId>com.github.johnpersano</groupId>
   <artifactId>supertoasts</artifactId>
-  <version>1.2</version>
+  <version>1.3.2</version>
   <type>apklib</type>
 </dependency>
 ```
