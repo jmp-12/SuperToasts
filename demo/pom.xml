@@ -5,7 +5,7 @@
     <groupId>com.github.johnpersano</groupId>
     <artifactId>demo</artifactId>
     <packaging>apk</packaging>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.2</version>
 
     <name>Demo</name>
     <description>Demo app for the SuperToasts library</description>
