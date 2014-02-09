@@ -92,6 +92,21 @@ class ManagerSuperActivityToast extends Handler {
 
         }
 
+        /** If task finishes while other SuperActivityToasts are showing do not show it */
+        if(superActivityToast.getType() == SuperToast.Type.PROGRESS_HORIZONTAL) {
+
+            if(superActivityToast.getProgress() == superActivityToast.getMaxProgress()) {
+
+                mList.remove(superActivityToast);
+
+                this.showNextSuperToast();
+
+                return;
+
+            }
+
+        }
+
         if (!superActivityToast.isShowing()) {
 
             final Message message = obtainMessage(Messages.DISPLAY);
@@ -184,8 +199,14 @@ class ManagerSuperActivityToast extends Handler {
     /** Hide and remove the SuperActivityToast */
     void removeSuperToast(final SuperActivityToast superActivityToast) {
 
+        if(!superActivityToast.isShowing()) {
+
+            return;
+
+        }
+
         /** If being called somewhere else get rid of delayed remove message */
-        removeMessages(Messages.REMOVE);
+        removeMessages(Messages.REMOVE, superActivityToast);
 
         final ViewGroup viewGroup = superActivityToast.getViewGroup();
 
