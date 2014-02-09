@@ -24,14 +24,17 @@ public class ExampleSuperActivityToast extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playground);
 
-        /** Create a wrappers object with any OnClickWrappers/OnDismissWrappers to be
-         *  reattached on orientation change */
+        /**
+         * Create a wrappers object with any OnClickWrappers/OnDismissWrappers to be
+         * reattached on orientation change
+         */
         Wrappers wrappers = new Wrappers();
         wrappers.add(onClickWrapper);
         wrappers.add(onClickWrapperTwo);
         wrappers.add(onDismissWrapper);
 
-        /** This is used to recreate any showing or pending SuperActivityToasts.
+        /**
+         *  This is used to recreate any showing or pending SuperActivityToasts.
          *
          *  1st parameter: Use bundle from onCreate(). No need for a null check
          *  2nd parameter: The current Activity
@@ -71,7 +74,8 @@ public class ExampleSuperActivityToast extends Activity {
                 superActivityToast.setButtonIcon(SuperToast.Icon.Dark.INFO);
                 superActivityToast.setOnDismissWrapper(onDismissWrapper);
 
-                /** We are using two different OnClickWrappers based on the amount of
+                /**
+                 * We are using two different OnClickWrappers based on the amount of
                  * times the user has clicked the button for demonstration. Rotate the device
                  * for each condition to see the app recreate the SuperActivityToast and reassign the
                  * appropriate OnClickWrapper.
