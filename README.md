@@ -8,7 +8,7 @@ and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
 This is a Beta release, expect bugs. <br>
 
-![SuperButtonToast](http://i1331.photobucket.com/albums/w597/JohnPersano/supertoasts_githubimage_zps8a5ceb7c.png)
+![Screenshot](http://i1016.photobucket.com/albums/af284/Turbopwned/supertoasts_group_screenshot.png)
 
 
 Adding SuperToasts to your project
