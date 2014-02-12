@@ -25,15 +25,18 @@ import android.view.WindowManager;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/** Manages the life of a SuperActivityToast. Copied from the Crouton library. */
-@SuppressWarnings("UnusedDeclaration")
+/**
+ *  Manages the life of a SuperToast. Copied from the Crouton library.
+ */
 public class ManagerSuperToast extends Handler {
 
+    @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = "ManagerSuperToast";
 
+    /* Potential messages for the handler to send **/
     private static final class Messages {
 
-        /** Hexadecimal numbers that represent acronyms for the operation. **/
+        /* Hexadecimal numbers that represent acronyms for the operation. **/
         private static final int DISPLAY_SUPERTOAST = 0x445354;
         private static final int ADD_SUPERTOAST = 0x415354;
         private static final int REMOVE_SUPERTOAST = 0x525354;
@@ -44,12 +47,16 @@ public class ManagerSuperToast extends Handler {
 
     private final Queue<SuperToast> mQueue;
 
+    /* Private method to create a new list if the manager is being initialized */
     private ManagerSuperToast() {
 
         mQueue = new LinkedBlockingQueue<SuperToast>();
 
     }
 
+    /**
+     * Singleton method to ensure all SuperToasts are passed through the same manager.
+     */
     protected static synchronized ManagerSuperToast getInstance() {
 
         if (mManagerSuperToast != null) {
@@ -66,7 +73,10 @@ public class ManagerSuperToast extends Handler {
 
     }
 
-
+    /**
+     * Add a SuperToast to the list. Will show immediately if no other SuperActivityToasts
+     * are in the list.
+     */
     protected void add(SuperToast superToast) {
 
         mQueue.add(superToast);
@@ -74,7 +84,10 @@ public class ManagerSuperToast extends Handler {
 
     }
 
-
+    /**
+     * Shows the next SuperToast in the list. Called by add() and when the dismiss animation
+     * of a previously showing SuperToast ends.
+     */
     private void showNextSuperToast() {
 
         if (mQueue.isEmpty()) {
@@ -157,6 +170,9 @@ public class ManagerSuperToast extends Handler {
 
     }
 
+    /**
+     * Displays a SuperToast.
+     */
     private void displaySuperToast(SuperToast superToast) {
 
         if (superToast.isShowing()) {
@@ -184,6 +200,9 @@ public class ManagerSuperToast extends Handler {
 
     }
 
+    /**
+     *  Hide and remove the SuperToast
+     */
     protected void removeSuperToast(SuperToast superToast) {
 
         final WindowManager windowManager = superToast
@@ -210,9 +229,11 @@ public class ManagerSuperToast extends Handler {
 
     }
 
-    protected void clearQueue() {
+    protected void cancelAllSuperToasts() {
 
-        removeAllMessages();
+        removeMessages(Messages.ADD_SUPERTOAST);
+        removeMessages(Messages.DISPLAY_SUPERTOAST);
+        removeMessages(Messages.REMOVE_SUPERTOAST);
 
         for (SuperToast superToast : mQueue) {
 
@@ -226,14 +247,6 @@ public class ManagerSuperToast extends Handler {
         }
 
         mQueue.clear();
-
-    }
-
-    private void removeAllMessages() {
-
-        removeMessages(Messages.ADD_SUPERTOAST);
-        removeMessages(Messages.DISPLAY_SUPERTOAST);
-        removeMessages(Messages.REMOVE_SUPERTOAST);
 
     }
 

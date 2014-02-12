@@ -20,6 +20,7 @@ package com.github.johnpersano.supertoasts;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
 import com.github.johnpersano.supertoasts.util.Style;
 
 /**
@@ -43,6 +43,22 @@ public class SuperToast {
     private static final String ERROR_CONTEXTNULL = " - You cannot use a null context.";
     private static final String ERROR_DURATIONTOOLONG = " - You should NEVER specify a duration greater than " +
             "four and a half seconds for a SuperToast.";
+
+    /** Custom OnClickListener to be used with SuperActivityToasts/SuperCardToasts. Note that
+     *  SuperActivityToasts/SuperCardToasts must use this with an {@link com.github.johnpersano.supertoasts.util.OnClickWrapper} */
+    public interface OnClickListener {
+
+        public void onClick(View view, Parcelable token);
+
+    }
+
+    /** Custom OnDismissListener to be used with any type of SuperToasts. Note that
+     *  SuperActivityToasts/SuperCardToasts must use this with an {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper} */
+    public interface OnDismissListener {
+
+        public void onDismiss(View view);
+
+    }
 
     /**
      * Backgrounds for all types of SuperToasts.
@@ -528,7 +544,7 @@ public class SuperToast {
      * Sets an OnDismissListener defined in this library
      * to the {@value #TAG}. Does not require wrapper.
      *
-     * @param onDismissListener {@link com.github.johnpersano.supertoasts.util.OnDismissListener}
+     * @param onDismissListener {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}
      */
     public void setOnDismissListener(OnDismissListener onDismissListener) {
 
@@ -539,7 +555,7 @@ public class SuperToast {
     /**
      * Returns the OnDismissListener set to the {@value #TAG}.
      *
-     * @return {@link com.github.johnpersano.supertoasts.util.OnDismissListener}
+     * @return {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}
      */
     public OnDismissListener getOnDismissListener() {
 
@@ -717,7 +733,7 @@ public class SuperToast {
      */
     public static void cancelAllSuperToasts() {
 
-        ManagerSuperToast.getInstance().clearQueue();
+        ManagerSuperToast.getInstance().cancelAllSuperToasts();
 
     }
 

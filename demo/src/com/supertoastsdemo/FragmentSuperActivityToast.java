@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,7 @@ import android.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.OnClickWrapper;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
-import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
-import com.github.johnpersano.supertoasts.util.Wrappers;
+import com.github.johnpersano.supertoasts.util.*;
 
 public class FragmentSuperActivityToast extends SherlockFragment {
 
@@ -343,10 +341,10 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     }
 
-    private OnClickWrapper onClickWrapper = new OnClickWrapper("toast_one", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapper = new OnClickWrapper("toast_one", new SuperToast.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View v, Parcelable token) {
 
             SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with first listener!");
@@ -359,10 +357,10 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnClickWrapper onClickWrapperTwo = new OnClickWrapper("toast_two", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperTwo = new OnClickWrapper("toast_two", new SuperToast.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View v, Parcelable token) {
 
         SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with second listener!");
@@ -375,10 +373,10 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnClickWrapper onClickWrapperThree = new OnClickWrapper("toast_three", new View.OnClickListener() {
+    private OnClickWrapper onClickWrapperThree = new OnClickWrapper("toast_three", new SuperToast.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View v, Parcelable token) {
 
             SuperToast superToast = new SuperToast(v.getContext());
             superToast.setText("On Click with last listener!");
@@ -391,7 +389,7 @@ public class FragmentSuperActivityToast extends SherlockFragment {
 
     });
 
-    private OnDismissWrapper onDismissWrapper = new OnDismissWrapper("toast_one", new OnDismissListener() {
+    private OnDismissWrapper onDismissWrapper = new OnDismissWrapper("toast_one", new SuperToast.OnDismissListener() {
 
                 @Override
                 public void onDismiss(View view) {

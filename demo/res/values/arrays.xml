@@ -41,4 +41,13 @@
         <item>"Touch"</item>
     </array>
 
+    <array name="names_list">
+        <item>John</item>
+        <item>Chris</item>
+        <item>Olaf</item>
+        <item>Alyssa</item>
+        <item>Sarah</item>
+        <item>Neav</item>
+    </array>
+
 </resources>

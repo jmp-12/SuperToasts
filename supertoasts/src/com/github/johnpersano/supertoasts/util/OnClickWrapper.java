@@ -17,37 +17,59 @@
 
 package com.github.johnpersano.supertoasts.util;
 
+import android.os.Parcelable;
 import android.view.View;
-import android.view.View.OnClickListener;
+import com.github.johnpersano.supertoasts.SuperToast;
 
 /**
- *  Class that holds a reference to OnClickListeners set to button type SuperActivityToasts/SuperCardToasts.
+ *  Class that holds a reference to an OnClickListener set to button type SuperActivityToasts/SuperCardToasts.
  *  This is used for restoring listeners on orientation changes.
  */
-public class OnClickWrapper implements OnClickListener {
+public class OnClickWrapper implements SuperToast.OnClickListener {
 
     private final String mTag;
-    private final OnClickListener mOnClickListener;
+    private final SuperToast.OnClickListener mOnClickListener;
+    private Parcelable mToken;
 
-    public OnClickWrapper(String tag, OnClickListener onClickListener) {
+    /**
+     *  Creates an OnClickWrapper.
+     *
+     *  @param tag {@link java.lang.CharSequence} Must be unique to this listener
+     *  @param onClickListener {@link com.github.johnpersano.supertoasts.SuperToast.OnClickListener}
+     */
+    public OnClickWrapper(String tag, SuperToast.OnClickListener onClickListener) {
 
         this.mTag = tag;
         this.mOnClickListener = onClickListener;
 
     }
 
+    /**
+     *  Returns the tag associated with this OnClickWrapper. This is used to
+     *  reattach {@link com.github.johnpersano.supertoasts.SuperToast.OnClickListener}.
+     *
+     *  @return {@link java.lang.String}
+     */
     public String getTag() {
 
         return mTag;
 
     }
 
+    /**
+     *  This is used during SuperActivityToast/SuperCardToast recreation and should
+     *  never be called by the developer.
+     */
+    public void setToken(Parcelable token) {
 
-    @Override
-    public void onClick(View view) {
-
-        mOnClickListener.onClick(view);
+        this.mToken = token;
 
     }
 
+    @Override
+    public void onClick(View view, Parcelable token) {
+
+        mOnClickListener.onClick(view, mToken);
+
+    }
 }

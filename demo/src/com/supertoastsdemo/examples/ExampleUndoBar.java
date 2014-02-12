@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.OnClickListener;
 import com.github.johnpersano.supertoasts.util.OnClickWrapper;
 import com.github.johnpersano.supertoasts.util.Wrappers;
 import com.supertoastsdemo.R;
@@ -141,7 +140,7 @@ public class ExampleUndoBar extends Activity {
      * via a Parcelable (our bundle that we passed earlier). This is particularly useful if an item is deleted
      * and the user rotates the device, the item's data wil not be lost until the SuperActivityToast disappears.
      */
-    OnClickWrapper onClickWrapper = new OnClickWrapper(ID_UNDO_WRAPPER, new OnClickListener() {
+    OnClickWrapper onClickWrapper = new OnClickWrapper(ID_UNDO_WRAPPER, new SuperToast.OnClickListener() {
 
         @Override
         public void onClick(View view, Parcelable token) {

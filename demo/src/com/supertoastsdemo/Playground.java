@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
 import com.github.johnpersano.supertoasts.util.Style;
 
 
@@ -27,7 +26,7 @@ public class Playground extends Activity {
 
                 final SuperToast superToast = new SuperToast(Playground.this, Style.getStyle(Style.GREEN));
                 superToast.setDuration(4500);
-                superToast.setOnDismissListener(new OnDismissListener() {
+                superToast.setOnDismissListener(new SuperToast.OnDismissListener() {
 
                     @Override
                     public void onDismiss(View view) {

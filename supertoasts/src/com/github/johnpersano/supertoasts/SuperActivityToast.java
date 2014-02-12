@@ -85,6 +85,7 @@ public class SuperActivityToast {
     private LinearLayout mRootLayout;
     private OnDismissWrapper mOnDismissWrapper;
     private OnClickWrapper mOnClickWrapper;
+    private Parcelable mToken;
     private ProgressBar mProgressBar;
     private String mOnClickWrapperTag;
     private String mOnDismissWrapperTag;
@@ -675,6 +676,38 @@ public class SuperActivityToast {
 
         this.mOnClickWrapper = onClickWrapper;
         this.mOnClickWrapperTag = onClickWrapper.getTag();
+
+    }
+
+    /**
+     * Sets an OnClickWrapper with a parcelable object to the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @param onClickWrapper {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     * @param token {@link android.os.Parcelable}
+     */
+    public void setOnClickWrapper(OnClickWrapper onClickWrapper, Parcelable token) {
+
+        if (mType != Type.BUTTON) {
+
+            Log.e(TAG, "setOnClickListenerWrapper()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        onClickWrapper.setToken(token);
+
+        this.mToken = token;
+        this.mOnClickWrapper = onClickWrapper;
+        this.mOnClickWrapperTag = onClickWrapper.getTag();
+
+    }
+
+    /**
+     * Used in orientation change recreation.
+     */
+    private Parcelable getToken(){
+
+        return mToken;
 
     }
 
@@ -1311,7 +1344,7 @@ public class SuperActivityToast {
 
                     if (onClickWrapper.getTag().equalsIgnoreCase(referenceHolder.mClickListenerTag)) {
 
-                        superActivityToast.setOnClickWrapper(onClickWrapper);
+                        superActivityToast.setOnClickWrapper(onClickWrapper, referenceHolder.mToken);
 
                     }
 
@@ -1412,7 +1445,7 @@ public class SuperActivityToast {
 
                     if (mOnClickWrapper != null) {
 
-                        mOnClickWrapper.onClick(view);
+                        mOnClickWrapper.onClick(view, mToken);
 
                     }
 
@@ -1422,7 +1455,7 @@ public class SuperActivityToast {
 
             }
 
-            timesTouched++;
+            //timesTouched++;
 
             return false;
 
@@ -1450,6 +1483,7 @@ public class SuperActivityToast {
         int mButtonIcon;
         int mDivider;
         int mButtonTypefaceStyle;
+        Parcelable mToken;
         String mText;
         String mButtonText;
         String mClickListenerTag;
@@ -1469,6 +1503,7 @@ public class SuperActivityToast {
                 mDivider = superActivityToast.getDivider();
                 mClickListenerTag = superActivityToast.getOnClickWrapperTag();
                 mButtonTypefaceStyle = superActivityToast.getButtonTypefaceStyle();
+                mToken = superActivityToast.getToken();
 
             }
 
@@ -1505,6 +1540,7 @@ public class SuperActivityToast {
                 mDivider = parcel.readInt();
                 mButtonTypefaceStyle = parcel.readInt();
                 mClickListenerTag = parcel.readString();
+                mToken = parcel.readParcelable(getClass().getClassLoader());
 
             }
 
@@ -1545,6 +1581,7 @@ public class SuperActivityToast {
                 parcel.writeInt(mDivider);
                 parcel.writeInt(mButtonTypefaceStyle);
                 parcel.writeString(mClickListenerTag);
+                parcel.writeParcelable(mToken, 0);
 
             }
 

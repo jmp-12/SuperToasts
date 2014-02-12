@@ -27,16 +27,18 @@ import android.view.animation.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-/** Manages the life of a SuperActivityToast. Initial code derived from the Crouton library. */
+/**
+ * Manages the life of a SuperActivityToast. Initial code derived from the Crouton library.
+ */
 class ManagerSuperActivityToast extends Handler {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = "ManagerSuperActivityToast";
 
-    /** Potential messages for the handler to send **/
+    /* Potential messages for the handler to send **/
     private static final class Messages {
 
-        /** Hexadecimal numbers that represent acronyms for the operation. **/
+        /* Hexadecimal numbers that represent acronyms for the operation. **/
         private static final int DISPLAY = 0x44534154;
         private static final int REMOVE = 0x52534154;
 
@@ -46,15 +48,17 @@ class ManagerSuperActivityToast extends Handler {
 
     private final LinkedList<SuperActivityToast> mList;
 
-    /** Private method to create a new list if the manager is being initialized */
+    /* Private method to create a new list if the manager is being initialized */
     private ManagerSuperActivityToast() {
 
         mList = new LinkedList<SuperActivityToast>();
 
     }
 
-    /** Singleton method to ensure all SuperActivityToasts are passed through the same manager */
-    static synchronized ManagerSuperActivityToast getInstance() {
+    /**
+     * Singleton method to ensure all SuperActivityToasts are passed through the same manager.
+     */
+    protected static synchronized ManagerSuperActivityToast getInstance() {
 
         if (mManagerSuperActivityToast != null) {
 
@@ -70,8 +74,10 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Add a SuperActivityToast to the list. Will show immediately if no other SuperActivityToasts
-     *  are in the list. */
+    /**
+     * Add a SuperActivityToast to the list. Will show immediately if no other SuperActivityToasts
+     * are in the list.
+     */
     void add(SuperActivityToast superActivityToast) {
 
         mList.add(superActivityToast);
@@ -80,8 +86,10 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Shows the next SuperActivityToast in the list. Called by add() and when the dismiss animation
-     *  of a previously showing SuperActivityToast ends. */
+    /**
+     * Shows the next SuperActivityToast in the list. Called by add() and when the dismiss animation
+     * of a previously showing SuperActivityToast ends.
+     */
     private void showNextSuperToast() {
 
         final SuperActivityToast superActivityToast = mList.peek();
@@ -135,10 +143,12 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Displays a SuperActivityToast */
+    /**
+     * Displays a SuperActivityToast.
+     */
     private void displaySuperToast(SuperActivityToast superActivityToast) {
 
-        /** If this SuperActivityToast is somehow already showing do nothing */
+        /* If this SuperActivityToast is somehow already showing do nothing */
         if(superActivityToast.isShowing()) {
 
             return;
@@ -169,7 +179,7 @@ class ManagerSuperActivityToast extends Handler {
 
         }
 
-        /** Dismiss the SuperActivityToast at the set duration time unless indeterminate */
+        /* Dismiss the SuperActivityToast at the set duration time unless indeterminate */
         if(!superActivityToast.isIndeterminate()) {
 
             Message message = obtainMessage(Messages.REMOVE);
@@ -181,10 +191,12 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Hide and remove the SuperActivityToast */
+    /**
+     *  Hide and remove the SuperActivityToast
+     */
     void removeSuperToast(final SuperActivityToast superActivityToast) {
 
-        /** If SuperActivityToast has been dismissed before it shows, do not attempt to show it */
+        /* If SuperActivityToast has been dismissed before it shows, do not attempt to show it */
         if(!superActivityToast.isShowing()) {
 
             mList.remove(superActivityToast);
@@ -193,7 +205,7 @@ class ManagerSuperActivityToast extends Handler {
 
         }
 
-        /** If being called somewhere else get rid of delayed remove message */
+        /* If being called somewhere else get rid of delayed remove message */
         removeMessages(Messages.REMOVE, superActivityToast);
 
         final ViewGroup viewGroup = superActivityToast.getViewGroup();
@@ -209,7 +221,7 @@ class ManagerSuperActivityToast extends Handler {
                 @Override
                 public void onAnimationStart(Animation animation) {
 
-                    /** Do nothing */
+                    /* Do nothing */
 
                 }
 
@@ -222,7 +234,7 @@ class ManagerSuperActivityToast extends Handler {
 
                     }
 
-                    /** Show the SuperActivityToast next in the list if any exist */
+                    /* Show the SuperActivityToast next in the list if any exist */
                     ManagerSuperActivityToast.this.showNextSuperToast();
 
                 }
@@ -230,7 +242,7 @@ class ManagerSuperActivityToast extends Handler {
                 @Override
                 public void onAnimationRepeat(Animation animation) {
 
-                    /** Do nothing */
+                    /* Do nothing */
 
                 }
             });
@@ -245,7 +257,9 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Removes all SuperActivityToasts and clears the list */
+    /**
+     * Removes all SuperActivityToasts and clears the list
+     */
     void cancelAllSuperActivityToasts() {
 
         removeMessages(Messages.DISPLAY);
@@ -268,7 +282,9 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Removes all SuperActivityToasts and clears the list for a specific activity */
+    /**
+     * Removes all SuperActivityToasts and clears the list for a specific activity
+     */
     void cancelAllSuperActivityToastsForActivity(Activity activity) {
 
         Iterator<SuperActivityToast> superActivityToastIterator = mList
@@ -300,14 +316,18 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Used in SuperActivityToast saveState() */
+    /**
+     * Used in SuperActivityToast saveState().
+     */
     LinkedList<SuperActivityToast> getList(){
 
         return mList;
 
     }
 
-    /** Returns an animation based on the {@link com.github.johnpersano.supertoasts.SuperToast.Animations} enums */
+    /**
+     * Returns an animation based on the {@link com.github.johnpersano.supertoasts.SuperToast.Animations} enums
+     */
     private Animation getShowAnimation(SuperActivityToast superActivityToast) {
 
         if (superActivityToast.getAnimations() == SuperToast.Animations.FLYIN) {
@@ -369,7 +389,9 @@ class ManagerSuperActivityToast extends Handler {
 
     }
 
-    /** Returns an animation based on the {@link com.github.johnpersano.supertoasts.SuperToast.Animations} enums */
+    /**
+     *  Returns an animation based on the {@link com.github.johnpersano.supertoasts.SuperToast.Animations} enums
+     */
     private Animation getDismissAnimation(SuperActivityToast superActivityToast) {
 
         if (superActivityToast.getAnimations() == SuperToast.Animations.FLYIN) {

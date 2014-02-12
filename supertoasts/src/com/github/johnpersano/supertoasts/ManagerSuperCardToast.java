@@ -1,5 +1,5 @@
 /**
- *  Copyright 2013 John Persano
+ *  Copyright 2014 John Persano
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *	you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ package com.github.johnpersano.supertoasts;
 
 import java.util.LinkedList;
 
-/** Manages the life of a SuperCardToast on orientation changes. */
+/**
+ * Manages the life of a SuperCardToast on orientation changes.
+ */
 class ManagerSuperCardToast {
 
+    @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = "Manager SuperCardToast";
 
     private static ManagerSuperCardToast mManagerSuperCardToast;
@@ -34,7 +37,10 @@ class ManagerSuperCardToast {
 
     }
 
-    static synchronized ManagerSuperCardToast getInstance() {
+    /**
+     * Singleton method to ensure all SuperCardToasts are passed through the same manager.
+     */
+    protected static synchronized ManagerSuperCardToast getInstance() {
 
         if (mManagerSuperCardToast != null) {
 
@@ -50,20 +56,28 @@ class ManagerSuperCardToast {
 
     }
 
-
+    /**
+     * Add a SuperCardToast to the list.
+     */
     void add(SuperCardToast superCardToast) {
 
         mList.add(superCardToast);
 
     }
 
+    /**
+     * Removes a SuperCardToast from the list.
+     */
     void remove(SuperCardToast superCardToast) {
 
         mList.remove(superCardToast);
 
     }
 
-    void clearQueue() {
+    /**
+     * Removes all SuperCardToasts and clears the list
+     */
+    void cancelAllSuperActivityToasts() {
 
         for (SuperCardToast superCardToast : mList) {
 
@@ -82,6 +96,9 @@ class ManagerSuperCardToast {
 
     }
 
+    /**
+     * Used in SuperCardToast saveState().
+     */
     LinkedList<SuperCardToast> getList() {
 
         return mList;

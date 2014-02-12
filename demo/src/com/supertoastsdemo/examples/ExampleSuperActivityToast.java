@@ -3,6 +3,7 @@ package com.supertoastsdemo.examples;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,10 @@ import com.supertoastsdemo.R;
 /** This class showcases some different uses for the SuperActivityToast */
 @SuppressWarnings("UnusedDeclaration")
 public class ExampleSuperActivityToast extends Activity {
+
+    private static final String ID_ONCLICKWRAPPER_ONE = "id_onclickwrapper_one";
+    private static final String ID_ONCLICKWRAPPER_TWO = "id_onclickwrapper_two";
+    private static final String ID_ONCLICKWRAPPER_THREE = "id_onclickwrapper_three";
 
     private Style mStyle;
 
@@ -103,7 +108,7 @@ public class ExampleSuperActivityToast extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        /** This method is used to save any showing or pending SuperActivityToasts */
+        /* This method is used to save any showing or pending SuperActivityToasts */
         SuperActivityToast.onSaveState(outState);
 
     }
@@ -115,10 +120,10 @@ public class ExampleSuperActivityToast extends Activity {
      * 1st parameter: A tag unique to this listener
      * 2nd parameter: A new OnClickListener
      */
-    OnClickWrapper onClickWrapper = new OnClickWrapper("onclick_1", new View.OnClickListener() {
+    OnClickWrapper onClickWrapper = new OnClickWrapper(ID_ONCLICKWRAPPER_ONE, new SuperToast.OnClickListener() {
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View view, Parcelable token) {
 
             /**
              *  Show a SuperActivityToast.
@@ -141,10 +146,10 @@ public class ExampleSuperActivityToast extends Activity {
      * 1st parameter: A tag unique to this listener
      * 2nd parameter: A new OnClickListener
      */
-    OnClickWrapper onClickWrapperTwo = new OnClickWrapper("onclick_2", new View.OnClickListener() {
+    OnClickWrapper onClickWrapperTwo = new OnClickWrapper(ID_ONCLICKWRAPPER_TWO, new SuperToast.OnClickListener() {
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View view, Parcelable token) {
 
             /**
              *  Show a SuperActivityToast.
@@ -167,7 +172,7 @@ public class ExampleSuperActivityToast extends Activity {
      * 1st parameter: A tag unique to this listener
      * 2nd parameter: A new OnDismissListener
      */
-    OnDismissWrapper onDismissWrapper = new OnDismissWrapper("dismiss_1", new OnDismissListener() {
+    OnDismissWrapper onDismissWrapper = new OnDismissWrapper(ID_ONCLICKWRAPPER_THREE, new SuperToast.OnDismissListener() {
 
         @Override
         public void onDismiss(View view) {
