@@ -56,15 +56,6 @@ rather it is a short demonstration of major features/functions of the library.
 </a>
 
 
-Developed By
-============
-
-John Persano 
-* <johnpersano@gmail.com>
-* [Google+ profile](https://plus.google.com/+JohnPersano/)
-
-
-
 License
 =======
 
