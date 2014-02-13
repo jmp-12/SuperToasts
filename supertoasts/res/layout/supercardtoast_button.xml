@@ -12,13 +12,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:paddingBottom="@dimen/superbuttontoast_textview_y_padding"
-            android:paddingLeft="@dimen/superbuttontoast_textview_x_padding"
-            android:paddingRight="@dimen/superbuttontoast_textview_x_padding"
-            android:paddingTop="@dimen/superbuttontoast_textview_y_padding"
+            android:drawablePadding="@dimen/supertoast_drawable_padding"
+            android:paddingBottom="@dimen/supertoast_textview_y_padding"
+            android:paddingLeft="@dimen/supertoast_textview_x_padding"
+            android:paddingRight="@dimen/supertoast_textview_x_padding"
+            android:paddingTop="@dimen/supertoast_textview_y_padding"
             android:text="Default"
             android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white" tools:ignore="HardcodedText"/>
 
     <View
