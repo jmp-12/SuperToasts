@@ -17,7 +17,6 @@
 
 package com.github.johnpersano.supertoasts;
 
-
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Parcelable;
@@ -44,16 +43,22 @@ public class SuperToast {
     private static final String ERROR_DURATIONTOOLONG = " - You should NEVER specify a duration greater than " +
             "four and a half seconds for a SuperToast.";
 
-    /** Custom OnClickListener to be used with SuperActivityToasts/SuperCardToasts. Note that
-     *  SuperActivityToasts/SuperCardToasts must use this with an {@link com.github.johnpersano.supertoasts.util.OnClickWrapper} */
+    /**
+     * Custom OnClickListener to be used with SuperActivityToasts/SuperCardToasts. Note that
+     * SuperActivityToasts/SuperCardToasts must use this with an
+     * {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     */
     public interface OnClickListener {
 
         public void onClick(View view, Parcelable token);
 
     }
 
-    /** Custom OnDismissListener to be used with any type of SuperToasts. Note that
-     *  SuperActivityToasts/SuperCardToasts must use this with an {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper} */
+    /**
+     * Custom OnDismissListener to be used with any type of SuperToasts. Note that
+     * SuperActivityToasts/SuperCardToasts must use this with an
+     * {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper}
+     */
     public interface OnDismissListener {
 
         public void onDismiss(View view);
@@ -65,23 +70,14 @@ public class SuperToast {
      */
     public static class Background {
 
-        public static final int BLACK = (R.drawable.background_black);
-        public static final int BLUE = (R.drawable.background_blue);
-        public static final int GRAY = (R.drawable.background_grey);
-        public static final int GREEN = (R.drawable.background_green);
-        public static final int ORANGE = (R.drawable.background_orange);
-        public static final int PURPLE = (R.drawable.background_purple);
-        public static final int RED = (R.drawable.background_red);
-        public static final int WHITE = (R.drawable.background_white);
-
-        public static final int TRANSLUCENT_BLACK = (R.drawable.background_blacktranslucent);
-        public static final int TRANSLUCENT_BLUE = (R.drawable.background_bluetranslucent);
-        public static final int TRANSLUCENT_GREEN = (R.drawable.background_greentranslucent);
-        public static final int TRANSLUCENT_GRAY = (R.drawable.background_greytranslucent);
-        public static final int TRANSLUCENT_PURPLE = (R.drawable.background_purpletranslucent);
-        public static final int TRANSLUCENT_RED = (R.drawable.background_redtranslucent);
-        public static final int TRANSLUCENT_WHITE = (R.drawable.background_whitetranslucent);
-        public static final int TRANSLUCENT_ORANGE = (R.drawable.background_orangetranslucent);
+        public static final int BLACK = Style.getBackground(Style.BLACK);
+        public static final int BLUE = Style.getBackground(Style.BLUE);
+        public static final int GRAY = Style.getBackground(Style.GRAY);
+        public static final int GREEN = Style.getBackground(Style.GREEN);
+        public static final int ORANGE = Style.getBackground(Style.ORANGE);
+        public static final int PURPLE = Style.getBackground(Style.PURPLE);
+        public static final int RED = Style.getBackground(Style.RED);
+        public static final int WHITE = Style.getBackground(Style.WHITE);
 
     }
 
@@ -154,6 +150,7 @@ public class SuperToast {
      */
     public static class TextSize {
 
+        public static final int EXTRA_SMALL = (12);
         public static final int SMALL = (14);
         public static final int MEDIUM = (18);
         public static final int LARGE = (22);
@@ -245,7 +242,7 @@ public class SuperToast {
         this.mContext = context;
 
         mYOffset = context.getResources().getDimensionPixelSize(
-                R.dimen.toast_yoffset);
+                R.dimen.toast_hover);
 
         final LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -259,7 +256,7 @@ public class SuperToast {
                 mToastView.findViewById(R.id.root_layout);
 
         mMessageTextView = (TextView)
-                mToastView.findViewById(R.id.message_textView);
+                mToastView.findViewById(R.id.message_textview);
 
     }
 
@@ -280,7 +277,7 @@ public class SuperToast {
         this.mContext = context;
 
         mYOffset = context.getResources().getDimensionPixelSize(
-                R.dimen.toast_yoffset);
+                R.dimen.toast_hover);
 
         final LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -294,7 +291,7 @@ public class SuperToast {
                 mToastView.findViewById(R.id.root_layout);
 
         mMessageTextView = (TextView)
-                mToastView.findViewById(R.id.message_textView);
+                mToastView.findViewById(R.id.message_textview);
 
         this.setStyle(style);
 
@@ -673,7 +670,7 @@ public class SuperToast {
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperToast}
      */
-    public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
+    public static SuperToast create(Context context, CharSequence textCharSequence,
                                               int durationInteger) {
 
         SuperToast superToast = new SuperToast(context);
@@ -694,7 +691,7 @@ public class SuperToast {
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperToast}
      */
-    public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
+    public static SuperToast create(Context context, CharSequence textCharSequence,
                                               int durationInteger, Animations animations) {
 
         final SuperToast superToast = new SuperToast(context);
@@ -716,8 +713,7 @@ public class SuperToast {
      *
      * @return SuperCardToast
      */
-    public static SuperToast createSuperToast(
-            Context context, CharSequence textCharSequence, int durationInteger, Style style) {
+    public static SuperToast create(Context context, CharSequence textCharSequence, int durationInteger, Style style) {
 
         final SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
