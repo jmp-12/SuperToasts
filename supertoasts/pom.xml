@@ -50,6 +50,7 @@
         <java.version>1.6</java.version>
         <android.version>4.1.1.4</android.version>
         <android.platform>17</android.platform>
+        <scope>provided</scope>
     </properties>
 
     <dependencies>
