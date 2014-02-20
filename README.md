@@ -57,7 +57,7 @@ rather it is a short demonstration of major features/functions of the library.
 
 Developer
 =========
-[John Persaano](google.com/+JohnPersano)
+[John Persaano](https://plus.google.com/+JohnPersano)
 
 
 License
