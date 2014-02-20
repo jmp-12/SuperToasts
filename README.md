@@ -55,6 +55,10 @@ rather it is a short demonstration of major features/functions of the library.
        src="https://developer.android.com/images/brand/en_app_rgb_wo_60.png" />
 </a>
 
+Developer
+=========
+[John Persaano](google.com/+JohnPersano)
+
 
 License
 =======
