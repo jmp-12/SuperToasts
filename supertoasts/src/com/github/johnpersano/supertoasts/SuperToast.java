@@ -152,8 +152,8 @@ public class SuperToast {
 
         public static final int EXTRA_SMALL = (12);
         public static final int SMALL = (14);
-        public static final int MEDIUM = (18);
-        public static final int LARGE = (22);
+        public static final int MEDIUM = (16);
+        public static final int LARGE = (18);
 
     }
 

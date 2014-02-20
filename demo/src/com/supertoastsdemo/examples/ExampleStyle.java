@@ -41,7 +41,7 @@ public class ExampleStyle extends Activity {
         /* Create a style object and modify it's references directly. */
         final Style customStyle = new Style();
         customStyle.animations = SuperToast.Animations.POPUP;
-        customStyle.background = SuperToast.Background.TRANSLUCENT_PURPLE;
+        customStyle.background = SuperToast.Background.PURPLE;
         customStyle.textColor = Color.WHITE;
         customStyle.buttonTextColor = Color.LTGRAY;
         customStyle.dividerColor = Color.WHITE;

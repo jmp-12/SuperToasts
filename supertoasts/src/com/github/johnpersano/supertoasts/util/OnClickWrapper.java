@@ -25,6 +25,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
  *  Class that holds a reference to an OnClickListener set to button type SuperActivityToasts/SuperCardToasts.
  *  This is used for restoring listeners on orientation changes.
  */
+@SuppressWarnings("UnusedParameters")
 public class OnClickWrapper implements SuperToast.OnClickListener {
 
     private final String mTag;
@@ -72,4 +73,5 @@ public class OnClickWrapper implements SuperToast.OnClickListener {
         mOnClickListener.onClick(view, mToken);
 
     }
+
 }

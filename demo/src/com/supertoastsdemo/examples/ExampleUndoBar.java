@@ -21,8 +21,8 @@ import java.util.Collections;
 
 
 /**
- * Use this class to play around with the library. Simply run this activity
- * in a specified run configuration
+ * This class showcases the usage of a SuperActivityToast to mimic the undo
+ * delete bar in the Gmail app.
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ExampleUndoBar extends Activity {
@@ -38,7 +38,7 @@ public class ExampleUndoBar extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playground_undo);
+        setContentView(R.layout.example_undobar);
 
         /* Create a Wrappers object to reattach our OnClickWrapper  */
         Wrappers wrappers = new Wrappers();
@@ -120,6 +120,7 @@ public class ExampleUndoBar extends Activity {
             SuperActivityToast superActivityToast = new SuperActivityToast(ExampleUndoBar.this, SuperToast.Type.BUTTON);
             superActivityToast.setDuration(SuperToast.Duration.LONG);
             superActivityToast.setText("Name deleted.");
+            superActivityToast.setBackground(SuperToast.Background.GRAY);
             superActivityToast.setButtonIcon(SuperToast.Icon.Dark.UNDO, "UNDO");
 
             /* This part is important, pass the Bundle we created earlier as a second parameter here */

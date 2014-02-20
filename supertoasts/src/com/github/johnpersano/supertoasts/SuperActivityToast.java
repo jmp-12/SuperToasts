@@ -19,6 +19,7 @@ package com.github.johnpersano.supertoasts;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -26,15 +27,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.github.johnpersano.supertoasts.SuperToast.Animations;
 import com.github.johnpersano.supertoasts.SuperToast.IconPosition;
 import com.github.johnpersano.supertoasts.SuperToast.Type;
@@ -50,7 +45,7 @@ import java.util.LinkedList;
  * SuperActivityToasts are designed to be used inside of Activities. When the
  * Activity is destroyed the SuperActivityToast is destroyed along with it.
  */
-@SuppressWarnings({"UnusedDeclaration", "BooleanMethodIsAlwaysInverted"})
+@SuppressWarnings({"UnusedDeclaration", "BooleanMethodIsAlwaysInverted", "ConstantConditions"})
 public class SuperActivityToast {
 
     private static final String TAG = "SuperActivityToast";
@@ -61,9 +56,7 @@ public class SuperActivityToast {
     private static final String ERROR_NOTPROGRESSHORIZONTALTYPE = " - is only compatible with PROGRESS_HORIZONTAL type SuperActivityToasts.";
     private static final String ERROR_NOTEITHERPROGRESSTYPE = " - is only compatible with PROGRESS_HORIZONTAL or PROGRESS type SuperActivityToasts.";
 
-    /**
-     * Bundle tag with a hex as a string so it can't interfere with other tags in the bundle
-     */
+    /* Bundle tag with a hex as a string so it can't interfere with other tags in the bundle */
     private static final String BUNDLE_TAG = "0x532e412e542e";
 
     private Activity mActivity;
@@ -75,7 +68,7 @@ public class SuperActivityToast {
     private Button mButton;
     private IconPosition mIconPosition;
     private int mDuration = SuperToast.Duration.SHORT;
-    private int mBackground = SuperToast.Background.TRANSLUCENT_BLACK;
+    private int mBackground = Style.getBackground(Style.GRAY);
     private int mButtonIcon = SuperToast.Icon.Dark.UNDO;
     private int mDividerColor = Color.LTGRAY;
     private int mIcon;
@@ -120,7 +113,7 @@ public class SuperActivityToast {
                 mViewGroup, false);
 
         mMessageTextView = (TextView) mToastView
-                .findViewById(R.id.message_textView);
+                .findViewById(R.id.message_textview);
 
         mRootLayout = (LinearLayout) mToastView
                 .findViewById(R.id.root_layout);
@@ -153,7 +146,7 @@ public class SuperActivityToast {
                 mViewGroup, false);
 
         mMessageTextView = (TextView) mToastView
-                .findViewById(R.id.message_textView);
+                .findViewById(R.id.message_textview);
 
         mRootLayout = (LinearLayout) mToastView
                 .findViewById(R.id.root_layout);
@@ -188,7 +181,7 @@ public class SuperActivityToast {
         if (type == Type.STANDARD) {
 
             mToastView = mLayoutInflater.inflate(
-                    R.layout.superactivitytoast, mViewGroup, false);
+                    R.layout.supertoast, mViewGroup, false);
 
         } else if (type == Type.BUTTON) {
 
@@ -201,7 +194,7 @@ public class SuperActivityToast {
             mDividerView = mToastView
                     .findViewById(R.id.divider);
 
-            mButton.setOnTouchListener(mButtonListener);
+            mButton.setOnClickListener(mButtonListener);
 
         } else if (type == Type.PROGRESS) {
 
@@ -209,7 +202,7 @@ public class SuperActivityToast {
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
-                    .findViewById(R.id.progressBar);
+                    .findViewById(R.id.progress_bar);
 
         } else if (type == Type.PROGRESS_HORIZONTAL) {
 
@@ -217,16 +210,15 @@ public class SuperActivityToast {
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
-                    .findViewById(R.id.progressBar);
+                    .findViewById(R.id.progress_bar);
 
         }
 
         mMessageTextView = (TextView) mToastView
-                .findViewById(R.id.message_textView);
+                .findViewById(R.id.message_textview);
 
         mRootLayout = (LinearLayout) mToastView
                 .findViewById(R.id.root_layout);
-
 
     }
 
@@ -257,7 +249,7 @@ public class SuperActivityToast {
         if (type == Type.STANDARD) {
 
             mToastView = mLayoutInflater.inflate(
-                    R.layout.superactivitytoast, mViewGroup, false);
+                    R.layout.supertoast, mViewGroup, false);
 
         } else if (type == Type.BUTTON) {
 
@@ -270,7 +262,7 @@ public class SuperActivityToast {
             mDividerView = mToastView
                     .findViewById(R.id.divider);
 
-            mButton.setOnTouchListener(mButtonListener);
+            mButton.setOnClickListener(mButtonListener);
 
         } else if (type == Type.PROGRESS) {
 
@@ -278,7 +270,7 @@ public class SuperActivityToast {
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
-                    .findViewById(R.id.progressBar);
+                    .findViewById(R.id.progress_bar);
 
         } else if (type == Type.PROGRESS_HORIZONTAL) {
 
@@ -286,12 +278,12 @@ public class SuperActivityToast {
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
-                    .findViewById(R.id.progressBar);
+                    .findViewById(R.id.progress_bar);
 
         }
 
         mMessageTextView = (TextView) mToastView
-                .findViewById(R.id.message_textView);
+                .findViewById(R.id.message_textview);
 
         mRootLayout = (LinearLayout) mToastView
                 .findViewById(R.id.root_layout);
@@ -299,7 +291,6 @@ public class SuperActivityToast {
         this.setStyle(style);
 
     }
-
 
     /**
      * Shows the {@value #TAG}. If another {@value #TAG} is showing than
@@ -647,7 +638,7 @@ public class SuperActivityToast {
      */
     private String getOnDismissWrapperTag() {
 
-        return mOnDismissWrapperTag;
+        return this.mOnDismissWrapperTag;
 
     }
 
@@ -707,7 +698,7 @@ public class SuperActivityToast {
      */
     private Parcelable getToken(){
 
-        return mToken;
+        return this.mToken;
 
     }
 
@@ -716,7 +707,7 @@ public class SuperActivityToast {
      */
     private String getOnClickWrapperTag() {
 
-        return mOnClickWrapperTag;
+        return this.mOnClickWrapperTag;
 
     }
 
@@ -815,7 +806,7 @@ public class SuperActivityToast {
      *
      * @return int
      */
-    public int getDivider() {
+    public int getDividerColor() {
 
         return this.mDividerColor;
 
@@ -851,7 +842,17 @@ public class SuperActivityToast {
      */
     public CharSequence getButtonText() {
 
-        return mButton.getText();
+        if(mButton != null) {
+
+            return mButton.getText();
+
+        } else {
+
+            Log.e(TAG, "getButtonText()" + ERROR_NOTBUTTONTYPE);
+
+            return "";
+
+        }
 
     }
 
@@ -869,9 +870,13 @@ public class SuperActivityToast {
 
         }
 
-        mButtonTypefaceStyle = typefaceStyle;
+        if (mButton != null) {
 
-        mButton.setTypeface(mButton.getTypeface(), typefaceStyle);
+            mButtonTypefaceStyle = typefaceStyle;
+
+            mButton.setTypeface(mButton.getTypeface(), typefaceStyle);
+
+        }
 
     }
 
@@ -883,7 +888,7 @@ public class SuperActivityToast {
      */
     public int getButtonTypefaceStyle() {
 
-        return mButtonTypefaceStyle;
+        return this.mButtonTypefaceStyle;
 
     }
 
@@ -917,7 +922,17 @@ public class SuperActivityToast {
      */
     public int getButtonTextColor() {
 
-        return mButton.getCurrentTextColor();
+        if(mButton != null) {
+
+            return mButton.getCurrentTextColor();
+
+        } else {
+
+            Log.e(TAG, "getButtonTextColor()" + ERROR_NOTBUTTONTYPE);
+
+            return 0;
+
+        }
 
     }
 
@@ -937,7 +952,7 @@ public class SuperActivityToast {
 
         if (mButton != null) {
 
-            mMessageTextView.setTextSize(buttonTextSize);
+            mButton.setTextSize(buttonTextSize);
 
         }
 
@@ -948,7 +963,7 @@ public class SuperActivityToast {
      */
     private void setButtonTextSizeFloat(float buttonTextSize) {
 
-        mMessageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
+        mButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize);
 
     }
 
@@ -960,7 +975,17 @@ public class SuperActivityToast {
      */
     public float getButtonTextSize() {
 
-        return mButton.getTextSize();
+        if(mButton != null) {
+
+            return mButton.getTextSize();
+
+        } else {
+
+            Log.e(TAG, "getButtonTextSize()" + ERROR_NOTBUTTONTYPE);
+
+            return 0.0f;
+
+        }
 
     }
 
@@ -994,7 +1019,17 @@ public class SuperActivityToast {
      */
     public int getProgress() {
 
-        return mProgressBar.getProgress();
+        if(mProgressBar != null) {
+
+            return mProgressBar.getProgress();
+
+        } else {
+
+            Log.e(TAG, "getProgress()" + ERROR_NOTPROGRESSHORIZONTALTYPE);
+
+            return 0;
+
+        }
 
     }
 
@@ -1028,10 +1063,19 @@ public class SuperActivityToast {
      */
     public int getMaxProgress() {
 
-        return mProgressBar.getMax();
+        if(mProgressBar != null) {
+
+            return mProgressBar.getMax();
+
+        } else {
+
+            Log.e(TAG, "getMaxProgress()" + ERROR_NOTPROGRESSHORIZONTALTYPE);
+
+            return 0;
+
+        }
 
     }
-
 
     /**
      * Sets an indeterminate value to the progressbar of a PROGRESS
@@ -1068,7 +1112,6 @@ public class SuperActivityToast {
         return this.isProgressIndeterminate;
 
     }
-
 
     /**
      * Returns the {@value #TAG} message textview.
@@ -1126,6 +1169,17 @@ public class SuperActivityToast {
     }
 
     /**
+     * Returns the LinearLayout that the {@value #TAG} is attached to.
+     *
+     * @return {@link android.widget.LinearLayout}
+     */
+    private LinearLayout getRootLayout(){
+
+        return mRootLayout;
+
+    }
+
+    /**
      * Private method used to set a default style to the {@value #TAG}
      */
     private void setStyle(Style style) {
@@ -1139,7 +1193,6 @@ public class SuperActivityToast {
 
             this.setDividerColor(style.dividerColor);
             this.setButtonTextColor(style.buttonTextColor);
-            this.setButtonTypefaceStyle(style.buttonTypefaceStyle);
 
         }
 
@@ -1154,8 +1207,7 @@ public class SuperActivityToast {
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
-    public static SuperActivityToast createSuperActivityToast(
-            Activity activity, CharSequence textCharSequence, int durationInteger) {
+    public static SuperActivityToast create(Activity activity, CharSequence textCharSequence, int durationInteger) {
 
         final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
@@ -1175,8 +1227,7 @@ public class SuperActivityToast {
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
-    public static SuperActivityToast createSuperActivityToast(
-            Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
+    public static SuperActivityToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
 
         final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
@@ -1197,8 +1248,7 @@ public class SuperActivityToast {
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperActivityToast}
      */
-    public static SuperActivityToast createSuperActivityToast(
-            Activity activity, CharSequence textCharSequence, int durationInteger, Style style) {
+    public static SuperActivityToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Style style) {
 
         final SuperActivityToast superActivityToast = new SuperActivityToast(activity);
         superActivityToast.setText(textCharSequence);
@@ -1337,7 +1387,25 @@ public class SuperActivityToast {
             superActivityToast.setDividerColor(referenceHolder.mDivider);
             superActivityToast.setButtonTypefaceStyle(referenceHolder.mButtonTypefaceStyle);
 
-            /** Reattach any OnClickWrappers by matching tags sent through parcel */
+            int screenSize = activity.getResources().getConfiguration().screenLayout &
+                    Configuration.SCREENLAYOUT_SIZE_MASK;
+
+            /* Changes the size of the BUTTON type SuperActivityToast to mirror Gmail app */
+            if(screenSize >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
+
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                layoutParams.bottomMargin = (int) activity.getResources().getDimension(R.dimen.buttontoast_hover);
+                layoutParams.rightMargin = (int) activity.getResources().getDimension(R.dimen.buttontoast_x_padding);
+                layoutParams.leftMargin = (int) activity.getResources().getDimension(R.dimen.buttontoast_x_padding);
+
+                superActivityToast.getRootLayout().setLayoutParams(layoutParams);
+
+            }
+
+            /* Reattach any OnClickWrappers by matching tags sent through parcel */
             if (wrappers != null) {
 
                 for (OnClickWrapper onClickWrapper : wrappers.getOnClickWrappers()) {
@@ -1353,13 +1421,13 @@ public class SuperActivityToast {
 
         } else if (referenceHolder.mType == Type.PROGRESS) {
 
-            /** PROGRESS referenceHolder {@value #TAG} should be managed by the developer */
+            /* PROGRESS {@value #TAG} should be managed by the developer */
 
             return;
 
         } else if (referenceHolder.mType == Type.PROGRESS_HORIZONTAL) {
 
-            /** PROGRESS_HORIZONTAL referenceHolder {@value #TAG} should be managed by the developer */
+            /* PROGRESS_HORIZONTAL {@value #TAG} should be managed by the developer */
 
             return;
 
@@ -1369,7 +1437,7 @@ public class SuperActivityToast {
 
         }
 
-        /** Reattach any OnDismissWrappers by matching tags sent through parcel */
+        /* Reattach any OnDismissWrappers by matching tags sent through parcel */
         if (wrappers != null) {
 
             for (OnDismissWrapper onDismissWrapper : wrappers.getOnDismissWrappers()) {
@@ -1394,7 +1462,7 @@ public class SuperActivityToast {
         superActivityToast.setBackground(referenceHolder.mBackground);
         superActivityToast.setTouchToDismiss(referenceHolder.mIsTouchDismissible);
 
-        /** Do not use show animation on recreation of {@value #TAG} that was previously showing */
+        /* Do not use show animation on recreation of {@value #TAG} that was previously showing */
         if (position == 1) {
 
             superActivityToast.setShowImmediate(true);
@@ -1405,6 +1473,7 @@ public class SuperActivityToast {
 
     }
 
+    /* This OnTouchListener handles the setTouchToDismiss() function */
     private OnTouchListener mTouchDismissListener = new OnTouchListener() {
 
         int timesTouched;
@@ -1412,7 +1481,7 @@ public class SuperActivityToast {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
 
-            /** Hack to prevent repeat touch events causing erratic behavior */
+            /* Hack to prevent repeat touch events causing erratic behavior */
             if (timesTouched == 0) {
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1431,36 +1500,21 @@ public class SuperActivityToast {
 
     };
 
-    private OnTouchListener mButtonListener = new OnTouchListener() {
-
-        int timesTouched;
+    /* This OnClickListener handles the button click event */
+    private View.OnClickListener mButtonListener = new View.OnClickListener() {
 
         @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
+        public void onClick(View view) {
 
-            /** Hack to prevent repeat touch events causing erratic behavior */
-            if (timesTouched == 0) {
+            if (mOnClickWrapper != null) {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    if (mOnClickWrapper != null) {
-
-                        mOnClickWrapper.onClick(view, mToken);
-
-                    }
-
-                    dismiss();
-
-                }
+                mOnClickWrapper.onClick(view, mToken);
 
             }
 
-            //timesTouched++;
-
-            return false;
+            dismiss();
 
         }
-
     };
 
     /**
@@ -1500,7 +1554,7 @@ public class SuperActivityToast {
                 mButtonTextSize = superActivityToast.getButtonTextSize();
                 mButtonTextColor = superActivityToast.getButtonTextColor();
                 mButtonIcon = superActivityToast.getButtonIcon();
-                mDivider = superActivityToast.getDivider();
+                mDivider = superActivityToast.getDividerColor();
                 mClickListenerTag = superActivityToast.getOnClickWrapperTag();
                 mButtonTypefaceStyle = superActivityToast.getButtonTypefaceStyle();
                 mToken = superActivityToast.getToken();
@@ -1540,7 +1594,7 @@ public class SuperActivityToast {
                 mDivider = parcel.readInt();
                 mButtonTypefaceStyle = parcel.readInt();
                 mClickListenerTag = parcel.readString();
-                mToken = parcel.readParcelable(getClass().getClassLoader());
+                mToken = parcel.readParcelable(((Object) this).getClass().getClassLoader());
 
             }
 
