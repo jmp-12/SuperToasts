@@ -51,11 +51,11 @@
 
     <style name="SuperActivityToast_Progress_ProgressBar" parent="android:Widget.Holo.ProgressBar">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
     </style>
 
     <style name="SuperActivityToast_Progress_TextView" parent="DefaultText">
-        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingLeft">0dp</item>
     </style>
 
     <!-- Styles for API 19+ devices -->
