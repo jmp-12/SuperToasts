@@ -2007,6 +2007,9 @@ public class SuperCardToast {
 
             dismiss();
 
+            /* Make sure the button cannot be clicked multiple times */
+            mButton.setClickable(false);
+
         }
     };
 
