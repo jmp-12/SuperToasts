@@ -27,8 +27,8 @@
 
     <style name="SuperActivityToast_Button_TextView" parent="DefaultText">
         <item name="android:textSize">16sp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingTop">12dp</item>
     </style>
