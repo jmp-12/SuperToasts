@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/root_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="bottom|center_horizontal"
-              android:layout_marginBottom="@dimen/superbuttontoast_layoutmargin_y"
-              android:layout_marginLeft="@dimen/superbuttontoast_layoutmargin_x"
-              android:layout_marginRight="@dimen/superbuttontoast_layoutmargin_x"
-              android:background="@drawable/background_greytranslucent">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        style="@style/SuperActivityToast_Button_RootLayout">
 
     <TextView
-            android:id="@+id/message_textView"
+            android:id="@+id/message_textview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:paddingBottom="@dimen/superbuttontoast_textview_y_padding"
-            android:paddingLeft="@dimen/superbuttontoast_textview_x_padding"
-            android:paddingRight="@dimen/superbuttontoast_textview_x_padding"
-            android:paddingTop="@dimen/superbuttontoast_textview_y_padding"
-            android:text="Default"
             android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" tools:ignore="HardcodedText"/>
+            style="@style/SuperActivityToast_Button_TextView"/>
 
     <View
             android:id="@+id/divider"
-            android:layout_width="@dimen/superbuttontoast_divider_width"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/superbuttontoast_divider_y_margin"
-            android:layout_marginTop="@dimen/superbuttontoast_divider_y_margin"
-            android:background="@color/light_gray"/>
+            android:background="@color/light_gray"
+            style="@style/SuperActivityToast_Button_Divider"/>
 
     <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/selector_undobutton"
             android:drawableLeft="@drawable/icon_dark_undo"
-            android:drawablePadding="@dimen/superbuttontoast_buttondrawable_padding"
-            android:paddingLeft="@dimen/superbuttontoast_button_x_padding"
-            android:paddingRight="@dimen/superbuttontoast_button_x_padding"
-            android:textSize="10sp"
             android:text="UNDO"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="@color/light_gray" tools:ignore="HardcodedText"/>
+            android:textColor="@color/light_gray"
+            tools:ignore="HardcodedText"
+            style="@style/SuperActivityToast_Button_Button"/>
 
 </LinearLayout>

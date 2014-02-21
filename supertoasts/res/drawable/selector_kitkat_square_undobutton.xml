@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This selector is for SuperCardToasts API 19+ -->
+<selector 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item 
+        android:drawable="@drawable/shape_kitkat_square_undobarselected"
+        android:state_pressed="true" />
+    
+    <item 
+        android:drawable="@drawable/shape_kitkat_square_undobarfocused"
+        android:state_focused="true" />
+    
+    <item 
+        android:drawable="@android:color/transparent" />
+    
+</selector>

@@ -130,43 +130,43 @@ public class FragmentSuperToast extends SherlockFragment {
 
             case 0:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLACK);
+                superToast.setBackground(SuperToast.Background.BLACK);
 
                 break;
 
             case 1:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_GRAY);
+                superToast.setBackground(SuperToast.Background.GRAY);
 
                 break;
 
             case 2:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_GREEN);
+                superToast.setBackground(SuperToast.Background.GREEN);
 
                 break;
 
             case 3:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_BLUE);
+                superToast.setBackground(SuperToast.Background.BLUE);
 
                 break;
 
             case 4:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_RED);
+                superToast.setBackground(SuperToast.Background.RED);
 
                 break;
 
             case 5:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_PURPLE);
+                superToast.setBackground(SuperToast.Background.PURPLE);
 
                 break;
 
             case 6:
 
-                superToast.setBackground(SuperToast.Background.TRANSLUCENT_ORANGE);
+                superToast.setBackground(SuperToast.Background.ORANGE);
 
                 break;
 

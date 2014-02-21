@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.supertoastsdemo"
-          android:versionCode="14"
-          android:versionName="1.3.2">
+          android:versionCode="16"
+          android:versionName="1.3.4">
 
     <uses-sdk
             android:minSdkVersion="8"
@@ -22,6 +22,9 @@
         </activity>
         <activity android:name=".ActivityTwo"/>
         <activity android:name=".Playground"/>
+        <activity android:name=".examples.ExampleUndoBar"/>
+        <activity android:name=".examples.ExampleStyle"/>
+        <activity android:name=".examples.ExampleSuperActivityToast"/>
 
     </application>
 

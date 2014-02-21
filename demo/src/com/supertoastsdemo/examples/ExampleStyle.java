@@ -38,18 +38,18 @@ public class ExampleStyle extends Activity {
          */
         SuperCardToast.onRestoreState(savedInstanceState, ExampleStyle.this);
 
-        /** Create a style object and modify it's references directly. */
+        /* Create a style object and modify it's references directly. */
         final Style customStyle = new Style();
         customStyle.animations = SuperToast.Animations.POPUP;
-        customStyle.background = SuperToast.Background.TRANSLUCENT_PURPLE;
+        customStyle.background = SuperToast.Background.PURPLE;
         customStyle.textColor = Color.WHITE;
         customStyle.buttonTextColor = Color.LTGRAY;
         customStyle.dividerColor = Color.WHITE;
 
-        /** Create a default style object defined in the Style class. */
+        /* Create a default style object defined in the Style class. */
         final Style defaultStyle = Style.getStyle(Style.GREEN);
 
-        /** Create a default style object defined in the Style class with specified animations. */
+        /* Create a default style object defined in the Style class with specified animations. */
         final Style defaultStyleAnimation = Style.getStyle(Style.BLUE, SuperToast.Animations.FLYIN);
 
         final Button showButton = (Button)
@@ -103,10 +103,10 @@ public class ExampleStyle extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        /** This method is used to save any showing or pending SuperActivityToasts */
+        /* This method is used to save any showing or pending SuperActivityToasts */
         SuperActivityToast.onSaveState(outState);
 
-        /** This method is used to save any showing or pending SuperCardToasts */
+        /* This method is used to save any showing or pending SuperCardToasts */
         SuperCardToast.onSaveState(outState);
 
     }

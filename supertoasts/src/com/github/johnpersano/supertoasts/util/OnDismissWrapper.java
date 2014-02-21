@@ -18,23 +18,36 @@
 package com.github.johnpersano.supertoasts.util;
 
 import android.view.View;
+import com.github.johnpersano.supertoasts.SuperToast;
 
 /**
  *  Class that holds a reference to OnDismissListeners set to button type SuperActivityToasts/SuperCardToasts.
  *  This is used for restoring listeners on orientation changes.
  */
-public class OnDismissWrapper implements OnDismissListener {
+public class OnDismissWrapper implements SuperToast.OnDismissListener {
 
     private final String mTag;
-    private final OnDismissListener mOnDismissListener;
+    private final SuperToast.OnDismissListener mOnDismissListener;
 
-    public OnDismissWrapper(String tag, OnDismissListener onDismissListener) {
+    /**
+     *  Creates an OnClickWrapper.
+     *
+     *  @param tag {@link CharSequence} Must be unique to this listener
+     *  @param onDismissListener {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}
+     */
+    public OnDismissWrapper(String tag, SuperToast.OnDismissListener onDismissListener) {
 
         this.mTag = tag;
         this.mOnDismissListener = onDismissListener;
 
     }
 
+    /**
+     *  Returns the tag associated with this OnDismissWrapper. This is used to
+     *  reattach {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}s.
+     *
+     *  @return {@link String}
+     */
     public String getTag() {
 
         return mTag;

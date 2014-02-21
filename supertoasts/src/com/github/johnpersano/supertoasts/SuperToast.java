@@ -17,9 +17,9 @@
 
 package com.github.johnpersano.supertoasts;
 
-
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,13 +27,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.github.johnpersano.supertoasts.util.OnDismissListener;
 import com.github.johnpersano.supertoasts.util.Style;
 
 /**
  * SuperToasts are designed to replace stock Android Toasts.
  * If you need to display a SuperToast inside of an Activity
- * please see {@link com.github.johnpersano.supertoasts.SuperActivityToast}.
+ * please see {@link SuperActivityToast}.
  */
 @SuppressWarnings("UnusedDeclaration")
 public class SuperToast {
@@ -45,27 +44,40 @@ public class SuperToast {
             "four and a half seconds for a SuperToast.";
 
     /**
+     * Custom OnClickListener to be used with SuperActivityToasts/SuperCardToasts. Note that
+     * SuperActivityToasts/SuperCardToasts must use this with an
+     * {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     */
+    public interface OnClickListener {
+
+        public void onClick(View view, Parcelable token);
+
+    }
+
+    /**
+     * Custom OnDismissListener to be used with any type of SuperToasts. Note that
+     * SuperActivityToasts/SuperCardToasts must use this with an
+     * {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper}
+     */
+    public interface OnDismissListener {
+
+        public void onDismiss(View view);
+
+    }
+
+    /**
      * Backgrounds for all types of SuperToasts.
      */
     public static class Background {
 
-        public static final int BLACK = (R.drawable.background_black);
-        public static final int BLUE = (R.drawable.background_blue);
-        public static final int GRAY = (R.drawable.background_grey);
-        public static final int GREEN = (R.drawable.background_green);
-        public static final int ORANGE = (R.drawable.background_orange);
-        public static final int PURPLE = (R.drawable.background_purple);
-        public static final int RED = (R.drawable.background_red);
-        public static final int WHITE = (R.drawable.background_white);
-
-        public static final int TRANSLUCENT_BLACK = (R.drawable.background_blacktranslucent);
-        public static final int TRANSLUCENT_BLUE = (R.drawable.background_bluetranslucent);
-        public static final int TRANSLUCENT_GREEN = (R.drawable.background_greentranslucent);
-        public static final int TRANSLUCENT_GRAY = (R.drawable.background_greytranslucent);
-        public static final int TRANSLUCENT_PURPLE = (R.drawable.background_purpletranslucent);
-        public static final int TRANSLUCENT_RED = (R.drawable.background_redtranslucent);
-        public static final int TRANSLUCENT_WHITE = (R.drawable.background_whitetranslucent);
-        public static final int TRANSLUCENT_ORANGE = (R.drawable.background_orangetranslucent);
+        public static final int BLACK = Style.getBackground(Style.BLACK);
+        public static final int BLUE = Style.getBackground(Style.BLUE);
+        public static final int GRAY = Style.getBackground(Style.GRAY);
+        public static final int GREEN = Style.getBackground(Style.GREEN);
+        public static final int ORANGE = Style.getBackground(Style.ORANGE);
+        public static final int PURPLE = Style.getBackground(Style.PURPLE);
+        public static final int RED = Style.getBackground(Style.RED);
+        public static final int WHITE = Style.getBackground(Style.WHITE);
 
     }
 
@@ -138,9 +150,10 @@ public class SuperToast {
      */
     public static class TextSize {
 
+        public static final int EXTRA_SMALL = (12);
         public static final int SMALL = (14);
-        public static final int MEDIUM = (18);
-        public static final int LARGE = (22);
+        public static final int MEDIUM = (16);
+        public static final int LARGE = (18);
 
     }
 
@@ -229,7 +242,7 @@ public class SuperToast {
         this.mContext = context;
 
         mYOffset = context.getResources().getDimensionPixelSize(
-                R.dimen.toast_yoffset);
+                R.dimen.toast_hover);
 
         final LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -243,7 +256,7 @@ public class SuperToast {
                 mToastView.findViewById(R.id.root_layout);
 
         mMessageTextView = (TextView)
-                mToastView.findViewById(R.id.message_textView);
+                mToastView.findViewById(R.id.message_textview);
 
     }
 
@@ -264,7 +277,7 @@ public class SuperToast {
         this.mContext = context;
 
         mYOffset = context.getResources().getDimensionPixelSize(
-                R.dimen.toast_yoffset);
+                R.dimen.toast_hover);
 
         final LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -278,7 +291,7 @@ public class SuperToast {
                 mToastView.findViewById(R.id.root_layout);
 
         mMessageTextView = (TextView)
-                mToastView.findViewById(R.id.message_textView);
+                mToastView.findViewById(R.id.message_textview);
 
         this.setStyle(style);
 
@@ -312,7 +325,7 @@ public class SuperToast {
     /**
      * Sets the message text of the {@value #TAG}.
      *
-     * @param text {@link java.lang.CharSequence}
+     * @param text {@link CharSequence}
      */
     public void setText(CharSequence text) {
 
@@ -323,7 +336,7 @@ public class SuperToast {
     /**
      * Returns the message text of the {@value #TAG}.
      *
-     * @return {@link java.lang.CharSequence}
+     * @return {@link CharSequence}
      */
     public CharSequence getText() {
 
@@ -528,7 +541,7 @@ public class SuperToast {
      * Sets an OnDismissListener defined in this library
      * to the {@value #TAG}. Does not require wrapper.
      *
-     * @param onDismissListener {@link com.github.johnpersano.supertoasts.util.OnDismissListener}
+     * @param onDismissListener {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}
      */
     public void setOnDismissListener(OnDismissListener onDismissListener) {
 
@@ -539,7 +552,7 @@ public class SuperToast {
     /**
      * Returns the OnDismissListener set to the {@value #TAG}.
      *
-     * @return {@link com.github.johnpersano.supertoasts.util.OnDismissListener}
+     * @return {@link com.github.johnpersano.supertoasts.SuperToast.OnDismissListener}
      */
     public OnDismissListener getOnDismissListener() {
 
@@ -652,12 +665,12 @@ public class SuperToast {
      * Returns a standard {@value #TAG}.
      *
      * @param context          {@link android.content.Context}
-     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param textCharSequence {@link CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      *
-     * @return {@link com.github.johnpersano.supertoasts.SuperToast}
+     * @return {@link SuperToast}
      */
-    public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
+    public static SuperToast create(Context context, CharSequence textCharSequence,
                                               int durationInteger) {
 
         SuperToast superToast = new SuperToast(context);
@@ -672,13 +685,13 @@ public class SuperToast {
      * Returns a standard {@value #TAG} with specified animations.
      *
      * @param context          {@link android.content.Context}
-     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param textCharSequence {@link CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      * @param animations       {@link com.github.johnpersano.supertoasts.SuperToast.Animations}
      *
-     * @return {@link com.github.johnpersano.supertoasts.SuperToast}
+     * @return {@link SuperToast}
      */
-    public static SuperToast createSuperToast(Context context, CharSequence textCharSequence,
+    public static SuperToast create(Context context, CharSequence textCharSequence,
                                               int durationInteger, Animations animations) {
 
         final SuperToast superToast = new SuperToast(context);
@@ -694,14 +707,13 @@ public class SuperToast {
      * Returns a {@value #TAG} with a specified style.
      *
      * @param context          {@link android.content.Context}
-     * @param textCharSequence {@link java.lang.CharSequence}
+     * @param textCharSequence {@link CharSequence}
      * @param durationInteger  {@link com.github.johnpersano.supertoasts.SuperToast.Duration}
      * @param style            {@link com.github.johnpersano.supertoasts.util.Style}
      *
      * @return SuperCardToast
      */
-    public static SuperToast createSuperToast(
-            Context context, CharSequence textCharSequence, int durationInteger, Style style) {
+    public static SuperToast create(Context context, CharSequence textCharSequence, int durationInteger, Style style) {
 
         final SuperToast superToast = new SuperToast(context);
         superToast.setText(textCharSequence);
@@ -717,7 +729,7 @@ public class SuperToast {
      */
     public static void cancelAllSuperToasts() {
 
-        ManagerSuperToast.getInstance().clearQueue();
+        ManagerSuperToast.getInstance().cancelAllSuperToasts();
 
     }
 

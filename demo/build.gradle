@@ -1,16 +1,17 @@
+apply plugin: 'android'
+
+
 buildscript{
 	repositories{
 		mavenCentral()
 	}
 	dependencies{
-		classpath 'com.android.tools.build:gradle:0.7.+'
+        classpath 'com.android.tools.build:gradle:0.8.+'
 	}
 }
 
-apply plugin: 'android'
-
-dependencies{
-	
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
 }
 
 repositories {
@@ -20,41 +21,29 @@ repositories {
 dependencies {
 	compile project(':supertoasts')
 	compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-	compile 'com.android.support:support-v4:13.0.+'
+	compile 'com.android.support:support-v4:19.0.+'
 }
 
 android {
 	 lintOptions {  
 	      abortOnError false  
 	}
-	compileSdkVersion 17
-	buildToolsVersion "17.0.0"
+	compileSdkVersion 19
+	buildToolsVersion "19.0.2"
 
 	defaultConfig {
 		minSdkVersion 8
-		targetSdkVersion 17
+		targetSdkVersion 19
 	}
 
-	sourceSets {
-		main{
-			manifest.srcFile 'AndroidManifest.xml'
-			java.srcDirs = ['src']
-			resources.srcDirs = ['src']
-			aidl.srcDirs = ['src']
-			renderscript.srcDirs = ['src']
-			res.srcDirs = ['res']
-			assets.srcDirs = ['assets']
-		}
-		 instrumentTest.setRoot('tests')
-		 debug.setRoot('build-types/debug')
-		 release.setRoot('build-types/release')
-	}
+    sourceSets {
 
-	packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
+        main{
+            java.srcDirs = ['src']
+            manifest.srcFile 'AndroidManifest.xml'
+            res.srcDirs = ['res']
+        }
+
     }
+
 }

@@ -34,7 +34,7 @@ public class Wrappers {
     /**
      * Adds an onclickwrapper to a list that will be reattached on orientation change.
      *
-     * @param onClickWrapper {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     * @param onClickWrapper {@link OnClickWrapper}
      */
     public void add(OnClickWrapper onClickWrapper){
 
@@ -45,7 +45,7 @@ public class Wrappers {
     /**
      * Adds an ondismisswrapper to a list that will be reattached on orientation change.
      *
-     * @param onDismissWrapper {@link com.github.johnpersano.supertoasts.util.OnDismissWrapper}
+     * @param onDismissWrapper {@link OnDismissWrapper}
      */
     public void add(OnDismissWrapper onDismissWrapper){
 
