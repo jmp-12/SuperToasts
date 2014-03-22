@@ -28,15 +28,14 @@ Adding SuperToasts to your project
 4) Select your project module in project structure > Dependencies > Add > Module dependency > SuperToasts
 
 
-###Maven
-Add this to your projects POM file (not tested yet!)
+###Gradle
+Add this to your project's build.gradle file
 ```xml
-<dependency>
-  <groupId>com.github.johnpersano</groupId>
-  <artifactId>supertoasts</artifactId>
-  <version>1.3.2</version>
-  <type>apklib</type>
-</dependency>
+dependencies {
+
+    compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
+
+}
 ```
 
 
@@ -63,7 +62,7 @@ Developer
 License
 =======
 
-    Copyright 2013 John Persano
+    Copyright 2014 John Persano
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
