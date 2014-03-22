@@ -2173,7 +2173,7 @@ public class SuperCardToast {
 
         }
 
-        public final Creator CREATOR = new Creator() {
+        public static final Creator CREATOR = new Creator() {
 
             public ReferenceHolder createFromParcel(Parcel parcel) {
 
