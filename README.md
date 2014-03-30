@@ -1,13 +1,13 @@
 SuperToasts Library
 =================
 
-The SuperToasts library enhances and builds upon the stock Android Toast class. Some of the features of this library include context sensitive toasts (SuperActivityToasts), toasts with buttons and icons, non context sensitive toasts (SuperToasts), and a new style of toasts (SuperCardToasts) with many customization options for each. Some of the ideas for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
+The SuperToasts library enhances and builds upon the Android Toast class. Some of the features of this library include context sensitive toasts (SuperActivityToasts), toasts with buttons and icons, non context sensitive toasts (SuperToasts), and a new style of toasts (SuperCardToasts) with many customization options for each. Some of the ideas for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
 and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
 
 ###The library is in beta and under active development, expect bugs. <br>
 
-![Screenshot](http://i1016.photobucket.com/albums/af284/Turbopwned/supertoasts_group_screenshot.png)
+![Screenshot](http://i1016.photobucket.com/albums/af284/Turbopwned/supertoasts_group_screenshot_two.png)
 
 
 Adding SuperToasts to your project
