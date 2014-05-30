@@ -66,7 +66,7 @@ public class SuperCardToast {
     /* Bundle tag with a hex as a string so it can't interfere with other tags in the bundle */
     private static final String BUNDLE_TAG = "0x532e432e542e";
 
-    private Activity mActivity;
+    protected Activity mActivity;
     private Animations mAnimations = Animations.FADE;
     private boolean mIsIndeterminate;
     private boolean mIsTouchDismissible;
@@ -83,7 +83,7 @@ public class SuperCardToast {
     private int mButtonTypefaceStyle = Typeface.BOLD;
     private int mButtonIcon = SuperToast.Icon.Dark.UNDO;
     private int mDividerColor = Color.DKGRAY;
-    private LayoutInflater mLayoutInflater;
+    protected LayoutInflater mLayoutInflater;
     private LinearLayout mRootLayout;
     private OnDismissWrapper mOnDismissWrapper;
     private OnClickWrapper mOnClickWrapper;
@@ -94,7 +94,7 @@ public class SuperCardToast {
     private TextView mMessageTextView;
     private Type mType = Type.STANDARD;
     private ViewGroup mViewGroup;
-    private View mToastView;
+    protected View mToastView;
     private View mDividerView;
 
 
@@ -118,16 +118,11 @@ public class SuperCardToast {
         mLayoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
 
-        if (mViewGroup == null) {
+	    createContainer(activity);
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTAINERNULL);
 
-        }
-
-        mToastView = mLayoutInflater
+	    mToastView = mLayoutInflater
                 .inflate(R.layout.supercardtoast, mViewGroup, false);
 
         mMessageTextView = (TextView)
@@ -138,7 +133,7 @@ public class SuperCardToast {
 
     }
 
-    /**
+	/**
      * Instantiates a new {@value #TAG} with a specified default style.
      *
      * @param activity     {@link android.app.Activity}
@@ -159,14 +154,7 @@ public class SuperCardToast {
         mLayoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
-
-        if (mViewGroup == null) {
-
-            throw new IllegalArgumentException(TAG + ERROR_CONTAINERNULL);
-
-        }
+        createContainer(activity);
 
         mToastView = mLayoutInflater
                 .inflate(R.layout.supercardtoast, mViewGroup, false);
@@ -202,14 +190,9 @@ public class SuperCardToast {
         mLayoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
 
-        if (mViewGroup == null) {
+	    createContainer(activity);
 
-            throw new IllegalArgumentException(TAG + ERROR_CONTAINERNULL);
-
-        }
 
         if (type == Type.BUTTON) {
 
@@ -276,14 +259,7 @@ public class SuperCardToast {
         mLayoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
-
-        if (mViewGroup == null) {
-
-            throw new IllegalArgumentException(TAG + ERROR_CONTAINERNULL);
-
-        }
+        createContainer(activity);
 
         if (type == Type.BUTTON) {
 
@@ -345,9 +321,9 @@ public class SuperCardToast {
 
         }
 
-        mViewGroup.addView(mToastView);
+	    addToastToContainer();
 
-        if (!showImmediate) {
+	    if (!showImmediate) {
 
             final Animation animation = this.getShowAnimation();
 
@@ -356,12 +332,8 @@ public class SuperCardToast {
 
                 @Override
                 public void onAnimationEnd(Animation arg0) {
-
-                    /* Must use Handler to modify ViewGroup in onAnimationEnd() **/
-                    Handler mHandler = new Handler();
-                    mHandler.post(mInvalidateRunnable);
-
-                }
+	                toastAnimationDidEnd();
+	            }
 
                 @Override
                 public void onAnimationRepeat(Animation arg0) {
@@ -385,7 +357,7 @@ public class SuperCardToast {
 
     }
 
-    /**
+	/**
      * Returns the {@link com.github.johnpersano.supertoasts.SuperToast.Type} of {@value #TAG}.
      *
      * @return {@link com.github.johnpersano.supertoasts.SuperToast.Type}
@@ -831,7 +803,7 @@ public class SuperCardToast {
      */
     public void dismiss() {
 
-        ManagerSuperCardToast.getInstance().remove(this);
+	    ManagerSuperCardToast.getInstance().remove(this);
 
         dismissWithAnimation();
 
@@ -960,6 +932,12 @@ public class SuperCardToast {
                     handler.post(mHideImmediateRunnable);
 
                 }
+
+	            //if (ManagerSuperCardToast.getInstance().getList().size() == 0) {
+                    /* Must use Handler to modify ViewGroup in onAnimationEnd() **/
+		            Handler mHandler = new Handler();
+		            mHandler.post(mInvalidateRunnable);
+	            //}
 
             }
 
@@ -1572,18 +1550,12 @@ public class SuperCardToast {
 
         @Override
         public void run() {
-
-            if (mViewGroup != null) {
-
-                mViewGroup.postInvalidate();
-
-            }
-
+            invalidateToast();
         }
 
     };
 
-    private Animation getShowAnimation() {
+	private Animation getShowAnimation() {
 
         if (this.getAnimations() == SuperToast.Animations.FLYIN) {
 
@@ -2187,5 +2159,37 @@ public class SuperCardToast {
         };
 
     }
+
+	/*****************************
+	/*  Hooks to allow extension *
+	 *****************************/
+
+	/**
+	 * Create/inflate toast container
+	 */
+	protected void createContainer(Activity activity) {
+		mViewGroup = (LinearLayout) activity.findViewById(R.id.card_container);
+		if (mViewGroup == null) {
+			throw new IllegalArgumentException(TAG + ERROR_CONTAINERNULL);
+		}
+	}
+
+	protected void addToastToContainer() {
+		mViewGroup.addView(mToastView);
+	}
+
+
+	protected void toastAnimationDidEnd() {
+		/* Must use Handler to modify ViewGroup in onAnimationEnd() **/
+		Handler mHandler = new Handler();
+		mHandler.post(mInvalidateRunnable);
+
+	}
+
+	protected void invalidateToast() {
+		if (mViewGroup != null) {
+			mViewGroup.postInvalidate();
+		}
+	}
 
 }
