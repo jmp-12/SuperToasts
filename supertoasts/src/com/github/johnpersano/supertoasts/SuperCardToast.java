@@ -933,11 +933,11 @@ public class SuperCardToast {
 
                 }
 
-	            //if (ManagerSuperCardToast.getInstance().getList().size() == 0) {
+	            if (ManagerSuperCardToast.getInstance().getList().size() == 0) {
                     /* Must use Handler to modify ViewGroup in onAnimationEnd() **/
 		            Handler mHandler = new Handler();
 		            mHandler.post(mInvalidateRunnable);
-	            //}
+	            }
 
             }
 
