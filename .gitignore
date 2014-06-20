@@ -8,12 +8,15 @@ gen
 .settings
 .checkstyle
 
-#IntelliJ IDEA
+#IntelliJ IDEA/Gradle
 .idea
 *.iml
 *.ipr
 *.iws
 classes
+.gradle
+build
+gradle.properties
 gen-external-apklibs
 
 #Maven
