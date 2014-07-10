@@ -104,7 +104,7 @@ public class SuperCardToast {
      * @param activity {@link android.app.Activity}
      */
     @SuppressWarnings("ConstantConditions")
-    public SuperCardToast(Activity activity) {
+    public SuperCardToast(Activity activity, int viewId) {
 
         if (activity == null) {
 
@@ -119,7 +119,7 @@ public class SuperCardToast {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
+                .findViewById(viewId);
 
         if (mViewGroup == null) {
 
@@ -145,7 +145,7 @@ public class SuperCardToast {
      * @param style {@link com.github.johnpersano.supertoasts.util.Style}
      */
     @SuppressWarnings("ConstantConditions")
-    public SuperCardToast(Activity activity, Style style) {
+    public SuperCardToast(Activity activity, Style style, int viewId) {
 
         if (activity == null) {
 
@@ -160,7 +160,7 @@ public class SuperCardToast {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
+                .findViewById(viewId);
 
         if (mViewGroup == null) {
 
@@ -188,7 +188,7 @@ public class SuperCardToast {
      * @param type     {@link com.github.johnpersano.supertoasts.SuperToast.Type}
      */
     @SuppressWarnings("ConstantConditions")
-    public SuperCardToast(Activity activity, Type type) {
+    public SuperCardToast(Activity activity, Type type, int viewId) {
 
         if (activity == null) {
 
@@ -203,7 +203,7 @@ public class SuperCardToast {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
+                .findViewById(viewId);
 
         if (mViewGroup == null) {
 
@@ -262,7 +262,7 @@ public class SuperCardToast {
      * @param style {@link com.github.johnpersano.supertoasts.util.Style}
      */
     @SuppressWarnings("ConstantConditions")
-    public SuperCardToast(Activity activity, Type type, Style style) {
+    public SuperCardToast(Activity activity, Type type, Style style, int viewId) {
 
         if (activity == null) {
 
@@ -277,7 +277,7 @@ public class SuperCardToast {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mViewGroup = (LinearLayout) activity
-                .findViewById(R.id.card_container);
+                .findViewById(viewId);
 
         if (mViewGroup == null) {
 
@@ -1719,9 +1719,9 @@ public class SuperCardToast {
      *
      * @return SuperCardToast
      */
-    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger) {
+    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger, int viewId) {
 
-        SuperCardToast superCardToast = new SuperCardToast(activity);
+        SuperCardToast superCardToast = new SuperCardToast(activity, viewId);
         superCardToast.setText(textCharSequence);
         superCardToast.setDuration(durationInteger);
 
@@ -1743,9 +1743,9 @@ public class SuperCardToast {
      *
      * @return SuperCardToast
      */
-    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations) {
+    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Animations animations, int viewId) {
 
-        SuperCardToast superCardToast = new SuperCardToast(activity);
+        SuperCardToast superCardToast = new SuperCardToast(activity, viewId);
         superCardToast.setText(textCharSequence);
         superCardToast.setDuration(durationInteger);
         superCardToast.setAnimations(animations);
@@ -1768,9 +1768,9 @@ public class SuperCardToast {
      *
      * @return SuperCardToast
      */
-    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Style style) {
+    public static SuperCardToast create(Activity activity, CharSequence textCharSequence, int durationInteger, Style style, int viewId) {
 
-        SuperCardToast superCardToast = new SuperCardToast(activity);
+        SuperCardToast superCardToast = new SuperCardToast(activity, viewId);
         superCardToast.setText(textCharSequence);
         superCardToast.setDuration(durationInteger);
         superCardToast.setStyle(style);
@@ -1821,7 +1821,7 @@ public class SuperCardToast {
      * @param bundle   Use onCreate() bundle
      * @param activity The current activity
      */
-    public static void onRestoreState(Bundle bundle, Activity activity) {
+    public static void onRestoreState(Bundle bundle, Activity activity, int viewId) {
 
         if (bundle == null) {
 
@@ -1838,7 +1838,7 @@ public class SuperCardToast {
 
                 i++;
 
-                new SuperCardToast(activity, (ReferenceHolder) parcelable, null, i);
+                new SuperCardToast(activity, (ReferenceHolder) parcelable, null, i, viewId);
 
             }
 
@@ -1854,7 +1854,7 @@ public class SuperCardToast {
      * @param activity        The current activity
      * @param wrappers        {@link com.github.johnpersano.supertoasts.util.Wrappers}
      */
-    public static void onRestoreState(Bundle bundle, Activity activity, Wrappers wrappers) {
+    public static void onRestoreState(Bundle bundle, Activity activity, Wrappers wrappers, int viewId) {
 
         if (bundle == null) {
 
@@ -1871,7 +1871,7 @@ public class SuperCardToast {
 
                 i++;
 
-                new SuperCardToast(activity, (ReferenceHolder) parcelable, wrappers, i);
+                new SuperCardToast(activity, (ReferenceHolder) parcelable, wrappers, i, viewId);
 
             }
 
@@ -1882,13 +1882,13 @@ public class SuperCardToast {
     /**
      * Method used to recreate {@value #TAG} after orientation change
      */
-    private SuperCardToast(Activity activity, ReferenceHolder referenceHolder, Wrappers wrappers, int position) {
+    private SuperCardToast(Activity activity, ReferenceHolder referenceHolder, Wrappers wrappers, int position, int viewId) {
 
         SuperCardToast superCardToast;
 
         if(referenceHolder.mType == Type.BUTTON) {
 
-            superCardToast = new SuperCardToast(activity, Type.BUTTON);
+            superCardToast = new SuperCardToast(activity, Type.BUTTON, viewId);
             superCardToast.setButtonText(referenceHolder.mButtonText);
             superCardToast.setButtonTextSizeFloat(referenceHolder.mButtonTextSize);
             superCardToast.setButtonTextColor(referenceHolder.mButtonTextColor);
@@ -1923,7 +1923,7 @@ public class SuperCardToast {
 
         } else {
 
-            superCardToast = new SuperCardToast(activity);
+            superCardToast = new SuperCardToast(activity, viewId);
 
         }
 
