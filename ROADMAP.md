@@ -20,4 +20,4 @@ Version 2.0
 - Overhaul the demo to incorporate the latest Material design guidelines
 - Fix Gradle errors when forking the project
 - Simplify the overall API
-- Update code examples
+- Update code examples 
