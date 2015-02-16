@@ -17,6 +17,7 @@
 
 package com.github.johnpersano.supertoasts;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -66,6 +67,7 @@ public class SuperActivityToast {
     private boolean isProgressIndeterminate;
     private boolean showImmediate;
     private Button mButton;
+    private ImageButton mImageButton;
     private IconPosition mIconPosition;
     private int mDuration = SuperToast.Duration.SHORT;
     private int mBackground = Style.getBackground(Style.GRAY);
@@ -162,6 +164,16 @@ public class SuperActivityToast {
      * @param type     {@link com.github.johnpersano.supertoasts.SuperToast.Type}
      */
     public SuperActivityToast(Activity activity, Type type) {
+        this(activity, type, -1);
+    }
+
+    /**
+     * Instantiates a new {@value #TAG} with a type.
+     *
+     * @param activity {@link android.app.Activity}
+     * @param type     {@link com.github.johnpersano.supertoasts.SuperToast.Type}
+     */
+    public SuperActivityToast(Activity activity, Type type, int layoutResId) {
 
         if (activity == null) {
 
@@ -179,34 +191,41 @@ public class SuperActivityToast {
                 .findViewById(android.R.id.content);
 
         if (type == Type.STANDARD) {
+            if (layoutResId == -1) layoutResId = R.layout.supertoast;
 
-            mToastView = mLayoutInflater.inflate(
-                    R.layout.supertoast, mViewGroup, false);
+            mToastView = mLayoutInflater.inflate(layoutResId
+                    , mViewGroup, false);
 
         } else if (type == Type.BUTTON) {
+            if (layoutResId == -1) layoutResId = R.layout.superactivitytoast_button;
 
             mToastView = mLayoutInflater.inflate(
-                    R.layout.superactivitytoast_button, mViewGroup, false);
+                    layoutResId, mViewGroup, false);
 
-            mButton = (Button) mToastView
-                    .findViewById(R.id.button);
+            View button = mToastView.findViewById(R.id.button);
+            if (button instanceof Button) {
+                mButton = (Button) button;
+            } else {
+                mImageButton = (ImageButton) button;
+            }
 
-            mDividerView = mToastView
-                    .findViewById(R.id.divider);
+            mDividerView = mToastView.findViewById(R.id.divider);
 
-            mButton.setOnClickListener(mButtonListener);
+            button.setOnClickListener(mButtonListener);
 
         } else if (type == Type.PROGRESS) {
+            if (layoutResId == -1) layoutResId = R.layout.superactivitytoast_progresscircle;
 
-            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresscircle,
+            mToastView = mLayoutInflater.inflate(layoutResId,
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
                     .findViewById(R.id.progress_bar);
 
         } else if (type == Type.PROGRESS_HORIZONTAL) {
+            if (layoutResId == -1) layoutResId = R.layout.superactivitytoast_progresshorizontal;
 
-            mToastView = mLayoutInflater.inflate(R.layout.superactivitytoast_progresshorizontal,
+            mToastView = mLayoutInflater.inflate(layoutResId,
                     mViewGroup, false);
 
             mProgressBar = (ProgressBar) mToastView
@@ -656,6 +675,38 @@ public class SuperActivityToast {
      * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
      *
      * @param onClickWrapper {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
+     * @param global if to set it on the whole view
+     */
+    public void setOnClickWrapper(OnClickWrapper onClickWrapper, boolean global) {
+
+        if (mType != Type.BUTTON && !global) {
+
+            Log.e(TAG, "setOnClickListenerWrapper()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        this.mOnClickWrapper = onClickWrapper;
+        this.mOnClickWrapperTag = onClickWrapper.getTag();
+
+        final View.OnClickListener globalOnClickListener;
+        if (global) {
+            globalOnClickListener = mButtonListener;
+        } else {
+            globalOnClickListener = null;
+        }
+        getView().setOnClickListener(globalOnClickListener);
+        if (globalOnClickListener == null) getView().setClickable(false);
+        View button = getButton();
+        if (button != null) {
+            button.setClickable(globalOnClickListener == null);
+        }
+    }
+
+    /**
+     * Sets an OnClickWrapper to the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @param onClickWrapper {@link com.github.johnpersano.supertoasts.util.OnClickWrapper}
      */
     public void setOnClickWrapper(OnClickWrapper onClickWrapper) {
 
@@ -729,11 +780,33 @@ public class SuperActivityToast {
 
         if (mButton != null) {
 
-            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
+            mButton.setCompoundDrawables(mActivity
                     .getResources().getDrawable(buttonIcon), null, null, null);
 
         }
 
+    }
+
+    /**
+     * Sets the icon resource of the button in a BUTTON
+     * {@link com.github.johnpersano.supertoasts.SuperToast.Type} {@value #TAG}.
+     *
+     * @param buttonIcon {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
+     */
+    public void setImageButtonIcon(int buttonIcon) {
+
+        if (mType != Type.BUTTON) {
+
+            Log.e(TAG, "setButtonIcon()" + ERROR_NOTBUTTONTYPE);
+
+        }
+
+        this.mButtonIcon = buttonIcon;
+
+        @SuppressLint("WrongViewCast")
+        ImageButton imageButton = (ImageButton) getView().findViewById(R.id.button);
+
+        imageButton.setImageResource(buttonIcon);
     }
 
     /**
@@ -1122,6 +1195,12 @@ public class SuperActivityToast {
 
         return mMessageTextView;
 
+    }
+
+    private View getButton() {
+        if (mButton != null) return mButton;
+        if (mImageButton != null) return mImageButton;
+        return null;
     }
 
     /**
@@ -1515,8 +1594,7 @@ public class SuperActivityToast {
             dismiss();
 
             /* Make sure the button cannot be clicked multiple times */
-            mButton.setClickable(false);
-
+            getButton().setClickable(false);
         }
     };
 
