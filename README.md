@@ -34,7 +34,7 @@ Add this to your project's build.gradle file
 ```xml
 dependencies {
 
-    compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
+    compile 'com.github.johnpersano:supertoasts:1.3.4.1@aar'
 
 }
 ```
