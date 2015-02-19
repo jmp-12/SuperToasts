@@ -22,7 +22,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.*;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -195,15 +201,7 @@ class ManagerSuperActivityToast extends Handler {
      *  Hide and remove the SuperActivityToast
      */
     void removeSuperToast(final SuperActivityToast superActivityToast) {
-
-        /* If SuperActivityToast has been dismissed before it shows, do not attempt to show it */
-        if(!superActivityToast.isShowing()) {
-
-            mList.remove(superActivityToast);
-
-            return;
-
-        }
+        mList.remove(superActivityToast);
 
         /* If being called somewhere else get rid of delayed remove message */
         removeMessages(Messages.REMOVE, superActivityToast);
@@ -213,48 +211,51 @@ class ManagerSuperActivityToast extends Handler {
         final View toastView = superActivityToast.getView();
 
         if (viewGroup != null) {
+            if (superActivityToast.isShowing()) {
+                // not sure why but if called when another activity was on top, this animation
+                // was played when coming back to this toast hosting activity.
+                // Hence not bothering with playing of the animation when were not attached
+                // to window (not visible).
 
-            Animation animation = getDismissAnimation(superActivityToast);
+                Animation animation = getDismissAnimation(superActivityToast);
 
-            animation.setAnimationListener(new Animation.AnimationListener() {
+                animation.setAnimationListener(new Animation.AnimationListener() {
 
-                @Override
-                public void onAnimationStart(Animation animation) {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                    /* Do nothing */
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-
-                    if(superActivityToast.getOnDismissWrapper() != null){
-
-                        superActivityToast.getOnDismissWrapper().onDismiss(superActivityToast.getView());
+                        /* Do nothing */
 
                     }
 
-                    /* Show the SuperActivityToast next in the list if any exist */
-                    ManagerSuperActivityToast.this.showNextSuperToast();
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
 
-                }
+                        if(superActivityToast.getOnDismissWrapper() != null){
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                            superActivityToast.getOnDismissWrapper().onDismiss(superActivityToast.getView());
 
-                    /* Do nothing */
+                        }
 
-                }
-            });
+                        /* Show the SuperActivityToast next in the list if any exist */
+                        ManagerSuperActivityToast.this.showNextSuperToast();
 
-            toastView.startAnimation(animation);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                        /* Do nothing */
+
+                    }
+                });
+
+                toastView.startAnimation(animation);
+            }
+
 
             viewGroup.removeView(toastView);
-
-            mList.poll();
-
         }
-
     }
 
     /**
