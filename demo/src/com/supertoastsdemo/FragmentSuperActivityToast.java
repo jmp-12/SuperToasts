@@ -79,9 +79,6 @@ public class FragmentSuperActivityToast extends SherlockFragment {
         mImageCheckBox = (CheckBox)
                 view.findViewById(R.id.imageCheckBox);
 
-        mImageCheckBox = (CheckBox)
-                view.findViewById(R.id.imageCheckBox);
-
         mDismissCheckBox = (CheckBox)
                 view.findViewById(R.id.dismiss_checkbox);
 
