@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2016 John Persano
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">SuperToasts Demo</string>
+
+    <!-- Strings for MainActivity -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="supertoast">SuperToast</string>
+    <string name="superactivitytoast">SuperActivityToast</string>
+    <string name="about">About</string>
+    <string name="developed_by_john_persano">Developed by John Persano</string>
+
+    <!-- Strings for About Activity -->
+    <string name="title_activity_about">About</string>
+
+
+    <!-- Strings for fragments/SuperToastFragment -->
+    <string name="duration_title">Duration</string>
+    <string name="duration_subtitle">Display duration</string>
+    <string name="duration_summary">Set the duration that the SuperToast is displayed for. Duration constants can be found in the Style class.</string>
+    <string name="frame_title">Frame</string>
+    <string name="frame_subtitle">Background frame</string>
+    <string name="frame_summary">Set the background frame of the SuperToast. If none is set, a frame is chosen in accordance with the device\'s SDK level. Frame constants can be found in the Style class.</string>
+    <string name="animation_title">Animations</string>
+    <string name="animation_subtitle">Display animations</string>
+    <string name="animation_summary">Set the animations that the SuperToast uses to display and hide. Animation constants can be found in the Style class.</string>
+    <string name="color_title">Color</string>
+    <string name="color_subtitle">Background color</string>
+    <string name="color_summary">Set the color of the SuperToast\'s background. Colors can be retrieved from the PaletteUtils class using static methods.</string>
+
+    <!-- Strings for fragments/SuperActivityToastFragment -->
+    <string name="type_title">Type</string>
+    <string name="type_subtitle">Toast type</string>
+    <string name="type_summary">Set the type of the SuperActivityToast. Type constants can be found in the Style class.</string>
+
+    <!-- Strings for resource files -->
+    <string name="application_icon">Application icon</string>
+    <string name="licensed_under_the_apache_license_version_2_0">Licensed under the Apache License, Version 2.0</string>
+    <string name="view_project_source">VIEW PROJECT SOURCE</string>
+    <string name="version_2_0">Version 2.0</string>
+    <string name="title_activity_playground">Playground</string>
+    <string name="press_the_button_below_to_show">Press the button below to show a randomized SuperToast/SuperActivityToast.</string>
+    <string name="note_1">Note 1: Please note that all attributes are random and the SuperToasts/SuperActivityToasts themselves may appear unsightly.</string>
+    <string name="note_2">Note 2: All SuperActivityToasts have touch to dismiss enabled.</string>
+    <string name="randomize">RANDOMIZER</string>
+    <string name="playground">Playground</string>
+</resources>

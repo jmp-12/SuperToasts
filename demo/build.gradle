@@ -1,49 +1,30 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
-
-buildscript{
-	repositories{
-		mavenCentral()
-	}
-	dependencies{
-        classpath 'com.android.tools.build:gradle:0.9.+'
-	}
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.10'
-}
-
-repositories {
-  mavenCentral()
-}
-
-dependencies {
-	compile project(':supertoasts')
-	compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-	compile 'com.android.support:support-v4:19.0.+'
-}
-
+//noinspection GroovyMissingReturnStatement
 android {
-	 lintOptions {  
-	      abortOnError false  
-	}
-	compileSdkVersion 19
-	buildToolsVersion "19.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
 
-	defaultConfig {
-		minSdkVersion 8
-		targetSdkVersion 19
-	}
-
-    sourceSets {
-
-        main{
-            java.srcDirs = ['src']
-            manifest.srcFile 'AndroidManifest.xml'
-            res.srcDirs = ['res']
-        }
-
+    defaultConfig {
+        applicationId "com.github.johnpersano.supertoasts.demo"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 20
+        versionName "2.0"
     }
 
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dependencies {
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+        compile project(":library")
+        compile 'com.android.support:support-v4:24.0.0'
+        compile 'com.android.support:appcompat-v7:24.0.0'
+        compile 'com.android.support:design:24.0.0'
+    }
 }

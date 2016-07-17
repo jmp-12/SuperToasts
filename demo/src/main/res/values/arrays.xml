@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2016 John Persano
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+
+<resources>
+    <array name="duration_constants">
+        <item>"DURATION_SHORT"</item>
+        <item>"DURATION_MEDIUM"</item>
+        <item>"DURATION_LONG"</item>
+    </array>
+
+    <array name="frame_constants">
+        <item>"FRAME_STANDARD"</item>
+        <item>"FRAME_KITKAT"</item>
+        <item>"FRAME_LOLLIPOP"</item>
+    </array>
+
+    <array name="animation_constants">
+        <item>"ANIMATIONS_FADE"</item>
+        <item>"ANIMATIONS_FLY"</item>
+        <item>"ANIMATIONS_SCALE"</item>
+        <item>"ANIMATIONS_POP"</item>
+    </array>
+
+    <array name="color_constants">
+        <item>"MATERIAL_RED"</item>
+        <item>"MATERIAL_PINK"</item>
+        <item>"MATERIAL_PURPLE"</item>
+        <item>"MATERIAL_DEEP_PURPLE"</item>
+        <item>"MATERIAL_INDIGO"</item>
+        <item>"MATERIAL_BLUE"</item>
+        <item>"MATERIAL_LIGHT_BLUE"</item>
+        <item>"MATERIAL_CYAN"</item>
+        <item>"MATERIAL_TEAL"</item>
+        <item>"MATERIAL_GREEN"</item>
+        <item>"MATERIAL_LIGHT_GREEN"</item>
+        <item>"MATERIAL_LIME"</item>
+        <item>"MATERIAL_YELLOW"</item>
+        <item>"MATERIAL_AMBER"</item>
+        <item>"MATERIAL_ORANGE"</item>
+        <item>"MATERIAL_DEEP_ORANGE"</item>
+        <item>"MATERIAL_BROWN"</item>
+        <item>"MATERIAL_GREY"</item>
+        <item>"MATERIAL_BLUE_GREY"</item>
+    </array>
+
+    <array name="type_constants">
+        <item>"TYPE_STANDARD"</item>
+        <item>"TYPE_BUTTON"</item>
+        <item>"TYPE_PROGRESS_BAR"</item>
+        <item>"TYPE_PROGRESS_CIRCLE"</item>
+    </array>
+</resources>
