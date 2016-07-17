@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+
+//noinspection GroovyMissingReturnStatement
+android {
+    compileSdkVersion 24
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 20
+        versionName "2.0"
+    }
+
+    dependencies {
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+        compile 'com.android.support:appcompat-v7:24.0.0'
+        compile 'com.android.support:support-annotations:24.0.0'
+    }
+}
