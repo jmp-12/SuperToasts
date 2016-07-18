@@ -7,11 +7,14 @@ The SuperToasts library enhances and builds upon the Android Toast class. This l
 ![Screenshot](https://github.com/JohnPersano/SuperToasts/blob/master/art/SuperToasts_Banner.png)
 
 
-Adding SuperToasts to your project (not updated to 2.0)
+Adding SuperToasts to your project
 ==================================
-Add this to your project's build.gradle file dependencies
+SuperToasts are now available on Jcenter.
+Add the following to your module's build.gradle file:
 ```xml
-compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
+dependencies {
+    compile 'com.github.johnpersano:supertoasts:2.0'
+}
 ```
 
 Using the library
@@ -29,7 +32,8 @@ SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_BUTTON)
     .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_PURPLE))
     .setAnimations(Style.ANIMATIONS_POP).show();
 ```
-Check out the [Wiki pages](https://github.com/JohnPersano/SuperToasts/wiki) for more detailed samples.
+Check out the [Wiki pages*](https://github.com/JohnPersano/SuperToasts/wiki) for more detailed samples. <br>
+*Please note that the Wiki pages are still being updated and may not reflect the most recent changes in version 2.0.
 
 Demo Application
 ================
