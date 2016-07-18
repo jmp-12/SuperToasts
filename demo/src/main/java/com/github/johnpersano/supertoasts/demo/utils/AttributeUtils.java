@@ -61,26 +61,26 @@ public class AttributeUtils {
     public static int getColor(Context context) {
         switch (PreferenceManager.getDefaultSharedPreferences(context).getInt(context
                 .getResources().getString(R.string.color_title), 0)) {
-            case 0: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_RED);
-            case 1: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_PINK);
-            case 2: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_PURPLE);
-            case 3: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_DEEP_PURPLE);
-            case 4: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_INDIGO);
-            case 5: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_BLUE);
-            case 6: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_LIGHT_BLUE);
-            case 7: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_CYAN);
-            case 8: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_TEAL);
-            case 9: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_GREEN);
-            case 10: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_LIGHT_GREEN);
-            case 11: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_LIME);
-            case 12: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_YELLOW);
-            case 13: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_AMBER);
-            case 14: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_ORANGE);
-            case 15: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_DEEP_ORANGE);
-            case 16: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_BROWN);
-            case 17: return PaletteUtils.getTransparentColor(PaletteUtils.GREY);
-            case 18: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_BLUE_GREY);
-            default: return PaletteUtils.getTransparentColor(PaletteUtils.MATERIAL_BLUE_GREY);
+            case 0: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED);
+            case 1: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_PINK);
+            case 2: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_PURPLE);
+            case 3: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_DEEP_PURPLE);
+            case 4: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_INDIGO);
+            case 5: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE);
+            case 6: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_LIGHT_BLUE);
+            case 7: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_CYAN);
+            case 8: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_TEAL);
+            case 9: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN);
+            case 10: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_LIGHT_GREEN);
+            case 11: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_LIME);
+            case 12: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_YELLOW);
+            case 13: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_AMBER);
+            case 14: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_ORANGE);
+            case 15: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_DEEP_ORANGE);
+            case 16: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BROWN);
+            case 17: return PaletteUtils.getSolidColor(PaletteUtils.GREY);
+            case 18: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE_GREY);
+            default: return PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE_GREY);
         }
     }
 

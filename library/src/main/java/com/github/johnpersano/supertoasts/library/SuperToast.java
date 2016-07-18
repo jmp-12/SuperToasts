@@ -189,7 +189,7 @@ public class SuperToast {
         if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN) {
             this.mView.setBackground(BackgroundUtils.getBackground(this.mStyle, this.mStyle.color));
             // Give Lollipop devices a nice shadow (does not work with transparent backgrounds)
-            if (sdkVersion >= Build.VERSION_CODES.LOLLIPOP) mView.setElevation(10f);
+            if (sdkVersion >= Build.VERSION_CODES.LOLLIPOP) mView.setElevation(3f);
         } else this.mView.setBackgroundDrawable(BackgroundUtils.getBackground(this.mStyle, this.mStyle.color));
 
         // Make adjustments that are specific to Lollipop frames
