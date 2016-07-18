@@ -1,6 +1,6 @@
 SuperToasts Library
 =================
-###Version 2.0 now available!
+[![Download](https://api.bintray.com/packages/johnpersano/maven/com.github.johnpersano%3Asupertoasts/images/download.svg) ](https://bintray.com/johnpersano/maven/com.github.johnpersano%3Asupertoasts/_latestVersion)
 
 The SuperToasts library enhances and builds upon the Android Toast class. This library includes support for context sensitive [SuperActivityToasts](https://github.com/JohnPersano/Supertoasts/wiki/SuperActivityToast) that can show progress and handle button clicks as well as non-context sensitive [SuperToasts](https://github.com/JohnPersano/Supertoasts/wiki/SuperToast) which offer many customization options over the standard Android Toast class. 
 
