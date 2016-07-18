@@ -1,9 +1,19 @@
 apply plugin: 'com.android.library'
 
+ext {
+    PUBLISH_GROUP_ID = 'com.github.johnpersano'
+    PUBLISH_ARTIFACT_ID = 'supertoasts'
+    PUBLISH_VERSION = '2.0'
+}
+
 //noinspection GroovyMissingReturnStatement
 android {
     compileSdkVersion 24
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '23.0.3'
+
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         minSdkVersion 16
@@ -17,6 +27,7 @@ android {
         compile 'com.android.support:appcompat-v7:24.0.0'
         compile 'com.android.support:support-annotations:24.0.0'
     }
+
 }
 
-apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
