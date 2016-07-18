@@ -1,59 +1,49 @@
 SuperToasts Library
 =================
-###Version 2.0 of the library is in the works as of 2015. Check the [roadmap](https://github.com/JohnPersano/SuperToasts/blob/master/ROADMAP.md) for the list of soon-to-be changes!<br>
-###The Wiki pages are undergoing maintenance to prepare for the version 2.0 release
+###Version 2.0 now available!
 
-The SuperToasts library enhances and builds upon the Android Toast class. Some of the features of this library include context sensitive toasts (SuperActivityToasts), toasts with buttons and icons, non context sensitive toasts (SuperToasts), and a new style of toasts (SuperCardToasts) with many customization options for each. Some of the ideas for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
-and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
+The SuperToasts library enhances and builds upon the Android Toast class. This library includes support for context sensitive [SuperActivityToasts](https://github.com/JohnPersano/Supertoasts/wiki/SuperActivityToast) that can show progress and handle button clicks as well as non-context sensitive [SuperToasts](https://github.com/JohnPersano/Supertoasts/wiki/SuperToast) which offer many customization options over the standard Android Toast class. 
 
-
-###The library is in beta and under active development, expect bugs. <br>
-
-![Screenshot](http://i1016.photobucket.com/albums/af284/Turbopwned/supertoasts_group_screenshot_two.png)
+![Screenshot](https://github.com/JohnPersano/SuperToasts/blob/master/art/SuperToasts_Banner.png)
 
 
-Adding SuperToasts to your project
-================
-###Eclipse
-1) Download the ZIP file <br>
-2) Extract the SuperToasts project from the ZIP file <br>
-3) In Eclipse: New > Android Project from Existing Code > SuperToasts project > Finish <br>
-4) Right click on your project <br>
-5) Android > Library: Add > SuperToasts <br>
-
-
-###IntelliJ
-1) Download the ZIP file <br>
-2) Extract the SuperToasts project from the ZIP file <br>
-3) In IntelliJ: File > Project Structure > Modules > Add > Import Module > SuperToasts <br>
-4) Select your project module in project structure > Dependencies > Add > Module dependency > SuperToasts
-
-
-###Gradle
-Add this to your project's build.gradle file
+Adding SuperToasts to your project (not updated to 2.0)
+==================================
+Add this to your project's build.gradle file dependencies
 ```xml
-dependencies {
-
-    compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
-
-}
+compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
 ```
-
 
 Using the library
 ================
-Check out the Wiki pages [here](https://github.com/JohnPersano/SuperToasts/wiki).
+Simple sample:
+```java
+SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_BUTTON)
+    .setButtonText("UNDO")
+    .setButtonIconResource(R.drawable.ic_undo)
+    .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+    .setProgressBarColor(Color.WHITE)
+    .setText("Email deleted")
+    .setDuration(Style.DURATION_LONG)
+    .setFrame(Style.FRAME_LOLLIPOP)
+    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_PURPLE))
+    .setAnimations(Style.ANIMATIONS_POP).show();
+```
+Check out the [Wiki pages](https://github.com/JohnPersano/SuperToasts/wiki) for more detailed samples.
 
-
-Demo Application
+Demo Application (not updated to 2.0)
 ================
-A simple demo application is available on Google Play. This demo application does not showcase all of the libraries functions 
-rather it is a short demonstration of major features/functions of the library.
+A simple demo application is available on Google Play. This demo application does not showcase all of the libraries functions rather it is a short demonstration of major features of the library.
 
 <a href="https://play.google.com/store/apps/details?id=com.supertoastsdemo">
   <img alt="Android app on Google Play"
        src="https://developer.android.com/images/brand/en_app_rgb_wo_60.png" />
 </a>
+
+Considerations
+==============
+Some of the ideas for this library came from the [UndoBar Library](https://code.google.com/p/romannurik-code/source/browse/misc/undobar)
+and the [Crouton Library](https://github.com/keyboardsurfer/Crouton).
 
 Developer
 =========
@@ -63,7 +53,7 @@ Developer
 License
 =======
 
-    Copyright 2014 John Persano
+    Copyright 2013-2016 John Persano
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
