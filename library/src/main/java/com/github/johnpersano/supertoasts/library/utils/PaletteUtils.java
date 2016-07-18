@@ -35,8 +35,7 @@ public class PaletteUtils {
             MATERIAL_TEAL, MATERIAL_GREEN, MATERIAL_LIGHT_GREEN, MATERIAL_LIME,
             MATERIAL_YELLOW, MATERIAL_AMBER, MATERIAL_ORANGE, MATERIAL_DEEP_ORANGE,
             MATERIAL_BROWN, MATERIAL_GREY, MATERIAL_BLUE_GREY})
-    public @interface PaletteColors {
-    }
+    public @interface PaletteColors {}
 
     // Use int values as flags to avoid using enums
     private static final String ALPHA_SOLID = "#FF";

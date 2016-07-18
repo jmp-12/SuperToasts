@@ -52,7 +52,7 @@ public class SuperToastFragment extends PagerFragment {
             @SuppressWarnings("ResourceType")
             public void onClick(View view) {
                 new SuperToast(getActivity())
-                        .setText("I am a SuperToast!")
+                        .setText("SuperToast")
                         .setDuration(AttributeUtils.getDuration(getActivity()))
                         .setFrame(AttributeUtils.getFrame(getActivity()))
                         .setColor(AttributeUtils.getColor(getActivity()))

@@ -74,8 +74,7 @@ public class SuperActivityToastFragment extends PagerFragment {
                         .setDuration(AttributeUtils.getDuration(getActivity()))
                         .setFrame(AttributeUtils.getFrame(getActivity()))
                         .setColor(AttributeUtils.getColor(getActivity()))
-                        .setAnimations(AttributeUtils.getAnimations(getActivity()))
-                        .setColor(AttributeUtils.getColor(getActivity())).show();
+                        .setAnimations(AttributeUtils.getAnimations(getActivity())).show();
             }
         });
 
