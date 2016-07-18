@@ -31,11 +31,11 @@ SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_BUTTON)
 ```
 Check out the [Wiki pages](https://github.com/JohnPersano/SuperToasts/wiki) for more detailed samples.
 
-Demo Application (not updated to 2.0)
+Demo Application
 ================
 A simple demo application is available on Google Play. This demo application does not showcase all of the libraries functions rather it is a short demonstration of major features of the library.
 
-<a href="https://play.google.com/store/apps/details?id=com.supertoastsdemo">
+<a href="https://play.google.com/store/apps/details?id=com.github.johnpersano.supertoasts.demo">
   <img alt="Android app on Google Play"
        src="https://developer.android.com/images/brand/en_app_rgb_wo_60.png" />
 </a>
