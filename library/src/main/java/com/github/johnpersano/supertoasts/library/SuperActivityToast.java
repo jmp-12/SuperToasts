@@ -576,7 +576,7 @@ public class SuperActivityToast extends SuperToast {
     }
 
     /**
-     * <b>REQUIRES API 21</b>
+     * REQUIRES API 21
      *
      * Set the progress color of the ProgressBar in a TYPE_PROGRESS_BAR SuperActivityToast.
      *
@@ -594,7 +594,7 @@ public class SuperActivityToast extends SuperToast {
     }
 
     /**
-     * <b>REQUIRES API 21</b>
+     * REQUIRES API 21
      *
      * Returns the ProgressBar progress of a TYPE_PROGRESS_BAR SuperActivityToast.
      *

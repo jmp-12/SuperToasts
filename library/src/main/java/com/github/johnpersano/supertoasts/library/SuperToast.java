@@ -304,7 +304,7 @@ public class SuperToast {
     /**
      * Sets the priority level of the SuperToast. A SuperToast with a
      * higher priority will be shown before a SuperToast with a lower
-     * priority. This will <b>not</b> affect any SuperToasts that are
+     * priority. This will not affect any SuperToasts that are
      * already showing.
      *
      * @param priorityLevel The desired priority level
