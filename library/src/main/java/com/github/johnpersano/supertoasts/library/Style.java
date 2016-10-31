@@ -20,6 +20,7 @@ import android.graphics.Typeface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
@@ -112,7 +113,7 @@ public class Style implements Parcelable {
     public static final int PRIORITY_LOW = 3;
 
     // General SuperToast items
-    public String message;
+    public CharSequence message;
     public int duration;
     public int color;
     public int priorityColor;
@@ -143,7 +144,7 @@ public class Style implements Parcelable {
     public boolean touchToDismiss;
 
     // SuperActivityToast Button items
-    public String buttonText;
+    public CharSequence buttonText;
     public int buttonTypefaceStyle;
     public int buttonTextColor;
     public int buttonTextSize;
@@ -197,7 +198,7 @@ public class Style implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         // General SuperToast items
-        parcel.writeString(message);
+        TextUtils.writeToParcel(message, parcel, flags);
         parcel.writeInt(duration);
         parcel.writeInt(color);
         parcel.writeInt(priorityColor);
@@ -228,7 +229,7 @@ public class Style implements Parcelable {
         parcel.writeByte((byte) (touchToDismiss ? 1 : 0));
 
         // SuperActivityToast Button items
-        parcel.writeString(buttonText);
+        TextUtils.writeToParcel(buttonText, parcel, flags);
         parcel.writeInt(buttonTypefaceStyle);
         parcel.writeInt(buttonTextColor);
         parcel.writeInt(buttonTextSize);
@@ -260,7 +261,7 @@ public class Style implements Parcelable {
     private Style(Parcel parcel) {
 
         // General SuperToast items
-        this.message = parcel.readString();
+        this.message = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel);
         this.duration = parcel.readInt();
         this.color = parcel.readInt();
         this.priorityColor = parcel.readInt();
@@ -291,7 +292,7 @@ public class Style implements Parcelable {
         this.touchToDismiss = parcel.readByte() != 0;
 
         // SuperActivityToast Button items
-        this.buttonText = parcel.readString();
+        this.buttonText = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel);
         this.buttonTypefaceStyle = parcel.readInt();
         this.buttonTextColor = parcel.readInt();
         this.buttonTextSize = parcel.readInt();

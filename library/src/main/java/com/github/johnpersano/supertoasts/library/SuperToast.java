@@ -235,7 +235,7 @@ public class SuperToast {
      * @param message The message to be displayed
      * @return The current SuperToast instance
      */
-    public SuperToast setText(String message) {
+    public SuperToast setText(CharSequence message) {
         this.mStyle.message = message;
         return this;
     }
@@ -245,7 +245,7 @@ public class SuperToast {
      *
      * @return The message text
      */
-    public String getText() {
+    public CharSequence getText() {
         return this.mStyle.message;
     }
 
@@ -824,7 +824,7 @@ public class SuperToast {
      *                      
      * @return The newly created SuperToast
      */
-    public static SuperToast create(@NonNull Context context, @NonNull String text,
+    public static SuperToast create(@NonNull Context context, @NonNull CharSequence text,
                                     @Style.Duration int duration) {
         return new SuperToast(context)
                 .setText(text)
@@ -841,7 +841,7 @@ public class SuperToast {
      *
      * @return The newly created SuperToast
      */
-    public static SuperToast create(@NonNull Context context, @NonNull String text,
+    public static SuperToast create(@NonNull Context context, @NonNull CharSequence text,
                                     @Style.Duration int duration, @NonNull Style style) {
         return new SuperToast(context, style)
                 .setText(text)
