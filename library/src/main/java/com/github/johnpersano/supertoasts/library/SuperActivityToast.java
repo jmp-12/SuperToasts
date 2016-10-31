@@ -388,7 +388,7 @@ public class SuperActivityToast extends SuperToast {
      *
      * @return The Button text
      */
-    public String getButtonText() {
+    public CharSequence getButtonText() {
         return this.mStyle.buttonText;
     }
 
@@ -706,7 +706,7 @@ public class SuperActivityToast extends SuperToast {
                 button.setBackgroundResource(BackgroundUtils
                         .getButtonBackgroundResource(this.mStyle.frame));
                 button.setText(this.mStyle.buttonText != null ?
-                        this.mStyle.buttonText.toUpperCase() : "");
+                        this.mStyle.buttonText.toString().toUpperCase() : "");
                 button.setTypeface(button.getTypeface(), this.mStyle.buttonTypefaceStyle);
                 button.setTextColor(this.mStyle.buttonTextColor);
                 button.setTextSize(this.mStyle.buttonTextSize);
@@ -987,7 +987,7 @@ public class SuperActivityToast extends SuperToast {
      * @param duration The desired duration of the SuperActivityToast
      * @return The newly created SuperActivityToast
      */
-    public static SuperActivityToast create(@NonNull Context context, @NonNull String text, @Style.Duration int duration) {
+    public static SuperActivityToast create(@NonNull Context context, @NonNull CharSequence text, @Style.Duration int duration) {
         return (SuperActivityToast) new SuperActivityToast(context)
                 .setText(text)
                 .setDuration(duration);
@@ -1002,7 +1002,7 @@ public class SuperActivityToast extends SuperToast {
      * @param style The desired Style of the SuperToast
      * @return The newly created SuperActivityToast
      */
-    public static SuperActivityToast create(@NonNull Context context, @NonNull String text, @Style.Duration int duration,
+    public static SuperActivityToast create(@NonNull Context context, @NonNull CharSequence text, @Style.Duration int duration,
                                             @NonNull Style style) {
         return (SuperActivityToast)  new SuperActivityToast(context, style)
                 .setText(text)
@@ -1019,7 +1019,7 @@ public class SuperActivityToast extends SuperToast {
      * @param viewGroup The ViewGroup to attach the SuperActivityToast to
      * @return The newly created SuperActivityToast
      */
-    public static SuperActivityToast create(@NonNull Context context, @NonNull String text, @Style.Duration int duration,
+    public static SuperActivityToast create(@NonNull Context context, @NonNull CharSequence text, @Style.Duration int duration,
                                             @NonNull Style style, @IdRes int viewGroup) {
         return (SuperActivityToast)  new SuperActivityToast(context, style, Style.TYPE_STANDARD, viewGroup)
                 .setText(text)
