@@ -13,7 +13,7 @@ SuperToasts are now available on Jcenter.
 Add the following to your module's build.gradle file:
 ```xml
 dependencies {
-    compile 'com.github.johnpersano:supertoasts:2.0'
+    implementation 'com.github.johnpersano:supertoasts:2.0'
 }
 ```
 
