@@ -57,7 +57,7 @@ public class Style implements Parcelable {
     public @interface Frame {}
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TYPE_STANDARD, TYPE_BUTTON, TYPE_PROGRESS_CIRCLE, TYPE_PROGRESS_BAR})
+    @IntDef({TYPE_STANDARD, TYPE_BUTTON, TYPE_PROGRESS_CIRCLE, TYPE_PROGRESS_BAR, TYPE_IMG})
     public @interface Type {}
 
     @Retention(RetentionPolicy.SOURCE)
@@ -101,6 +101,7 @@ public class Style implements Parcelable {
     public static final int TYPE_BUTTON = 2;
     public static final int TYPE_PROGRESS_CIRCLE = 3;
     public static final int TYPE_PROGRESS_BAR = 4;
+    public static final int TYPE_IMG = 5;
 
     public static final int ANIMATIONS_FADE = 1;
     public static final int ANIMATIONS_FLY = 2;
@@ -158,6 +159,10 @@ public class Style implements Parcelable {
     public boolean progressIndeterminate;
     public int progressBarColor;
 
+
+    // SuperActivityToast Img items
+    public int imgResource;
+
     /**
      * Public constructor for a new {@link com.github.johnpersano.supertoasts.library.Style}.
      * This constructor will assign a few default values.
@@ -167,6 +172,7 @@ public class Style implements Parcelable {
         this.duration = DURATION_MEDIUM;
         this.color = PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREY);
         this.gravity = Gravity.BOTTOM | Gravity.CENTER;
+        this.xOffset = BackgroundUtils.convertToDIP(24);
         this.yOffset = BackgroundUtils.convertToDIP(64);
         this.width = FrameLayout.LayoutParams.WRAP_CONTENT;
         this.height = FrameLayout.LayoutParams.WRAP_CONTENT;
@@ -242,6 +248,9 @@ public class Style implements Parcelable {
         parcel.writeInt(progressMax);
         parcel.writeByte((byte) (progressIndeterminate ? 1 : 0));
         parcel.writeInt(progressBarColor);
+
+        // SuperActivityToast Img items
+        parcel.writeInt(imgResource);
     }
 
     /**
@@ -305,6 +314,9 @@ public class Style implements Parcelable {
         this.progressMax = parcel.readInt();
         this.progressIndeterminate = parcel.readByte() != 0;
         this.progressBarColor = parcel.readInt();
+
+        // SuperActivityToast Img items
+        this.imgResource = parcel.readInt();
     }
 
     /**

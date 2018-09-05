@@ -68,6 +68,7 @@ public class SuperActivityToastFragment extends PagerFragment {
                         AttributeUtils.getType(getActivity()), containerId)
                         .setButtonText("UNDO")
                         .setButtonIconResource(R.drawable.ic_undo)
+                        .setImgResource(R.drawable.toast_warning)
                         .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
                         .setProgressBarColor(Color.WHITE)
                         .setText("SuperActivityToast")
@@ -123,7 +124,7 @@ public class SuperActivityToastFragment extends PagerFragment {
 
     private final SuperActivityToast.OnButtonClickListener onButtonClickListener =
             new SuperActivityToast.OnButtonClickListener() {
-        
+
         @Override
         public void onClick(View view, Parcelable token) {
             SuperToast.create(view.getContext(), "OnClick!", Style.DURATION_SHORT)

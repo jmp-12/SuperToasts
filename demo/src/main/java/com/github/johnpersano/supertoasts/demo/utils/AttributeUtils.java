@@ -26,7 +26,7 @@ import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
  * Utils class to help with saved SuperToast attributes.
  */
 public class AttributeUtils {
-    
+
     public static int getDuration(Context context) {
         switch (PreferenceManager.getDefaultSharedPreferences(context).getInt(context
                 .getResources().getString(R.string.duration_title), 0)) {
@@ -91,6 +91,7 @@ public class AttributeUtils {
             case 1: return Style.TYPE_BUTTON;
             case 2: return Style.TYPE_PROGRESS_BAR;
             case 3: return Style.TYPE_PROGRESS_CIRCLE;
+            case 4: return Style.TYPE_IMG;
             default: return Style.TYPE_STANDARD;
         }
     }

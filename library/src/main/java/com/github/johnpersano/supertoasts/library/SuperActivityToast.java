@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.github.johnpersano.supertoasts.library.utils.BackgroundUtils;
@@ -56,7 +57,7 @@ public class SuperActivityToast extends SuperToast {
     private static final String BUNDLE_KEY = "0x532e412e542e";
 
     /**
-     * Listener that calls onClick() when a TYPE_BUTTON SuperActivityToast receives a Button press event. 
+     * Listener that calls onClick() when a TYPE_BUTTON SuperActivityToast receives a Button press event.
      *
      * @see #setOnButtonClickListener(String, android.os.Parcelable,
      * com.github.johnpersano.supertoasts.library.SuperActivityToast.OnButtonClickListener)
@@ -76,6 +77,7 @@ public class SuperActivityToast extends SuperToast {
     private View mView;
     private ViewGroup mViewGroup;
     private ProgressBar mProgressBar;
+    private ImageView mImg;
     private Style mStyle;
     private OnButtonClickListener mOnButtonClickListener;
     private boolean mFromOrientationChange;
@@ -103,7 +105,7 @@ public class SuperActivityToast extends SuperToast {
      * Public constructor for a SuperActivityToast.
      *
      * @param context An Activity Context
-     * @param style The desired Style             
+     * @param style The desired Style
      */
     public SuperActivityToast(@NonNull Context context, @NonNull Style style) {
         super(context, style);
@@ -121,9 +123,9 @@ public class SuperActivityToast extends SuperToast {
 
     /**
      * Public constructor for a SuperActivityToast.
-     * 
+     *
      * @param context An Activity Context
-     * @param type The desired SuperActivityToast type             
+     * @param type The desired SuperActivityToast type
      */
     public SuperActivityToast(@NonNull Context context, @Style.Type int type) {
         super(context, type);
@@ -133,7 +135,7 @@ public class SuperActivityToast extends SuperToast {
         }
 
         this.mContext = context;
-        this.mStyle = this.getStyle(); // Style is created in the super(context) call 
+        this.mStyle = this.getStyle(); // Style is created in the super(context) call
 
         // Set the default ViewGroup as the Activity's content
         this.mViewGroup = (ViewGroup) ((Activity) context).findViewById(android.R.id.content);
@@ -143,8 +145,8 @@ public class SuperActivityToast extends SuperToast {
      * Public constructor for a SuperActivityToast.
      *
      * @param context An Activity Context
-     * @param style The desired Style             
-     * @param type The desired SuperActivityToast type             
+     * @param style The desired Style
+     * @param type The desired SuperActivityToast type
      */
     public SuperActivityToast(@NonNull Context context, @NonNull Style style, @Style.Type int type) {
         super(context, style, type);
@@ -154,7 +156,7 @@ public class SuperActivityToast extends SuperToast {
         }
 
         this.mContext = context;
-        this.mStyle = this.getStyle(); // Style is created in the super(context) call 
+        this.mStyle = this.getStyle(); // Style is created in the super(context) call
 
         // Set the default ViewGroup as the Activity's content
         this.mViewGroup = (ViewGroup) ((Activity) context).findViewById(android.R.id.content);
@@ -164,9 +166,9 @@ public class SuperActivityToast extends SuperToast {
      * Public constructor for a SuperActivityToast.
      *
      * @param context An Activity Context
-     * @param style The desired Style             
-     * @param type The desired SuperActivityToast type    
-     * @param viewGroupId The id of the ViewGroup to attach the SuperActivityToast to            
+     * @param style The desired Style
+     * @param type The desired SuperActivityToast type
+     * @param viewGroupId The id of the ViewGroup to attach the SuperActivityToast to
      */
     public SuperActivityToast(@NonNull Context context, @NonNull Style style,
                               @Style.Type int type, @IdRes int viewGroupId) {
@@ -177,7 +179,7 @@ public class SuperActivityToast extends SuperToast {
         }
 
         this.mContext = context;
-        this.mStyle = this.getStyle(); // Style is created in the super(context) call 
+        this.mStyle = this.getStyle(); // Style is created in the super(context) call
 
         // Try to find the ViewGroup id in the layout
         this.mViewGroup = (ViewGroup) ((Activity) context).findViewById(viewGroupId);
@@ -192,8 +194,8 @@ public class SuperActivityToast extends SuperToast {
      *
      * @param context An Activity Context
      * @param layoutInflater The LayoutInflater created from the Context
-     * @param type The desired SuperActivityToast type 
-     *                   
+     * @param type The desired SuperActivityToast type
+     *
      * @return The SuperActivityToast View
      */
     @Override
@@ -230,6 +232,14 @@ public class SuperActivityToast extends SuperToast {
                         (ViewGroup) ((Activity) context)
                         .findViewById(android.R.id.content), false);
                 this.mProgressBar = (ProgressBar) this.mView.findViewById(R.id.progress_bar);
+                break;
+
+            case Style.TYPE_IMG:
+                this.mView = layoutInflater.inflate(R.layout.supertoast_img,
+                        (ViewGroup)((Activity) context)
+                                .findViewById(android.R.id.content),
+                        false);
+                this.mImg = (ImageView) this.mView.findViewById(R.id.img);
                 break;
 
             default:
@@ -304,8 +314,8 @@ public class SuperActivityToast extends SuperToast {
 
     /**
      * Protected method used by the Toaster to know when not to use the
-     * show animation. 
-     *  
+     * show animation.
+     *
      * @return  The current SuperActivityToast instance
      */
     protected SuperActivityToast fromOrientationChange() {
@@ -315,8 +325,8 @@ public class SuperActivityToast extends SuperToast {
 
     /**
      * Protected method used by the Toaster to know when not to use the
-     * show animation.      
-     * 
+     * show animation.
+     *
      * @return true if coming from orientation change
      */
     protected boolean isFromOrientationChange() {
@@ -351,8 +361,8 @@ public class SuperActivityToast extends SuperToast {
 
     /**
      * Set a private OnTouchListener to the SuperActivityToast which will dismiss
-     * it if any part is touched. 
-     *  
+     * it if any part is touched.
+     *
      * @param touchToDismiss true if should touch to dismiss
      * @return The current SuperActivityToast instance
      */
@@ -487,6 +497,17 @@ public class SuperActivityToast extends SuperToast {
      */
     public SuperActivityToast setButtonIconResource(@DrawableRes int buttonIconResource) {
         this.mStyle.buttonIconResource = buttonIconResource;
+        return this;
+    }
+
+    /**
+     * Set the Img icon resource in a TYPE_IMG SuperActivityToast.
+     *
+     * @param imgResource The desired icon resource
+     * @return The current SuperActivityToast instance
+     */
+    public SuperActivityToast setImgResource(@DrawableRes int imgResource) {
+        this.mStyle.imgResource = imgResource;
         return this;
     }
 
@@ -629,10 +650,10 @@ public class SuperActivityToast extends SuperToast {
     public int getProgressMax() {
         return this.mStyle.progressMax;
     }
-    
+
     /**
      * Set the ProgressBar to be isIndeterminate in a TYPE_PROGRESS_BAR SuperActivityToast.
-     * 
+     *
      * @param progressIndeterminate true if progress should be isIndeterminate
      * @return The current SuperActivityToast instance
      */
@@ -670,11 +691,11 @@ public class SuperActivityToast extends SuperToast {
     }
 
     /**
-     * Modify various attributes of the SuperActivityToast before being shown.         
+     * Modify various attributes of the SuperActivityToast before being shown.
      */
     @Override
     protected void onPrepareShow() {
-        super.onPrepareShow(); // This will take care of many modifications 
+        super.onPrepareShow(); // This will take care of many modifications
 
         final FrameLayout.LayoutParams layoutParams = new FrameLayout
                 .LayoutParams(this.mStyle.width, this.mStyle.height);
@@ -683,6 +704,9 @@ public class SuperActivityToast extends SuperToast {
         switch (this.mStyle.type) {
 
             case Style.TYPE_STANDARD:
+                this.mStyle.width = FrameLayout.LayoutParams.MATCH_PARENT;
+                this.mStyle.xOffset = BackgroundUtils.convertToDIP(24);
+                this.mStyle.yOffset = BackgroundUtils.convertToDIP(24);
                 break;
 
             case Style.TYPE_BUTTON:
@@ -699,7 +723,7 @@ public class SuperActivityToast extends SuperToast {
                         >= Configuration.SCREENLAYOUT_SIZE_LARGE) {
                     this.mStyle.width = BackgroundUtils.convertToDIP(568);
                     this.mStyle.gravity = Gravity.BOTTOM | Gravity.START;
-                } 
+                }
 
                 // Set up the Button attributes
                 final Button button = (Button) this.mView.findViewById(R.id.button);
@@ -710,7 +734,7 @@ public class SuperActivityToast extends SuperToast {
                 button.setTypeface(button.getTypeface(), this.mStyle.buttonTypefaceStyle);
                 button.setTextColor(this.mStyle.buttonTextColor);
                 button.setTextSize(this.mStyle.buttonTextSize);
-                
+
                 if (this.mStyle.frame != Style.FRAME_LOLLIPOP) {
                     this.mView.findViewById(R.id.divider).setBackgroundColor(this
                             .mStyle.buttonDividerColor);
@@ -763,6 +787,17 @@ public class SuperActivityToast extends SuperToast {
                 this.mProgressBar.setMax(this.mStyle.progressMax);
                 this.mProgressBar.setIndeterminate(this.mStyle.progressIndeterminate);
                 break;
+
+            case Style.TYPE_IMG:
+                this.mStyle.width = FrameLayout.LayoutParams.MATCH_PARENT;
+                this.mStyle.xOffset = BackgroundUtils.convertToDIP(24);
+                this.mStyle.yOffset = BackgroundUtils.convertToDIP(24);
+
+                if(this.mStyle.imgResource > 0) {
+                    this.mImg.setImageResource(this.mStyle.imgResource);
+                }
+
+                break;
         }
 
         layoutParams.width = this.mStyle.width;
@@ -800,7 +835,7 @@ public class SuperActivityToast extends SuperToast {
      *
      * This should be called in the {@link android.app.Activity#onSaveInstanceState(android.os.Bundle)}
      * method of your Activity.
-     * 
+     *
      * @param bundle The Bundle provided in onSaveInstanceState()
      */
     @SuppressWarnings("unchecked")
