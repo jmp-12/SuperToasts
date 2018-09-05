@@ -62,5 +62,6 @@
         <item>"TYPE_BUTTON"</item>
         <item>"TYPE_PROGRESS_BAR"</item>
         <item>"TYPE_PROGRESS_CIRCLE"</item>
+        <item>"TYPE_PROGRESS_IMG"</item>
     </array>
 </resources>

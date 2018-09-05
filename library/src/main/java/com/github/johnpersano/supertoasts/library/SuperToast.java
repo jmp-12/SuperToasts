@@ -39,17 +39,17 @@ import com.github.johnpersano.supertoasts.library.utils.AnimationUtils;
 import com.github.johnpersano.supertoasts.library.utils.BackgroundUtils;
 
 /**
- * SuperToasts are designed to improve upon the stock {@link android.widget.Toast} class and 
- * should be used in similar situations. For usage information, check out the 
+ * SuperToasts are designed to improve upon the stock {@link android.widget.Toast} class and
+ * should be used in similar situations. For usage information, check out the
  * <a href="https://github.com/JohnPersano/Supertoasts/wiki/SuperToast">SuperToast Wiki page</a>.
  */
 @SuppressWarnings("ALL")
 public class SuperToast {
 
     /**
-     * Listener that calls onDismiss() when a SuperToast or SuperActivityToast is dismissed. 
-     * 
-     * @see #setOnDismissListener(String, android.os.Parcelable, com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener)  
+     * Listener that calls onDismiss() when a SuperToast or SuperActivityToast is dismissed.
+     *
+     * @see #setOnDismissListener(String, android.os.Parcelable, com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener)
      */
     public interface OnDismissListener {
 
@@ -88,7 +88,7 @@ public class SuperToast {
      * Public constructor for a SuperToast.
      *
      * @param context A valid Context
-     * @param style The desired Style             
+     * @param style The desired Style
      */
     public SuperToast(@NonNull Context context, @NonNull Style style) {
         this.mContext = context;
@@ -101,7 +101,7 @@ public class SuperToast {
     }
 
     /**
-     * Protected constructor that is overridden by the SuperActivityToast class.         
+     * Protected constructor that is overridden by the SuperActivityToast class.
      */
     protected SuperToast(@NonNull Context context, @Style.Type int type) {
         this.mContext = context;
@@ -115,7 +115,7 @@ public class SuperToast {
     }
 
     /**
-     * Protected constructor that is overridden by the SuperActivityToast class.         
+     * Protected constructor that is overridden by the SuperActivityToast class.
      */
     protected SuperToast(@NonNull Context context,  @NonNull Style style, @Style.Type int type) {
         this.mContext = context;
@@ -129,7 +129,7 @@ public class SuperToast {
     }
 
     /**
-     * Protected constructor that is overridden by the SuperActivityToast class.         
+     * Protected constructor that is overridden by the SuperActivityToast class.
      */
     protected SuperToast(@NonNull Context context,  @NonNull Style style, @Style.Type int type, @IdRes int viewGroupID) {
         this.mContext = context;
@@ -149,7 +149,7 @@ public class SuperToast {
     }
 
     /**
-     * Protected View that is overridden by the SuperActivityToast class.         
+     * Protected View that is overridden by the SuperActivityToast class.
      */
     @SuppressLint("InflateParams")
     protected View onCreateView(Context context, LayoutInflater layoutInflater, int type) {
@@ -218,7 +218,7 @@ public class SuperToast {
                 this.mStyle.yOffset = 0;
                 this.mStyle.width = FrameLayout.LayoutParams.MATCH_PARENT;
             }
-            
+
             // Set the priority color of the Lollipop frame if any
             if (this.mStyle.priorityColor != 0) {
                 mView.findViewById(R.id.border).setVisibility(View.VISIBLE);
@@ -231,7 +231,7 @@ public class SuperToast {
 
     /**
      * Sets the text of the main TextView.
-     *  
+     *
      * @param message The message to be displayed
      * @return The current SuperToast instance
      */
@@ -272,7 +272,7 @@ public class SuperToast {
     /**
      * Returns the duration of the SuperToast.
      *
-     * @return The SuperToast duration in milliseconds 
+     * @return The SuperToast duration in milliseconds
      */
     @Style.Duration
     public int getDuration() {
@@ -428,9 +428,9 @@ public class SuperToast {
      * @param iconPosition The desired icon position
      * @param iconResource The desired icon resource
      * @return The current SuperToast instance
-     * 
-     * @see #setIconPosition(int) 
-     * @see #setIconResource(int)  
+     *
+     * @see #setIconPosition(int)
+     * @see #setIconResource(int)
      */
     public SuperToast setIconResource(@Style.IconPosition int iconPosition,
                                       @DrawableRes int iconResource) {
@@ -447,7 +447,7 @@ public class SuperToast {
      * @param iconPosition The desired icon position
      * @return The current SuperToast instance
      *
-     * @see #setIconResource(int, int) 
+     * @see #setIconResource(int, int)
      * @see #setIconResource(int)
      */
     public SuperToast setIconPosition(@Style.IconPosition int iconPosition) {
@@ -490,8 +490,8 @@ public class SuperToast {
     }
 
     /**
-     * Sets the frame of the SuperToast. If this is not set, 
-     * an appropriate frame will be chosen based on the device's SDK level. 
+     * Sets the frame of the SuperToast. If this is not set,
+     * an appropriate frame will be chosen based on the device's SDK level.
      *
      * @param frame The desired frame
      * @return The current SuperToast instance
@@ -512,7 +512,7 @@ public class SuperToast {
     }
 
     /**
-     * Sets the show and hide animations value of the SuperToast.  
+     * Sets the show and hide animations value of the SuperToast.
      *
      * @param animations The desired animations value
      * @return The current SuperToast instance
@@ -521,7 +521,7 @@ public class SuperToast {
         this.mStyle.animations = animations;
         return this;
     }
-    
+
     /**
      * Returns the animations value of the SuperToast.
      *
@@ -538,8 +538,8 @@ public class SuperToast {
      * @param xOffset The desired x (horizontal) offset
      * @param yOffset The desired y (vertical) offset
      * @return The current SuperToast instance
-     * 
-     * @see #setGravity(int)  
+     *
+     * @see #setGravity(int)
      */
     public SuperToast setGravity(@Style.GravityStyle int gravity, int xOffset, int yOffset) {
         this.mStyle.gravity = gravity;
@@ -554,7 +554,7 @@ public class SuperToast {
      * @param gravity The desired Gravity
      * @return The current SuperToast instance
      *
-     * @see #setGravity(int, int, int) 
+     * @see #setGravity(int, int, int)
      */
     public SuperToast setGravity(@Style.GravityStyle int gravity) {
         this.mStyle.gravity = gravity;
@@ -591,7 +591,7 @@ public class SuperToast {
 
     /**
      * Sets the width of the SuperToast. There are not many usage cases
-     * where using this method is necessary. 
+     * where using this method is necessary.
      *
      * @param width The desired width
      * @return The current SuperToast instance
@@ -612,7 +612,7 @@ public class SuperToast {
 
     /**
      * Sets the height of the SuperToast. There are not many usage cases
-     * where using this method is necessary. 
+     * where using this method is necessary.
      *
      * @param height The desired height
      * @return The current SuperToast instance
@@ -632,7 +632,7 @@ public class SuperToast {
     }
 
     /**
-     * Sets the {@link com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener} 
+     * Sets the {@link com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener}
      * of the SuperActivityToast. The listener will be triggered when the
      * SuperActivityToast is dismissed.
      *
@@ -640,7 +640,7 @@ public class SuperToast {
      * @param token A Parcelable token to hold data across orientation changes
      * @param onDismissListener The desired OnDismissListener
      * @return The current SuperActivityToast instance
-     * 
+     *
      * @see #setOnDismissListener(String,
      * com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener)
      */
@@ -705,7 +705,7 @@ public class SuperToast {
     }
 
     /**
-     * Returns the {@link com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener} 
+     * Returns the {@link com.github.johnpersano.supertoasts.library.SuperToast.OnDismissListener}
      * of the SuperToast.
      *
      * @return The OnDismissListener
@@ -715,7 +715,7 @@ public class SuperToast {
     }
 
     /**
-     * Sets the {@link com.github.johnpersano.supertoasts.library.Style} of the SuperToast. 
+     * Sets the {@link com.github.johnpersano.supertoasts.library.Style} of the SuperToast.
      *
      * @param style The desired Style
      * @return The current SuperToast instance
@@ -821,7 +821,7 @@ public class SuperToast {
      * @param context A valid Context
      * @param text The desired text to be shown
      * @param duration The desired duration of the SuperToast
-     *                      
+     *
      * @return The newly created SuperToast
      */
     public static SuperToast create(@NonNull Context context, @NonNull String text,

@@ -164,11 +164,12 @@ public class Playground extends AppCompatActivity {
         final Random random = new Random();
 
         SuperActivityToast superActivityToast;
-        final int typeArbiter = random.nextInt(5);
+        final int typeArbiter = random.nextInt(6);
         switch (typeArbiter) {
             case 1: superActivityToast = new SuperActivityToast(Playground.this, Style.TYPE_BUTTON); break;
             case 2: superActivityToast = new SuperActivityToast(Playground.this, Style.TYPE_PROGRESS_BAR); break;
             case 3: superActivityToast = new SuperActivityToast(Playground.this, Style.TYPE_PROGRESS_CIRCLE); break;
+            case 4: superActivityToast = new SuperActivityToast(Playground.this, Style.TYPE_IMG); break;
             default: superActivityToast = new SuperActivityToast(Playground.this); break;
         }
         superActivityToast.setText("SuperActivityToast");
