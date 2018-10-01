@@ -690,7 +690,7 @@ public class SuperActivityToast extends SuperToast {
                 if (this.mStyle.frame != Style.FRAME_LOLLIPOP) {
                     this.mStyle.width = FrameLayout.LayoutParams.MATCH_PARENT;
                     this.mStyle.xOffset = BackgroundUtils.convertToDIP(24);
-                    this.mStyle.yOffset = BackgroundUtils.convertToDIP(24);
+                    this.mStyle.yOffset = BackgroundUtils.convertToDIP(64);
                 }
 
                 // On a big screen device, show the SuperActivityToast on the bottom left
